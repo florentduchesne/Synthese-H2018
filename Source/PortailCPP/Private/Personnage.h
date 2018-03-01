@@ -7,6 +7,9 @@
 #include "Runtime/Engine/Classes/Components/SkeletalMeshComponent.h"
 #include "Runtime/CoreUObject/Public/UObject/ConstructorHelpers.h"
 #include "TimerManager.h"
+#include "Arme.h"
+#include "FusilSemiAuto.h"
+#include "FusilAuto.h"
 #include "Runtime/Engine/Classes/Camera/CameraComponent.h"
 #include "Personnage.generated.h"
 
@@ -23,6 +26,14 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	//Mesh troisieme personne (visible uniquement par les autres joueurs)
+	USkeletalMeshComponent * corps;
+	// Mesh Premiere personne (visible uniquement par ce joueur)
+	/*UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
+	USkeletalMeshComponent * FPSMesh;*/
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UArme * arme;
 
 	int PointsDevie = 100;
 	int armure = 0;
@@ -60,10 +71,6 @@ public:
 	// Camera du personnage
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent * camera;
-	
-	// Mesh Premiere personne (visible uniquement par ce joueur)
-	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
-	USkeletalMeshComponent* FPSMesh;
 
 	bool bPeutSeTeleporter = true;
 	void debloquer();

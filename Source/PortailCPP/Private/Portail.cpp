@@ -7,7 +7,7 @@
 APortail::APortail()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 	cadre = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshCadre"));
 	const ConstructorHelpers::FObjectFinder<UStaticMesh> MeshObj(TEXT("/Game/Geometry/Meshes/cadrePortail"));
 	cadre->SetStaticMesh(MeshObj.Object);

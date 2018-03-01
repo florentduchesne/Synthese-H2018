@@ -10,9 +10,12 @@ APersonnage::APersonnage()
 	PrimaryActorTick.bCanEverTick = true;
 	/*corps = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("MeshCorps"));
 	const ConstructorHelpers::FObjectFinder<USkeletalMesh> MeshObj(TEXT("/Engine/Tutorial/SubEditors/TutorialAssets/Character/TutorialTPP"));
-	corps->SetSkeletalMeshWithoutResettingAnimation(MeshObj.Object);*/
-	//RootComponent = corps;
-	//corps->SetRelativeLocation(FVector(0, 0, -88.0f));
+	corps->SetSkeletalMeshWithoutResettingAnimation(MeshObj.Object);
+	RootComponent = corps;
+	corps->SetRelativeLocation(FVector(0, 0, -100.0f));
+	FRotator rotation;
+	rotation.Yaw = -90.0f;
+	corps->AddRelativeRotation(rotation);*/
 
 	// Cree une camera avec le modele par defaut
 	camera = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
@@ -22,15 +25,30 @@ APersonnage::APersonnage()
 	// Permet au personnage de controler la rotation de la camera
 	camera->bUsePawnControlRotation = true;
 
+	arme = CreateDefaultSubobject<UFusilAuto>(TEXT("Arme"));
+
+	arme->SetupAttachment(camera);
+
+	arme->getMesh()->SetupAttachment(camera);
+
+	arme->getMesh()->SetRelativeLocation(FVector(50.0f, 35.0f, -20.0f));
+
+	arme->getMesh()->SetRelativeRotation(FRotator(0.0f, -90.0f, 0.0f));
+
+	/*
 	// Cree un mesh par defaut
 	FPSMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("FirstPersonMesh"));
+	const ConstructorHelpers::FObjectFinder<USkeletalMesh> MeshObj1(TEXT("/Game/Personnage/HeroFPP"));
+	FPSMesh->SetSkeletalMeshWithoutResettingAnimation(MeshObj1.Object);
 	// Il n'y a que ce joueur qui peut voir le mesh
 	FPSMesh->SetOnlyOwnerSee(true);
 	// Attache le mesh a la camera
 	FPSMesh->SetupAttachment(camera);
 	// Desactive les ombres
 	FPSMesh->bCastDynamicShadow = false;
-	FPSMesh->CastShadow = false;
+	FPSMesh->CastShadow = false;*/
+
+	//arme->getMesh()->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
