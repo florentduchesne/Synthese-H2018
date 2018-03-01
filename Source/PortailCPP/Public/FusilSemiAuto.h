@@ -16,6 +16,8 @@ class PORTAILCPP_API UFusilSemiAuto : public UArme
 
 public:
 	UFusilSemiAuto();
-	
+
+	UFUNCTION()
+	void Tirer() override;
 	
 };

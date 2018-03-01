@@ -68,6 +68,10 @@ public:
 	UFUNCTION()
 	void TerminerSaut();
 
+	//tirer
+	UFUNCTION()
+	void Tirer();
+
 	// Camera du personnage
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent * camera;

@@ -82,6 +82,9 @@ void APersonnage::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	//saut
 	PlayerInputComponent->BindAction("Sauter", IE_Pressed, this, &APersonnage::DebuterSaut);
 	PlayerInputComponent->BindAction("Sauter", IE_Released, this, &APersonnage::TerminerSaut);
+	//tir
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("set input"));
+	PlayerInputComponent->BindAction("Tirer", IE_Pressed, this, &APersonnage::Tirer);
 }
 
 void APersonnage::Avancer(float Value)
@@ -127,4 +130,10 @@ void APersonnage::debloquerFutur()
 {
 	FTimerHandle UnusedHandle;
 	GetWorldTimerManager().SetTimer(UnusedHandle, this, &APersonnage::debloquer, 0.5f, false);
+}
+
+void APersonnage::Tirer()
+{
+	UE_LOG(LogTemp, Warning, TEXT("tirer dans personnage"));
+	this->arme->Tirer();
 }

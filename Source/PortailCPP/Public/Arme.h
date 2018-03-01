@@ -3,15 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Components/ActorComponent.h"
 #include "Runtime/Engine/Classes/Components/SkeletalMeshComponent.h"
+#include "Runtime/Engine/Classes/Components/SceneComponent.h"
 #include "Runtime/CoreUObject/Public/UObject/ConstructorHelpers.h"
-#include <string>
 #include "Arme.generated.h"
 
 
-UCLASS( abstract, ClassGroup=(Custom))
-class PORTAILCPP_API UArme : public USkeletalMeshComponent
+UCLASS(abstract)
+class PORTAILCPP_API UArme : public USceneComponent
 {
 	GENERATED_BODY()
 
@@ -35,6 +34,9 @@ public:
 	USkeletalMeshComponent * getMesh();
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	
-	virtual void Tirer() { check(0 && "Il faut implementer cette methode!!!") };
+	UFUNCTION()
+		virtual void Tirer() PURE_VIRTUAL(UArme::Tirer, );/* = 0; {
+		UE_LOG(LogTemp, Warning, TEXT("tirer dans arme"));
+	}*/
 	
 };

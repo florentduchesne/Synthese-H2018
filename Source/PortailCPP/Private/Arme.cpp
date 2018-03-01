@@ -22,10 +22,8 @@ UArme::UArme(const int _tailleChargeur, FString cheminMesh)
 	{
 		// Put up a debug message for five seconds. The -1 "Key" value (first argument) indicates that we will never need to update or refresh this message.
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, *FString("balles dans chargeur : " + FString::FromInt(_tailleChargeur)));
-	}
-	
+	}	
 }
-
 
 // Called when the game starts
 void UArme::BeginPlay()
@@ -35,7 +33,6 @@ void UArme::BeginPlay()
 	// ...
 	
 }
-
 
 USkeletalMeshComponent * UArme::getMesh()
 {
@@ -49,4 +46,3 @@ void UArme::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentT
 
 	// ...
 }
-
