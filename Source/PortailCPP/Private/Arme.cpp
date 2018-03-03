@@ -17,12 +17,8 @@ UArme::UArme(const int _tailleChargeur, FString cheminMesh)
 	mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("MeshArme"));
 	const ConstructorHelpers::FObjectFinder<USkeletalMesh> MeshObj((TEXT("%s"), *cheminMesh));
 	mesh->SetSkeletalMeshWithoutResettingAnimation(MeshObj.Object);
-
-	if (GEngine)
-	{
-		// Put up a debug message for five seconds. The -1 "Key" value (first argument) indicates that we will never need to update or refresh this message.
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, *FString("balles dans chargeur : " + FString::FromInt(_tailleChargeur)));
-	}	
+	UE_LOG(LogTemp, Warning, TEXT("constructeur UArme"));
+	//UKismetSystemLibrary::PrintString(this, *FString("balles dans chargeur : " + FString::FromInt(_tailleChargeur)), true, true, FColor::Red, 5.0f);
 }
 
 // Called when the game starts
@@ -45,4 +41,10 @@ void UArme::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentT
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
+}
+
+void UArme::Tirer()
+{
+	//UE_LOG(LogTemp, Warning, TEXT("tirer dans UArme"));
+	//UKismetSystemLibrary::PrintString(this, TEXT("tirer dans UArme"), true, true, FColor::Red, 5.0f);
 }

@@ -9,9 +9,6 @@ UFusilSemiAuto::UFusilSemiAuto()
 
 void UFusilSemiAuto::Tirer() {
 
-	UE_LOG(LogTemp, Warning, TEXT("tirer dans fusil semi auto"));
-	if (GEngine)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("PIOU! PIOU! PIOU!"));
-	}
+	//UE_LOG(LogTemp, Warning, TEXT("tirer dans fusil semi auto"));
+	//UKismetSystemLibrary::PrintString(this, TEXT("PIOU! PIOU! PIOU!"), true, true, FColor::Red, 5.0f);
 }

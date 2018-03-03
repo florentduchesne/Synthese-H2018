@@ -3,13 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Runtime/Engine/Classes/Kismet/KismetSystemLibrary.h"
 #include "Arme.h"
 #include "FusilSemiAuto.generated.h"
 
 /**
  * 
  */
-UCLASS(meta = (BlueprintSpawnableComponent))
+UCLASS()
 class PORTAILCPP_API UFusilSemiAuto : public UArme
 {
 	GENERATED_BODY()
@@ -17,7 +18,6 @@ class PORTAILCPP_API UFusilSemiAuto : public UArme
 public:
 	UFusilSemiAuto();
 
-	UFUNCTION()
 	void Tirer() override;
 	
 };

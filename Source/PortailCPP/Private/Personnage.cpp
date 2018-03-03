@@ -27,6 +27,8 @@ APersonnage::APersonnage()
 
 	arme = CreateDefaultSubobject<UFusilAuto>(TEXT("Arme"));
 
+	UE_LOG(LogTemp, Warning, TEXT("arme dans constructeur de personnage : %p"), arme);
+
 	arme->SetupAttachment(camera);
 
 	arme->getMesh()->SetupAttachment(camera);
@@ -34,6 +36,8 @@ APersonnage::APersonnage()
 	arme->getMesh()->SetRelativeLocation(FVector(50.0f, 35.0f, -20.0f));
 
 	arme->getMesh()->SetRelativeRotation(FRotator(0.0f, -90.0f, 0.0f));
+
+	UE_LOG(LogTemp, Warning, TEXT("arme dans constructeur de personnage : %p"), arme);
 
 	/*
 	// Cree un mesh par defaut
@@ -55,6 +59,8 @@ APersonnage::APersonnage()
 void APersonnage::BeginPlay()
 {
 	Super::BeginPlay();
+
+	UE_LOG(LogTemp, Warning, TEXT("arme dans begin play : %p"), arme);
 	/*if (GEngine)
 	{
 		// Put up a debug message for five seconds. The -1 "Key" value (first argument) indicates that we will never need to update or refresh this message.
@@ -83,7 +89,7 @@ void APersonnage::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	PlayerInputComponent->BindAction("Sauter", IE_Pressed, this, &APersonnage::DebuterSaut);
 	PlayerInputComponent->BindAction("Sauter", IE_Released, this, &APersonnage::TerminerSaut);
 	//tir
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("set input"));
+	UKismetSystemLibrary::PrintString(this, TEXT("Set Input Tirer"), true, true, FColor::Red, 5.0f);
 	PlayerInputComponent->BindAction("Tirer", IE_Pressed, this, &APersonnage::Tirer);
 }
 
@@ -134,6 +140,8 @@ void APersonnage::debloquerFutur()
 
 void APersonnage::Tirer()
 {
-	UE_LOG(LogTemp, Warning, TEXT("tirer dans personnage"));
-	this->arme->Tirer();
+	UE_LOG(LogTemp, Warning, TEXT("log de this : %p"), this);
+	UE_LOG(LogTemp, Warning, TEXT("appel de la méthode tirer dans personnage, arme=%p"), arme);
+	//UKismetSystemLibrary::PrintString(this, TEXT("Tirer dans Personnage"), true, true, FColor::Red, 5.0f);
+	//arme->Tirer();
 }

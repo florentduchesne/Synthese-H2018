@@ -6,6 +6,7 @@
 #include "Runtime/Engine/Classes/Components/SkeletalMeshComponent.h"
 #include "Runtime/Engine/Classes/Components/SceneComponent.h"
 #include "Runtime/CoreUObject/Public/UObject/ConstructorHelpers.h"
+#include "Runtime/Engine/Classes/Kismet/KismetSystemLibrary.h"
 #include "Arme.generated.h"
 
 
@@ -33,10 +34,7 @@ public:
 	// Called every frame
 	USkeletalMeshComponent * getMesh();
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-	
-	UFUNCTION()
-		virtual void Tirer() PURE_VIRTUAL(UArme::Tirer, );/* = 0; {
-		UE_LOG(LogTemp, Warning, TEXT("tirer dans arme"));
-	}*/
+
+	virtual void Tirer(); //PURE_VIRTUAL(UArme::Tirer, ;);
 	
 };

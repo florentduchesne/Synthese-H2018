@@ -5,14 +5,11 @@
 
 UFusilAuto::UFusilAuto()
 	:UArme(15, "/Game/FirstPerson/FPWeapon/Mesh/SK_FPGun")
-{}
+{
+	UE_LOG(LogTemp, Warning, TEXT("constructeur UFusil auto"));
+}
 
 void UFusilAuto::Tirer() {
-
-	UE_LOG(LogTemp, Warning, TEXT("tirer dans fusil auto"));
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("dans tirer fusil auto"));
-	if (GEngine)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("PIOU PIOU PIOU!!!"));
-	}
+	//UE_LOG(LogTemp, Warning, TEXT("tirer dans fusil auto"));
+	//UKismetSystemLibrary::PrintString(this, TEXT("PIOU PIOU PIOU!!!"), true, true, FColor::Red, 5.0f);
 }
