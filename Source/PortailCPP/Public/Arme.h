@@ -35,6 +35,6 @@ public:
 	USkeletalMeshComponent * getMesh();
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	virtual void Tirer(); //PURE_VIRTUAL(UArme::Tirer, ;);
+	virtual void Tirer() PURE_VIRTUAL(UArme::Tirer, ;);
 	
 };

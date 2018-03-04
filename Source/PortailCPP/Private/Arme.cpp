@@ -43,8 +43,9 @@ void UArme::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentT
 	// ...
 }
 
-void UArme::Tirer()
+/*void UArme::Tirer()
 {
 	//UE_LOG(LogTemp, Warning, TEXT("tirer dans UArme"));
 	//UKismetSystemLibrary::PrintString(this, TEXT("tirer dans UArme"), true, true, FColor::Red, 5.0f);
 }
+*/

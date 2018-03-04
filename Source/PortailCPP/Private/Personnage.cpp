@@ -58,6 +58,8 @@ APersonnage::APersonnage()
 // Called when the game starts or when spawned
 void APersonnage::BeginPlay()
 {
+	UE_LOG(LogTemp, Warning, TEXT("arme dans begin play : %p"), arme);
+
 	Super::BeginPlay();
 
 	UE_LOG(LogTemp, Warning, TEXT("arme dans begin play : %p"), arme);
@@ -143,5 +145,8 @@ void APersonnage::Tirer()
 	UE_LOG(LogTemp, Warning, TEXT("log de this : %p"), this);
 	UE_LOG(LogTemp, Warning, TEXT("appel de la méthode tirer dans personnage, arme=%p"), arme);
 	//UKismetSystemLibrary::PrintString(this, TEXT("Tirer dans Personnage"), true, true, FColor::Red, 5.0f);
-	//arme->Tirer();
+	if (arme)
+	{
+		arme->Tirer();
+	}
 }

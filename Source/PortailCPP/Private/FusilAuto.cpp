@@ -10,6 +10,6 @@ UFusilAuto::UFusilAuto()
 }
 
 void UFusilAuto::Tirer() {
-	//UE_LOG(LogTemp, Warning, TEXT("tirer dans fusil auto"));
-	//UKismetSystemLibrary::PrintString(this, TEXT("PIOU PIOU PIOU!!!"), true, true, FColor::Red, 5.0f);
+	UE_LOG(LogTemp, Warning, TEXT("tirer dans fusil auto"));
+	UKismetSystemLibrary::PrintString(this, TEXT("PIOU PIOU PIOU!!!"), true, true, FColor::Red, 5.0f);
 }
