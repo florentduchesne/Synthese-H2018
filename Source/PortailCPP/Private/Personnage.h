@@ -39,12 +39,14 @@ protected:
 	int PointsDevie = 100;
 	int armure = 0;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	// Camera du personnage
+	UPROPERTY(VisibleAnywhere)
+	UCameraComponent * camera;
 
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	bool bPeutSeTeleporter = true;
+
+	UFUNCTION()
+	void Recharger();
 
 	// Gere les inputs pour deplacer le personnage avant-arriere
 	UFUNCTION()
@@ -73,12 +75,19 @@ public:
 	UFUNCTION()
 	void Tirer();
 
-	// Camera du personnage
-	UPROPERTY(VisibleAnywhere)
-	UCameraComponent * camera;
+public:	
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
 
-	bool bPeutSeTeleporter = true;
-	void debloquer();
-	void debloquerFutur();
+	// Called to bind functionality to input
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
+	//débloque la téléportation avec un court délai
+	void DebloquerTeleportationFutur();
+	//permet au personnage de se téléporter
+	void DebloquerTeleportation();
+	//empêche le personnage de se téléporter
+	void BloquerTeleportation();
+	//retourne si oui ou non, le personnage a le droit de se téléporter
+	bool PeutSeTeleporter();
 };

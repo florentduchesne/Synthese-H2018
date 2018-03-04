@@ -93,6 +93,8 @@ void APersonnage::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	//tir
 	UKismetSystemLibrary::PrintString(this, TEXT("Set Input Tirer"), true, true, FColor::Red, 5.0f);
 	PlayerInputComponent->BindAction("Tirer", IE_Pressed, this, &APersonnage::Tirer);
+	//recharger
+	PlayerInputComponent->BindAction("Recharger", IE_Pressed, this, &APersonnage::Recharger);
 }
 
 void APersonnage::Avancer(float Value)
@@ -129,15 +131,25 @@ void APersonnage::TerminerSaut()
 	bPressedJump = false;
 }
 
-void APersonnage::debloquer()
+void APersonnage::DebloquerTeleportation()
 {
 	bPeutSeTeleporter = true;
 }
 
-void APersonnage::debloquerFutur()
+void APersonnage::BloquerTeleportation()
+{
+	bPeutSeTeleporter = false;
+}
+
+bool APersonnage::PeutSeTeleporter()
+{
+	return bPeutSeTeleporter;
+}
+
+void APersonnage::DebloquerTeleportationFutur()
 {
 	FTimerHandle UnusedHandle;
-	GetWorldTimerManager().SetTimer(UnusedHandle, this, &APersonnage::debloquer, 0.5f, false);
+	GetWorldTimerManager().SetTimer(UnusedHandle, this, &APersonnage::DebloquerTeleportation, 0.5f, false);
 }
 
 void APersonnage::Tirer()
@@ -149,4 +161,9 @@ void APersonnage::Tirer()
 	{
 		arme->Tirer();
 	}
+}
+
+void APersonnage::Recharger()
+{
+	arme->LancerRechargement();
 }

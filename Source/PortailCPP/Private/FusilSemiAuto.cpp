@@ -4,11 +4,13 @@
 
 
 UFusilSemiAuto::UFusilSemiAuto()
-	:UArme(10, "/Game/FirstPerson/FPWeapon/Mesh/SK_FPGun")
+	:UArme(10, 1.0f, "/Game/FirstPerson/FPWeapon/Mesh/SK_FPGun")
 {}
 
 void UFusilSemiAuto::Tirer() {
-
-	UE_LOG(LogTemp, Warning, TEXT("tirer dans fusil semi auto"));
-	UKismetSystemLibrary::PrintString(this, TEXT("PIOU! PIOU! PIOU!"), true, true, FColor::Red, 5.0f);
+	if (bPeutTirer)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("tirer dans fusil semi auto"));
+		UKismetSystemLibrary::PrintString(this, TEXT("PIOU! PIOU! PIOU!"), true, true, FColor::Red, 5.0f);
+	}
 }

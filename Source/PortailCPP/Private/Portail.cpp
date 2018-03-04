@@ -44,7 +44,7 @@ void APortail::OnTeleportation(AActor* overlappedActor, AActor* otherActor)
 	auto perso = Cast<APersonnage>(otherActor);
 	if (perso)
 	{
-		if (perso->bPeutSeTeleporter && autrePortail)
+		if (perso->PeutSeTeleporter() && autrePortail)
 		{
 			//le personnage fait dos au portail quand il en sort
 			//la rotation du personnage + la rotation de l'autre portail - ma rotation + 180
@@ -52,7 +52,7 @@ void APortail::OnTeleportation(AActor* overlappedActor, AActor* otherActor)
 			rotation.Yaw = perso->GetActorRotation().Yaw + autrePortail->GetActorRotation().Yaw - GetActorRotation().Yaw + 180.0f;
 			perso->GetController()->SetControlRotation(rotation);
 			//on lui enleve le droit de se teleporter pour eviter un stackoverflow
-			perso->bPeutSeTeleporter = false;
+			perso->BloquerTeleportation();
 
 			//teleporter le joueur sur la distance qui sépare les deux portails
 			FVector position = perso->GetActorLocation();
@@ -69,7 +69,7 @@ void APortail::OnTeleportation(AActor* overlappedActor, AActor* otherActor)
 			perso->GetCharacterMovement()->Velocity += force;
 
 			//on appelle une fonction qui lui redonne le droit de se teleporter dans une seconde
-			perso->debloquerFutur();
+			perso->DebloquerTeleportationFutur();
 		}
 	}	
 }
