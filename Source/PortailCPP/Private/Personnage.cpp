@@ -8,14 +8,18 @@ APersonnage::APersonnage()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	/*corps = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("MeshCorps"));
+	corps = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("MeshCorps"));
 	const ConstructorHelpers::FObjectFinder<USkeletalMesh> MeshObj(TEXT("/Engine/Tutorial/SubEditors/TutorialAssets/Character/TutorialTPP"));
 	corps->SetSkeletalMeshWithoutResettingAnimation(MeshObj.Object);
-	RootComponent = corps;
+	
 	corps->SetRelativeLocation(FVector(0, 0, -100.0f));
-	FRotator rotation;
-	rotation.Yaw = -90.0f;
-	corps->AddRelativeRotation(rotation);*/
+	corps->SetRelativeRotation(FRotator(0, -90.0f, 0));
+
+	corps->SetOwnerNoSee(true);
+	
+	RootComponent = GetCapsuleComponent();
+
+	corps->SetupAttachment(RootComponent);
 
 	// Cree une camera avec le modele par defaut
 	camera = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
@@ -25,7 +29,7 @@ APersonnage::APersonnage()
 	// Permet au personnage de controler la rotation de la camera
 	camera->bUsePawnControlRotation = true;
 
-	arme = CreateDefaultSubobject<UFusilAuto>(TEXT("Arme"));
+	arme = CreateDefaultSubobject<UFusilSemiAuto>(TEXT("Arme"));
 
 	UE_LOG(LogTemp, Warning, TEXT("arme dans constructeur de personnage : %p"), arme);
 
@@ -74,7 +78,6 @@ void APersonnage::BeginPlay()
 void APersonnage::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 // Called to bind functionality to input
@@ -92,9 +95,10 @@ void APersonnage::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	PlayerInputComponent->BindAction("Sauter", IE_Released, this, &APersonnage::TerminerSaut);
 	//tir
 	UKismetSystemLibrary::PrintString(this, TEXT("Set Input Tirer"), true, true, FColor::Red, 5.0f);
-	PlayerInputComponent->BindAction("Tirer", IE_Pressed, this, &APersonnage::Tirer);
+	PlayerInputComponent->BindAction("Tirer", IE_Pressed, arme, &UArme::CommencerTirSuper);
+	PlayerInputComponent->BindAction("Tirer", IE_Released, arme, &UArme::TerminerTirSuper);
 	//recharger
-	PlayerInputComponent->BindAction("Recharger", IE_Pressed, this, &APersonnage::Recharger);
+	PlayerInputComponent->BindAction("Recharger", IE_Pressed, arme, &UArme::LancerRechargement);
 }
 
 void APersonnage::Avancer(float Value)
@@ -146,22 +150,41 @@ bool APersonnage::PeutSeTeleporter()
 	return bPeutSeTeleporter;
 }
 
+void APersonnage::InfligerDegats(int degats)
+{
+	if (Armure)
+	{
+		Armure -= degats;
+		if (Armure < 0)
+		{
+			PointsDevie += Armure;
+			Armure = 0;
+		}
+	}
+	else
+	{
+		PointsDevie -= degats;
+	}
+	UE_LOG(LogTemp, Warning, TEXT("ARMURE DU PERSONNAGE %d"), Armure);
+	UE_LOG(LogTemp, Warning, TEXT("PV DU PERSONNAGE %d"), PointsDevie);
+}
+
 void APersonnage::DebloquerTeleportationFutur()
 {
 	FTimerHandle UnusedHandle;
 	GetWorldTimerManager().SetTimer(UnusedHandle, this, &APersonnage::DebloquerTeleportation, 0.5f, false);
 }
 
-void APersonnage::Tirer()
+/*void APersonnage::Tirer()
 {
 	UE_LOG(LogTemp, Warning, TEXT("log de this : %p"), this);
 	UE_LOG(LogTemp, Warning, TEXT("appel de la méthode tirer dans personnage, arme=%p"), arme);
 	//UKismetSystemLibrary::PrintString(this, TEXT("Tirer dans Personnage"), true, true, FColor::Red, 5.0f);
 	if (arme)
 	{
-		arme->Tirer();
+		arme->TirerSuper();
 	}
-}
+}*/
 
 void APersonnage::Recharger()
 {

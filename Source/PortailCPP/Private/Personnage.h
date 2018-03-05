@@ -10,6 +10,7 @@
 #include "Runtime/Engine/Classes/Kismet/KismetSystemLibrary.h"
 #include "Arme.h"
 #include "FusilSemiAuto.h"
+#include "Runtime/Engine/Classes/Components/CapsuleComponent.h"
 #include "FusilAuto.h"
 #include "Runtime/Engine/Classes/Camera/CameraComponent.h"
 #include "Personnage.generated.h"
@@ -30,14 +31,12 @@ protected:
 
 	//Mesh troisieme personne (visible uniquement par les autres joueurs)
 	USkeletalMeshComponent * corps;
-	// Mesh Premiere personne (visible uniquement par ce joueur)
-	/*UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
-	USkeletalMeshComponent * FPSMesh;*/
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+
+	UPROPERTY()
 	UArme * arme;
 
 	int PointsDevie = 100;
-	int armure = 0;
+	int Armure = 50;
 
 	// Camera du personnage
 	UPROPERTY(VisibleAnywhere)
@@ -71,9 +70,10 @@ protected:
 	UFUNCTION()
 	void TerminerSaut();
 
+	/*
 	//tirer
 	UFUNCTION()
-	void Tirer();
+	void Tirer();*/
 
 public:	
 	// Called every frame
@@ -90,4 +90,6 @@ public:
 	void BloquerTeleportation();
 	//retourne si oui ou non, le personnage a le droit de se téléporter
 	bool PeutSeTeleporter();
+	//Le personnage recoit des degats
+	void InfligerDegats(int degats);
 };

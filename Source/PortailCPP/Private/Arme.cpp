@@ -5,10 +5,11 @@
 
 // Sets default values for this component's properties
 UArme::UArme()
-	:UArme(10, 1.0f, "/Game/FirstPerson/FPWeapon/Mesh/SK_FPGun") {}
+	//:UArme(10, 1.0f, 10, "/Game/FirstPerson/FPWeapon/Mesh/SK_FPGun")
+{}
 
-UArme::UArme(const int _TailleChargeur, float _TempsRecharge, FString CheminMesh)
-	:TailleChargeur( _TailleChargeur ), TempsRecharge(_TempsRecharge)
+UArme::UArme(const int _TailleChargeur, float _TempsRecharge, int Degats, FString CheminMesh)
+	:TailleChargeur( _TailleChargeur ), TempsRecharge(_TempsRecharge), Degats(Degats)
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
@@ -27,9 +28,6 @@ UArme::UArme(const int _TailleChargeur, float _TempsRecharge, FString CheminMesh
 void UArme::BeginPlay()
 {
 	Super::BeginPlay();
-
-	// ...
-	
 }
 
 USkeletalMeshComponent * UArme::getMesh()
@@ -56,8 +54,56 @@ void UArme::Recharger()
 
 void UArme::LancerRechargement()
 {
-	FTimerHandle TimerHandle;
-	GetOuter()->GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UArme::Recharger, TempsRecharge, false);
-	bPeutTirer = false;
-	UKismetSystemLibrary::PrintString(this, TEXT("RECHARGEMENT"), true, true, FColor::Red, 5.0f);
+	if (bPeutTirer)
+	{
+		FTimerHandle TimerHandle;
+		GetOuter()->GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UArme::Recharger, TempsRecharge, false);
+		bPeutTirer = false;
+		UKismetSystemLibrary::PrintString(this, TEXT("RECHARGEMENT"), true, true, FColor::Red, 5.0f);
+	}
+}
+
+bool UArme::PeutTirer()
+{
+	if (!MunitionsDansChargeur)
+	{
+		LancerRechargement();
+	}
+	return bPeutTirer;
+	/*
+	if (bPeutTirer)
+	{
+		if (MunitionsDansChargeur)
+		{
+			return true;
+		}
+		else
+		{
+			LancerRechargement();
+			return false;
+		}
+	}
+	else
+	{
+		return false;
+	}*/
+}
+
+void UArme::CommencerTirSuper()
+{
+	if (PeutTirer())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("tirer super"));
+		UKismetSystemLibrary::PrintString(this, TEXT("tirer super"), true, true, FColor::Red, 5.0f);
+		MunitionsDansChargeur -= 1;
+		CommencerTir();
+	}
+}
+
+void UArme::TerminerTirSuper()
+{
+	if (PeutTirer())
+	{
+		TerminerTir();
+	}
 }
