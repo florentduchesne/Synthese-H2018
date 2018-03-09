@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "PortailCPP/Private/Personnage.h"
 #include "Projectile.h"
+#include "PortailCPP/Private/Personnage.h"
 
 // Sets default values
 AProjectile::AProjectile()
@@ -42,6 +42,11 @@ AProjectile::AProjectile()
 	Mesh->SetupAttachment(RootComponent);
 
 	Degats = 20;
+}
+
+void AProjectile::Initialiser(int Degats)
+{
+	this->Degats = Degats;
 }
 
 // Called when the game starts or when spawned

@@ -38,10 +38,12 @@ protected:
 
 	void Recharger();
 
+	AProjectile * FaireApparaitreProjectile();
+
 public:
 	// Called every frame
 	USkeletalMeshComponent * getMesh();
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	//virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	//retourne vrai si l'arme n'est pas en train de recharger ET qu'elle a encore une balle ou plus dans le chargeur
 	bool PeutTirer();

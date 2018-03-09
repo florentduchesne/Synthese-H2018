@@ -31,8 +31,6 @@ APersonnage::APersonnage()
 
 	arme = CreateDefaultSubobject<UFusilSemiAuto>(TEXT("Arme"));
 
-	UE_LOG(LogTemp, Warning, TEXT("arme dans constructeur de personnage : %p"), arme);
-
 	arme->SetupAttachment(camera);
 
 	arme->getMesh()->SetupAttachment(camera);
@@ -40,38 +38,12 @@ APersonnage::APersonnage()
 	arme->getMesh()->SetRelativeLocation(FVector(50.0f, 35.0f, -20.0f));
 
 	arme->getMesh()->SetRelativeRotation(FRotator(0.0f, -90.0f, 0.0f));
-
-	UE_LOG(LogTemp, Warning, TEXT("arme dans constructeur de personnage : %p"), arme);
-
-	/*
-	// Cree un mesh par defaut
-	FPSMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("FirstPersonMesh"));
-	const ConstructorHelpers::FObjectFinder<USkeletalMesh> MeshObj1(TEXT("/Game/Personnage/HeroFPP"));
-	FPSMesh->SetSkeletalMeshWithoutResettingAnimation(MeshObj1.Object);
-	// Il n'y a que ce joueur qui peut voir le mesh
-	FPSMesh->SetOnlyOwnerSee(true);
-	// Attache le mesh a la camera
-	FPSMesh->SetupAttachment(camera);
-	// Desactive les ombres
-	FPSMesh->bCastDynamicShadow = false;
-	FPSMesh->CastShadow = false;*/
-
-	//arme->getMesh()->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
 void APersonnage::BeginPlay()
 {
-	UE_LOG(LogTemp, Warning, TEXT("arme dans begin play : %p"), arme);
-
 	Super::BeginPlay();
-
-	UE_LOG(LogTemp, Warning, TEXT("arme dans begin play : %p"), arme);
-	/*if (GEngine)
-	{
-		// Put up a debug message for five seconds. The -1 "Key" value (first argument) indicates that we will never need to update or refresh this message.
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("We are using FPSCharacter."));
-	}*/
 }
 
 // Called every frame
@@ -135,6 +107,12 @@ void APersonnage::TerminerSaut()
 	bPressedJump = false;
 }
 
+void APersonnage::DebloquerTeleportationFutur()
+{
+	FTimerHandle UnusedHandle;
+	GetWorldTimerManager().SetTimer(UnusedHandle, this, &APersonnage::DebloquerTeleportation, 0.5f, false);
+}
+
 void APersonnage::DebloquerTeleportation()
 {
 	bPeutSeTeleporter = true;
@@ -168,23 +146,6 @@ void APersonnage::InfligerDegats(int degats)
 	UE_LOG(LogTemp, Warning, TEXT("ARMURE DU PERSONNAGE %d"), Armure);
 	UE_LOG(LogTemp, Warning, TEXT("PV DU PERSONNAGE %d"), PointsDevie);
 }
-
-void APersonnage::DebloquerTeleportationFutur()
-{
-	FTimerHandle UnusedHandle;
-	GetWorldTimerManager().SetTimer(UnusedHandle, this, &APersonnage::DebloquerTeleportation, 0.5f, false);
-}
-
-/*void APersonnage::Tirer()
-{
-	UE_LOG(LogTemp, Warning, TEXT("log de this : %p"), this);
-	UE_LOG(LogTemp, Warning, TEXT("appel de la méthode tirer dans personnage, arme=%p"), arme);
-	//UKismetSystemLibrary::PrintString(this, TEXT("Tirer dans Personnage"), true, true, FColor::Red, 5.0f);
-	if (arme)
-	{
-		arme->TirerSuper();
-	}
-}*/
 
 void APersonnage::Recharger()
 {

@@ -18,7 +18,6 @@ UArme::UArme(const int _TailleChargeur, float _TempsRecharge, int Degats, FStrin
 	mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("MeshArme"));
 	const ConstructorHelpers::FObjectFinder<USkeletalMesh> MeshObj((TEXT("%s"), *CheminMesh));
 	mesh->SetSkeletalMeshWithoutResettingAnimation(MeshObj.Object);
-	UE_LOG(LogTemp, Warning, TEXT("constructeur UArme"));
 	//UKismetSystemLibrary::PrintString(this, *FString("balles dans chargeur : " + FString::FromInt(_tailleChargeur)), true, true, FColor::Red, 5.0f);
 
 	MunitionsDansChargeur = TailleChargeur;
@@ -35,19 +34,10 @@ USkeletalMeshComponent * UArme::getMesh()
 	return mesh;
 }
 
-// Called every frame
-void UArme::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
-}
-
 //recharge l'arme
 void UArme::Recharger()
 {
 	MunitionsDansChargeur = TailleChargeur;
-	UE_LOG(LogTemp, Warning, TEXT("RECHARGEMENT"));
 	bPeutTirer = true;
 	UKismetSystemLibrary::PrintString(this, TEXT("RECHARGEMENT TERMINE"), true, true, FColor::Red, 5.0f);
 }
@@ -93,9 +83,6 @@ void UArme::CommencerTirSuper()
 {
 	if (PeutTirer())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("tirer super"));
-		UKismetSystemLibrary::PrintString(this, TEXT("tirer super"), true, true, FColor::Red, 5.0f);
-		MunitionsDansChargeur -= 1;
 		CommencerTir();
 	}
 }
@@ -106,4 +93,26 @@ void UArme::TerminerTirSuper()
 	{
 		TerminerTir();
 	}
+}
+
+AProjectile * UArme::FaireApparaitreProjectile()
+{
+	UWorld* const World = GetWorld();
+	if (World != NULL)
+	{
+		const FRotator SpawnRotation = this->GetComponentRotation();
+		// MuzzleOffset is in camera space, so transform it to world space before offsetting from the character location to find the final muzzle position
+		const FVector SpawnLocation = this->GetComponentLocation() + SpawnRotation.RotateVector(FVector(100.0f, 25.0f, 0.0f));
+
+		//Set Spawn Collision Handling Override
+		FActorSpawnParameters ActorSpawnParams;
+		ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
+
+		// fait apparaitre le projectile avec le constructeur par defaut
+		AProjectile * projectile = World->SpawnActor<AProjectile>(AProjectile::StaticClass(), SpawnLocation, SpawnRotation, ActorSpawnParams);
+		//initialise le projectile avec les valeurs propres a l'arme
+		MunitionsDansChargeur -= 1;
+		return projectile;
+	}
+	return nullptr;
 }

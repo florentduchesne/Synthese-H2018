@@ -14,9 +14,15 @@ UCLASS()
 class PORTAILCPP_API UFusilAuto : public UArme
 {
 	GENERATED_BODY()
+
+	int TirsParMinute = 1;
+	float TempsDepuisDernierTir = 0.0f;
+	bool bACommenceTir = false;
 	
 public:
 	UFusilAuto();
+
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	
 	void CommencerTir() override;
 	void TerminerTir() override;
