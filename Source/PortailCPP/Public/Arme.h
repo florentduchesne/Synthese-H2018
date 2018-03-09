@@ -26,7 +26,7 @@ protected:
 	virtual void BeginPlay() override;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	USkeletalMeshComponent * mesh;
-	float DelaiEntreChaqueTir;
+	float DelaiEntreChaqueTir;//a remplacer
 	float TempsRecharge;
 	int8 MunitionsDansChargeur;
 	int8 TailleChargeur;

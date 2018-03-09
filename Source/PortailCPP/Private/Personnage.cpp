@@ -29,7 +29,7 @@ APersonnage::APersonnage()
 	// Permet au personnage de controler la rotation de la camera
 	camera->bUsePawnControlRotation = true;
 
-	arme = CreateDefaultSubobject<UFusilSemiAuto>(TEXT("Arme"));
+	arme = CreateDefaultSubobject<UFusilARafales>(TEXT("Arme"));
 
 	arme->SetupAttachment(camera);
 

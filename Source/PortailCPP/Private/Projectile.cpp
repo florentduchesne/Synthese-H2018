@@ -8,7 +8,6 @@ AProjectile::AProjectile()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	UE_LOG(LogTemp, Warning, TEXT("projectile cree"));
 
 	// Use a sphere as a simple collision representation
 	CollisionComp = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComp"));
@@ -76,6 +75,5 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimi
 		UE_LOG(LogTemp, Warning, TEXT("UN PERSONNAGE A ETE TOUCHE"));
 		personnageTouche->InfligerDegats(Degats);
 	}
-	UE_LOG(LogTemp, Warning, TEXT("projectile touche quelque chose"));
 	Destroy();
 }

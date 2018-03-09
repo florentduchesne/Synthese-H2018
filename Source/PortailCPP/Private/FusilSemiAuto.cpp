@@ -11,7 +11,7 @@ void UFusilSemiAuto::CommencerTir() {
 	UE_LOG(LogTemp, Warning, TEXT("tirer dans fusil semi auto"));
 	UKismetSystemLibrary::PrintString(this, TEXT("PIOU! PIOU! PIOU!"), true, true, FColor::Red, 5.0f);
 	AProjectile * projectile = FaireApparaitreProjectile();
-	projectile->Initialiser(20);
+	projectile->Initialiser(Degats);
 }
 
 void UFusilSemiAuto::TerminerTir()

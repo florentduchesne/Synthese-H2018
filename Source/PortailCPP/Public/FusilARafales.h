@@ -3,28 +3,32 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Runtime/Engine/Classes/Kismet/KismetSystemLibrary.h"
 #include "Arme.h"
-#include "FusilAuto.generated.h"
+#include "FusilARafales.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class PORTAILCPP_API UFusilAuto : public UArme
+class PORTAILCPP_API UFusilARafales : public UArme
 {
 	GENERATED_BODY()
 
-	const int TempsEntreChaqueTir = 0.1f;
+	const int TirsParRafale = 3;
+	const float TempsEntreChaqueTir = 0.1f;
 	float TempsDepuisDernierTir = 0.0f;
+
+	int BallesTireesDansRafale = 0;
+
 	bool bACommenceTir = false;
 	
 public:
-	UFusilAuto();
+	
+	UFusilARafales();
 
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-	
+	void TerminerRafale();
 	void CommencerTir() override;
 	void TerminerTir() override;
-
+	
 };

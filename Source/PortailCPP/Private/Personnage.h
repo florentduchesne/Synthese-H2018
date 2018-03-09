@@ -10,6 +10,7 @@
 #include "Runtime/Engine/Classes/Kismet/KismetSystemLibrary.h"
 #include "Arme.h"
 #include "FusilSemiAuto.h"
+#include "FusilARafales.h"
 #include "Runtime/Engine/Classes/Components/CapsuleComponent.h"
 #include "FusilAuto.h"
 #include "Runtime/Engine/Classes/Camera/CameraComponent.h"

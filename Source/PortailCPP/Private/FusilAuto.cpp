@@ -4,11 +4,10 @@
 
 
 UFusilAuto::UFusilAuto()
-	:UArme(20, 1.0f, 20, "/Game/FirstPerson/FPWeapon/Mesh/SK_FPGun")
+	:UArme(20, 3.0f, 20, "/Game/FirstPerson/FPWeapon/Mesh/SK_FPGun")
 {
 	UE_LOG(LogTemp, Warning, TEXT("constructeur UFusil auto"));
 	PrimaryComponentTick.bCanEverTick = true;
-	TempsRecharge = 3.0f;
 }
 
 void UFusilAuto::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -19,10 +18,10 @@ void UFusilAuto::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompo
 		if (PeutTirer())
 		{
 			TempsDepuisDernierTir += DeltaTime;
-			if (TempsDepuisDernierTir > 0.1f)
+			if (TempsDepuisDernierTir > TempsEntreChaqueTir)
 			{
 				AProjectile * projectile = FaireApparaitreProjectile();
-				projectile->Initialiser(10);
+				projectile->Initialiser(Degats);
 				TempsDepuisDernierTir = 0.0f;
 			}
 		}
