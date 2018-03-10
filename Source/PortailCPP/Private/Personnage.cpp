@@ -67,7 +67,6 @@ void APersonnage::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	PlayerInputComponent->BindAction("Sauter", IE_Pressed, this, &APersonnage::DebuterSaut);
 	PlayerInputComponent->BindAction("Sauter", IE_Released, this, &APersonnage::TerminerSaut);
 	//tir
-	UKismetSystemLibrary::PrintString(this, TEXT("Set Input Tirer"), true, true, FColor::Red, 5.0f);
 	PlayerInputComponent->BindAction("Tirer", IE_Pressed, arme, &UArme::CommencerTirSuper);
 	PlayerInputComponent->BindAction("Tirer", IE_Released, arme, &UArme::TerminerTirSuper);
 	//recharger
@@ -98,11 +97,12 @@ void APersonnage::TournerVerticalement(float Value)
 	AddControllerPitchInput(Value);
 }
 
+//géré par l'engine...
 void APersonnage::DebuterSaut()
 {
 	bPressedJump = true;
 }
-
+//géré par l'engine...
 void APersonnage::TerminerSaut()
 {
 	bPressedJump = false;

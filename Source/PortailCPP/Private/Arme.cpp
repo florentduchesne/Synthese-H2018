@@ -5,7 +5,6 @@
 
 // Sets default values for this component's properties
 UArme::UArme()
-	//:UArme(10, 1.0f, 10, "/Game/FirstPerson/FPWeapon/Mesh/SK_FPGun")
 {}
 
 UArme::UArme(const int _TailleChargeur, float _TempsRecharge, int Degats, FString CheminMesh)
@@ -38,81 +37,77 @@ USkeletalMeshComponent * UArme::getMesh()
 void UArme::Recharger()
 {
 	MunitionsDansChargeur = TailleChargeur;
-	bPeutTirer = true;
+	bADesBallesDansChargeur = true;
 	UKismetSystemLibrary::PrintString(this, TEXT("RECHARGEMENT TERMINE"), true, true, FColor::Red, 5.0f);
 }
 
 void UArme::LancerRechargement()
 {
-	if (bPeutTirer)
+	if (bADesBallesDansChargeur)
 	{
 		FTimerHandle TimerHandle;
 		GetOuter()->GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UArme::Recharger, TempsRecharge, false);
-		bPeutTirer = false;
+		bADesBallesDansChargeur = false;
 		UKismetSystemLibrary::PrintString(this, TEXT("RECHARGEMENT"), true, true, FColor::Red, 5.0f);
 	}
 }
 
-bool UArme::PeutTirer()
+bool UArme::ADesBallesDansChargeur()
 {
 	if (!MunitionsDansChargeur)
 	{
 		LancerRechargement();
 	}
-	return bPeutTirer;
-	/*
-	if (bPeutTirer)
-	{
-		if (MunitionsDansChargeur)
-		{
-			return true;
-		}
-		else
-		{
-			LancerRechargement();
-			return false;
-		}
-	}
-	else
-	{
-		return false;
-	}*/
+	return bADesBallesDansChargeur;
 }
 
 void UArme::CommencerTirSuper()
 {
-	if (PeutTirer())
+	if (ADesBallesDansChargeur())
 	{
-		CommencerTir();
+		if (bDelaiEntreChaqueTirTermine)
+		{
+			CommencerTir();
+			bTirACommence = true;
+		}
 	}
 }
 
 void UArme::TerminerTirSuper()
 {
-	if (PeutTirer())
+	TerminerTir();
+	if (bDelaiEntreChaqueTirTermine && bTirACommence)
 	{
-		TerminerTir();
+		FTimerHandle TimerHandle;
+		GetOuter()->GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UArme::DebloquerTirDelai, DelaiEntreChaqueTir, false);
+		bDelaiEntreChaqueTirTermine = false;
 	}
+	bTirACommence = false;
 }
 
-AProjectile * UArme::FaireApparaitreProjectile()
+void UArme::DebloquerTirDelai()
+{
+	bDelaiEntreChaqueTirTermine = true;
+}
+
+void UArme::FaireApparaitreProjectile()
 {
 	UWorld* const World = GetWorld();
 	if (World != NULL)
 	{
 		const FRotator SpawnRotation = this->GetComponentRotation();
-		// MuzzleOffset is in camera space, so transform it to world space before offsetting from the character location to find the final muzzle position
+		// place la balle au bon endroit par rapport au personnage et à son orientation
 		const FVector SpawnLocation = this->GetComponentLocation() + SpawnRotation.RotateVector(FVector(100.0f, 25.0f, 0.0f));
 
-		//Set Spawn Collision Handling Override
+		//initialise les collisions pour la balle
 		FActorSpawnParameters ActorSpawnParams;
 		ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
 
 		// fait apparaitre le projectile avec le constructeur par defaut
 		AProjectile * projectile = World->SpawnActor<AProjectile>(AProjectile::StaticClass(), SpawnLocation, SpawnRotation, ActorSpawnParams);
 		//initialise le projectile avec les valeurs propres a l'arme
+		projectile->Initialiser(Degats);
+		//diminue le nombre de balles dans le chargeur
 		MunitionsDansChargeur -= 1;
-		return projectile;
 	}
-	return nullptr;
 }

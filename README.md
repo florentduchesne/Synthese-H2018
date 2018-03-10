@@ -18,4 +18,4 @@ Liste des éléments du jeu :
 - Réinitialiser la partie
 - Tirs secondaires
 - Localisation des tirs
-- Menu principal
+- Menu principal (FAIT)

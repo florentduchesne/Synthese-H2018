@@ -43,6 +43,7 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent * camera;
 
+	//vrai si le personnage ne s'est pas téléporté depuis un petit délai
 	bool bPeutSeTeleporter = true;
 
 	UFUNCTION()
@@ -78,7 +79,8 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
-	//débloque la téléportation avec un court délai
+	///on bloque et débloque la téléportation dans le but d'éviter que le joueur se téléporte à répétition d'un téléporteur à l'autre jusqu'au StackOverflow
+	//débloque la téléportation après un court délai
 	void DebloquerTeleportationFutur();
 	//permet au personnage de se téléporter
 	void DebloquerTeleportation();

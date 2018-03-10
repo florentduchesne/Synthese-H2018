@@ -25,8 +25,8 @@ AProjectile::AProjectile()
 	// Use a ProjectileMovementComponent to govern this projectile's movement
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileComp"));
 	ProjectileMovement->UpdatedComponent = CollisionComp;
-	ProjectileMovement->InitialSpeed = 4000.f;
-	ProjectileMovement->MaxSpeed = 4000.f;
+	ProjectileMovement->InitialSpeed = 6000.f;
+	ProjectileMovement->MaxSpeed = 6000.f;
 	ProjectileMovement->bRotationFollowsVelocity = false;
 	ProjectileMovement->bShouldBounce = false;
 
@@ -52,28 +52,26 @@ void AProjectile::Initialiser(int Degats)
 void AProjectile::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
 void AProjectile::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-	// Only add impulse and destroy projectile if we hit a physics
+	// si l'acteur touché simule la physique, lui donne une poussée
 	if ((OtherActor != NULL) && (OtherActor != this) && (OtherComp != NULL) && OtherComp->IsSimulatingPhysics())
 	{
 		OtherComp->AddImpulseAtLocation(GetVelocity() * 100.0f, GetActorLocation());
-
 	}
+	//si l'acteur touché est un joueur, lui inflige les dégâts
 	if (APersonnage * personnageTouche = Cast<APersonnage>(OtherActor))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("UN PERSONNAGE A ETE TOUCHE"));
 		personnageTouche->InfligerDegats(Degats);
 	}
+	//détruit le projectile
 	Destroy();
 }

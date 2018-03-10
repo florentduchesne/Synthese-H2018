@@ -14,17 +14,15 @@ void UFusilARafales::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 {
 	if (bACommenceTir)
 	{
-		if (PeutTirer())
+		if (ADesBallesDansChargeur())
 		{
 			if (BallesTireesDansRafale < TirsParRafale)
 			{
 				TempsDepuisDernierTir += DeltaTime;
 				if (TempsDepuisDernierTir > TempsEntreChaqueTir)
 				{
-					UE_LOG(LogTemp, Warning, TEXT("tirer dans fusil a rafales"));
 					BallesTireesDansRafale += 1;
-					AProjectile * projectile = FaireApparaitreProjectile();
-					projectile->Initialiser(Degats);
+					FaireApparaitreProjectile();
 					TempsDepuisDernierTir = 0.0f;
 				}
 			}

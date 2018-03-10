@@ -15,13 +15,12 @@ void UFusilAuto::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompo
 	
 	if (bACommenceTir)
 	{
-		if (PeutTirer())
+		if (ADesBallesDansChargeur())
 		{
 			TempsDepuisDernierTir += DeltaTime;
 			if (TempsDepuisDernierTir > TempsEntreChaqueTir)
 			{
-				AProjectile * projectile = FaireApparaitreProjectile();
-				projectile->Initialiser(Degats);
+				FaireApparaitreProjectile();
 				TempsDepuisDernierTir = 0.0f;
 			}
 		}
@@ -42,7 +41,5 @@ void UFusilAuto::CommencerTir() {
 
 void UFusilAuto::TerminerTir()
 {
-	UE_LOG(LogTemp, Warning, TEXT("tirer dans fusil auto"));
-	UKismetSystemLibrary::PrintString(this, TEXT("tir terminé!!!"), true, true, FColor::Red, 5.0f);
 	bACommenceTir = false;
 }
