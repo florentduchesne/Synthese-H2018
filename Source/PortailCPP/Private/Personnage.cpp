@@ -38,6 +38,7 @@ APersonnage::APersonnage()
 	arme->getMesh()->SetRelativeLocation(FVector(50.0f, 35.0f, -20.0f));
 
 	arme->getMesh()->SetRelativeRotation(FRotator(0.0f, -90.0f, 0.0f));
+
 }
 
 // Called when the game starts or when spawned

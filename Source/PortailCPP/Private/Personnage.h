@@ -71,11 +71,6 @@ protected:
 	UFUNCTION()
 	void TerminerSaut();
 
-	/*
-	//tirer
-	UFUNCTION()
-	void Tirer();*/
-
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
