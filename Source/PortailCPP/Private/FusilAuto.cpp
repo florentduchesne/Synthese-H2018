@@ -6,7 +6,6 @@
 UFusilAuto::UFusilAuto()
 	:UArme(20, 3.0f, 20, "/Game/FirstPerson/FPWeapon/Mesh/SK_FPGun")
 {
-	UE_LOG(LogTemp, Warning, TEXT("constructeur UFusil auto"));
 	PrimaryComponentTick.bCanEverTick = true;
 }
 
@@ -31,12 +30,9 @@ void UFusilAuto::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompo
 	}
 }
 
-void UFusilAuto::CommencerTir() {
-	UE_LOG(LogTemp, Warning, TEXT("tirer dans fusil auto"));
-	UKismetSystemLibrary::PrintString(this, TEXT("PIOU! PIOU! PIOU!"), true, true, FColor::Red, 5.0f);
-	
+void UFusilAuto::CommencerTir() 
+{
 	bACommenceTir = true;
-	
 }
 
 void UFusilAuto::TerminerTir()

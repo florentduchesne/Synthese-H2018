@@ -30,7 +30,7 @@ protected:
 	USkeletalMeshComponent * mesh;
 
 	//delai entre la fin d'un tir et le début du suivant
-	float DelaiEntreChaqueTir = 2.0f;
+	float DelaiEntreChaqueTir = 0.8f;
 	//temps requis pour recharger
 	float TempsRecharge;
 	//nombre de balles qu'il reste dans le chargeur
