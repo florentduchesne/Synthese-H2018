@@ -16,6 +16,8 @@ APersonnage::APersonnage()
 	corps->SetRelativeRotation(FRotator(0, -90.0f, 0));
 
 	corps->SetOwnerNoSee(true);
+
+	UE_LOG(LogTemp, Warning, TEXT("constructeur personnage"));
 	
 	RootComponent = GetCapsuleComponent();
 
@@ -136,16 +138,21 @@ void APersonnage::InfligerDegats(int degats)
 		Armure -= degats;
 		if (Armure < 0)
 		{
-			PointsDevie += Armure;
+			PointsDeVie += Armure;
 			Armure = 0;
 		}
 	}
 	else
 	{
-		PointsDevie -= degats;
+		PointsDeVie -= degats;
+	}
+
+	if (PointsDeVie <= 0)
+	{
+		GetOuter()->GetWorld()->GetAuthGameMode();
 	}
 	UE_LOG(LogTemp, Warning, TEXT("ARMURE DU PERSONNAGE %d"), Armure);
-	UE_LOG(LogTemp, Warning, TEXT("PV DU PERSONNAGE %d"), PointsDevie);
+	UE_LOG(LogTemp, Warning, TEXT("PV DU PERSONNAGE %d"), PointsDeVie);
 }
 
 void APersonnage::Recharger()

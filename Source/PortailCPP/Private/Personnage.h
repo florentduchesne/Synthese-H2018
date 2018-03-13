@@ -36,7 +36,7 @@ protected:
 	UPROPERTY()
 	UArme * arme;
 
-	int PointsDevie = 100;
+	int PointsDeVie = 100;
 	int Armure = 50;
 
 	// Camera du personnage

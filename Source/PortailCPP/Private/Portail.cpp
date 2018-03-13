@@ -77,6 +77,8 @@ void APortail::OnTeleportation(AActor* overlappedActor, AActor* otherActor)
 void APortail::connecterDeuxPortails(APortail * portail)
 {
 	this->autrePortail = portail;
+	if (!autrePortail->estConnecte())
+		autrePortail->connecterDeuxPortails(this);
 }
 
 // Called every frame
@@ -86,3 +88,10 @@ void APortail::Tick(float DeltaTime)
 
 }
 
+bool APortail::estConnecte()
+{
+	if (autrePortail)
+		return true;
+	else
+		return false;
+}
