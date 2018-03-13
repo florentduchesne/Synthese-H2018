@@ -106,7 +106,10 @@ void UArme::FaireApparaitreProjectile()
 		// fait apparaitre le projectile avec le constructeur par defaut
 		AProjectile * projectile = World->SpawnActor<AProjectile>(AProjectile::StaticClass(), SpawnLocation, SpawnRotation, ActorSpawnParams);
 		//initialise le projectile avec les valeurs propres a l'arme
-		projectile->Initialiser(Degats, NoJoueur);
+		if (projectile)
+		{
+			projectile->Initialiser(Degats, NoJoueur);
+		}
 		//diminue le nombre de balles dans le chargeur
 		MunitionsDansChargeur -= 1;
 	}

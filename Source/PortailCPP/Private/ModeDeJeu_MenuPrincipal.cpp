@@ -47,4 +47,9 @@ void AModeDeJeu_MenuPrincipal::JoueurEnTueUnAutre(int IndexJoueurTueur, int Inde
 {
 	StatsJoueurs[IndexJoueurTueur]->NbMeurtres++;
 	StatsJoueurs[IndexJoueurMort]->NbMorts++;
+
+	if (StatsJoueurs[IndexJoueurTueur]->NbMeurtres == 3)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("JOUEUR %d A GAGNÉ LA PARTIE"), IndexJoueurTueur);
+	}
 }
