@@ -9,6 +9,11 @@ AModeDeJeu_MenuPrincipal::AModeDeJeu_MenuPrincipal()
 	// set default pawn class to our Blueprinted character
 	DefaultPawnClass = APersonnage::StaticClass();
 	UE_LOG(LogTemp, Warning, TEXT("constructeur game mode"));
+
+	for (auto i = 0; i < 4; i++)
+	{
+		StatsJoueurs[i] = new StatistiquesDuJoueur(i);
+	}
 }
 
 void AModeDeJeu_MenuPrincipal::BeginPlay()
@@ -36,4 +41,10 @@ void AModeDeJeu_MenuPrincipal::ChangeMenuWidget(TSubclassOf<UUserWidget> NewWidg
 			CurrentWidget->AddToViewport();
 		}
 	}
+}
+
+void AModeDeJeu_MenuPrincipal::JoueurEnTueUnAutre(int IndexJoueurTueur, int IndexJoueurMort)
+{
+	StatsJoueurs[IndexJoueurTueur]->NbMeurtres++;
+	StatsJoueurs[IndexJoueurMort]->NbMorts++;
 }

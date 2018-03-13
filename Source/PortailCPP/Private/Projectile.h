@@ -24,11 +24,12 @@ class AProjectile : public AActor
 	UStaticMeshComponent * Mesh;
 
 	int Degats;
+	int NoJoueur;
 	
 public:	
 	// Sets default values for this actor's properties
 	AProjectile();
-	void Initialiser(int degats);
+	void Initialiser(int degats, int NoJoueur);
 
 protected:
 	// Called when the game starts or when spawned

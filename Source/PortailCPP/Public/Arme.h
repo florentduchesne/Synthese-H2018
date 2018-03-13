@@ -39,6 +39,7 @@ protected:
 	int8 TailleChargeur;
 	//les dégâts qu'infligent chaque balle lorsqu'elles heurtent un personnage
 	int Degats;
+	int NoJoueur;
 
 	//vrai si l'arme a terminé son temps de récupération après un tir et est prête à commencer un autre tir
 	bool bDelaiEntreChaqueTirTermine = true;
@@ -73,4 +74,6 @@ public:
 	void TerminerTirSuper();
 	//bloque le tir de l'arme et appelle la méthode "Recharger" après un délai
 	void LancerRechargement();
+
+	void SetNoJoueur(int NoJoueur);
 };

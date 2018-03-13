@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Personnage.h"
-
+#include "./Public/ModeDeJeu_MenuPrincipal.h"
 
 // Sets default values
 APersonnage::APersonnage()
@@ -32,6 +32,8 @@ APersonnage::APersonnage()
 	camera->bUsePawnControlRotation = true;
 
 	arme = CreateDefaultSubobject<UFusilARafales>(TEXT("Arme"));
+
+	arme->SetNoJoueur(NoJoueur);
 
 	arme->SetupAttachment(camera);
 
@@ -131,7 +133,7 @@ bool APersonnage::PeutSeTeleporter()
 	return bPeutSeTeleporter;
 }
 
-void APersonnage::InfligerDegats(int degats)
+void APersonnage::InfligerDegats(int degats, int NoJoueurAttaquant)
 {
 	if (Armure)
 	{
@@ -149,10 +151,14 @@ void APersonnage::InfligerDegats(int degats)
 
 	if (PointsDeVie <= 0)
 	{
-		GetOuter()->GetWorld()->GetAuthGameMode();
+		AModeDeJeu_MenuPrincipal * GameMode = Cast<AModeDeJeu_MenuPrincipal>(GetOuter()->GetWorld()->GetAuthGameMode());
+		GameMode->JoueurEnTueUnAutre(NoJoueurAttaquant, NoJoueur);
+		UE_LOG(LogTemp, Warning, TEXT("JE SUIS MORT"));
+		PointsDeVie = 100;
 	}
 	UE_LOG(LogTemp, Warning, TEXT("ARMURE DU PERSONNAGE %d"), Armure);
 	UE_LOG(LogTemp, Warning, TEXT("PV DU PERSONNAGE %d"), PointsDeVie);
+	UE_LOG(LogTemp, Warning, TEXT("DEGATS INFLIGES PAR : %d"), NoJoueurAttaquant);
 }
 
 void APersonnage::Recharger()

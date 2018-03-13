@@ -43,9 +43,10 @@ AProjectile::AProjectile()
 	Degats = 20;
 }
 
-void AProjectile::Initialiser(int Degats)
+void AProjectile::Initialiser(int Degats, int NoJoueur)
 {
 	this->Degats = Degats;
+	this->NoJoueur = NoJoueur;
 }
 
 // Called when the game starts or when spawned
@@ -70,7 +71,7 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimi
 	//si l'acteur touché est un joueur, lui inflige les dégâts
 	if (APersonnage * personnageTouche = Cast<APersonnage>(OtherActor))
 	{
-		personnageTouche->InfligerDegats(Degats);
+		personnageTouche->InfligerDegats(Degats, NoJoueur);
 	}
 	//détruit le projectile
 	Destroy();

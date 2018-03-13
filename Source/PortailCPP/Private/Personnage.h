@@ -39,6 +39,8 @@ protected:
 	int PointsDeVie = 100;
 	int Armure = 50;
 
+	int NoJoueur = 3;
+
 	// Camera du personnage
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent * camera;
@@ -89,5 +91,5 @@ public:
 	//retourne si oui ou non, le personnage a le droit de se téléporter
 	bool PeutSeTeleporter();
 	//Le personnage recoit des degats
-	void InfligerDegats(int degats);
+	void InfligerDegats(int degats, int NoJoueurAttaquant);
 };
