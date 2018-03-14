@@ -4,8 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Classes/Engine/LevelStreaming.h"
-#include "Classes/Kismet/GameplayStatics.h"
+#include "Engine/LevelStreaming.h"
+#include "Kismet/GameplayStatics.h"
 #include "GestionnaireDeNiveaux.generated.h"
 
 UCLASS()
