@@ -66,7 +66,7 @@ void APortail::OnTeleportation(AActor* overlappedActor, AActor* otherActor)
 			FVector force;
 			force.Z = -5000.0f;
 			perso->AddMovementInput(force);
-			perso->GetCharacterMovement()->Velocity += force;
+			//perso->GetCharacterMovement()->Velocity += force;
 
 			//on appelle une fonction qui lui redonne le droit de se teleporter dans une seconde
 			perso->DebloquerTeleportationFutur();

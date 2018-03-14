@@ -6,6 +6,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "Classes/Kismet/GameplayStatics.h"
 #include "StatistiquesDuJoueur.h"
+#include "GestionnaireDeNiveaux.h"
 #include "./Private/Personnage.h"
 #include "Blueprint/UserWidget.h"
 #include "ModeDeJeu_MenuPrincipal.generated.h"
@@ -35,4 +36,7 @@ public:
 	void ChangeMenuWidget(TSubclassOf<UUserWidget> NewWidgetClass);
 
 	void JoueurEnTueUnAutre(int IndexJoueurTueur, int IndexJoueurMort);
+
+	UFUNCTION(BlueprintCallable, Category = "GenerationCarte")
+	void GenererCarte();
 };

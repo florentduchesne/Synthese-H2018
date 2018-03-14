@@ -53,3 +53,11 @@ void AModeDeJeu_MenuPrincipal::JoueurEnTueUnAutre(int IndexJoueurTueur, int Inde
 		UE_LOG(LogTemp, Warning, TEXT("JOUEUR %d A GAGNÉ LA PARTIE"), IndexJoueurTueur);
 	}
 }
+
+void AModeDeJeu_MenuPrincipal::GenererCarte()
+{
+	AGestionnaireDeNiveaux* GestionnaireDeNiveaux = GetWorld()->SpawnActor<AGestionnaireDeNiveaux>(AGestionnaireDeNiveaux::StaticClass());
+	UE_LOG(LogTemp, Warning, TEXT("Generation de la carte en cours"));
+	GestionnaireDeNiveaux->ChargerNiveau(FName("Ventilation"));
+	GestionnaireDeNiveaux->ChargerNiveau(FName("Metro"));
+}
