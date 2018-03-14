@@ -43,6 +43,9 @@ APersonnage::APersonnage()
 
 	arme->getMesh()->SetRelativeRotation(FRotator(0.0f, -90.0f, 0.0f));
 
+	//on change la vitesse de déplacement du personnage
+	GetCharacterMovement()->MaxWalkSpeed = 1200;
+	GetCharacterMovement()->MaxAcceleration = 3000;
 }
 
 // Called when the game starts or when spawned

@@ -55,18 +55,18 @@ void APortail::OnTeleportation(AActor* overlappedActor, AActor* otherActor)
 			perso->BloquerTeleportation();
 
 			//teleporter le joueur sur la distance qui sépare les deux portails
-			FVector position = perso->GetActorLocation();
-			position += autrePortail->GetActorLocation();
-			position -= GetActorLocation();
-			position.Z = autrePortail->GetActorLocation().Z;
+			FVector position;// = perso->GetActorLocation();
+			position = autrePortail->GetActorLocation();
+			//position -= GetActorLocation();
+			//position.Z = autrePortail->GetActorLocation().Z;
 			FHitResult HitResult;
 			perso->SetActorLocation(position, false, &HitResult, ETeleportType::None);//ETeleportType est None, ce qui annule tout effet de physique lorsqu'on sort du portail.
 
 			//on envoie le personnage au sol pour eviter qu'il continue dans la mauvaise direction au cas ou il serait dans un saut au moment de passer le portail.
-			FVector force;
+			/*FVector force;
 			force.Z = -5000.0f;
 			perso->AddMovementInput(force);
-			//perso->GetCharacterMovement()->Velocity += force;
+			perso->GetCharacterMovement()->Velocity += force;*/
 
 			//on appelle une fonction qui lui redonne le droit de se teleporter dans une seconde
 			perso->DebloquerTeleportationFutur();

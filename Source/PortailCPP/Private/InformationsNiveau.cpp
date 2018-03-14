@@ -2,12 +2,22 @@
 
 #include "InformationsNiveau.h"
 
-InformationsNiveau::InformationsNiveau(int NbPortails, FName Nom)
-	:NbPortails{NbPortails}, Nom{Nom}
+InformationsNiveau::InformationsNiveau(int NbPortails, FName Nom, int Id)
+	:NbPortails{NbPortails}, Nom{Nom},  Id{Id}
 {
 
 }
 
 InformationsNiveau::~InformationsNiveau()
 {
+}
+
+int InformationsNiveau::GetNbPortailsNonConnectes()
+{
+	return NbPortails - IdPiecesConnectees.Num();
+}
+
+void InformationsNiveau::ConnecterNiveau(int IdNiveau)
+{
+	IdPiecesConnectees.Add(IdNiveau);
 }

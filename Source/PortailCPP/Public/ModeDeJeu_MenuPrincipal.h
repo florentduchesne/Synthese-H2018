@@ -5,9 +5,11 @@
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
 #include "Kismet/GameplayStatics.h"
+#include "Math/UnrealMathUtility.h"
 #include "StatistiquesDuJoueur.h"
 #include "GestionnaireDeNiveaux.h"
 #include "Personnage/Personnage.h"
+#include "InformationsNiveau.h"
 #include "Blueprint/UserWidget.h"
 #include "ModeDeJeu_MenuPrincipal.generated.h"
 
@@ -38,5 +40,5 @@ public:
 	void JoueurEnTueUnAutre(int IndexJoueurTueur, int IndexJoueurMort);
 
 	UFUNCTION(BlueprintCallable, Category = "GenerationCarte")
-	void GenererCarte();
+	void GenererCarte(int nbJoueurs);
 };
