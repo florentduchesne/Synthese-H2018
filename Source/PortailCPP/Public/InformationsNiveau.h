@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Portail.h"
 
 /**
  * 
@@ -20,6 +21,11 @@ class PORTAILCPP_API InformationsNiveau
 public:
 	InformationsNiveau(int NbPortails, FName Nom, int Id);
 	~InformationsNiveau();
+
+	//liste de tous les portails du niveau
+	TArray<APortail*> listePortails;
+
+	APortail * GetProchainPortailNonConnecte();
 
 	int GetNbPortailsNonConnectes();
 	void ConnecterNiveau(int IdNiveau);

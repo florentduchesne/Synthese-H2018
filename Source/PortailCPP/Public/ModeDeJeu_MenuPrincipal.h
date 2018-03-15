@@ -7,6 +7,9 @@
 #include "Kismet/GameplayStatics.h"
 #include "Math/UnrealMathUtility.h"
 #include "StatistiquesDuJoueur.h"
+#include "EngineUtils.h"
+#include "TimerManager.h"
+#include "Portail.h"
 #include "GestionnaireDeNiveaux.h"
 #include "Personnage/Personnage.h"
 #include "InformationsNiveau.h"
@@ -22,6 +25,9 @@ class PORTAILCPP_API AModeDeJeu_MenuPrincipal : public AGameModeBase
 	GENERATED_BODY()
 
 	StatistiquesDuJoueur * StatsJoueurs[4];
+
+	void ConnecterLesPortails(TArray<InformationsNiveau*> NiveauxChoisis);
+	
 	
 public:
 	AModeDeJeu_MenuPrincipal();

@@ -35,9 +35,6 @@ protected:
 
 	UFUNCTION()
 	void OnTeleportation(AActor* overlappedActor, AActor* otherActor);
-
-	UFUNCTION(BlueprintCallable, Category = "Portail")
-	void connecterDeuxPortails(APortail * portail);
 	
 public:	
 	// Called every frame
@@ -45,6 +42,6 @@ public:
 	bool bActif = true;
 	bool estConnecte();
 
-	
+	void connecterDeuxPortails(APortail * portail);
 	
 };

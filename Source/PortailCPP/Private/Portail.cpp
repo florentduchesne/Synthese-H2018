@@ -57,6 +57,7 @@ void APortail::OnTeleportation(AActor* overlappedActor, AActor* otherActor)
 			//teleporter le joueur sur la distance qui sépare les deux portails
 			FVector position;// = perso->GetActorLocation();
 			position = autrePortail->GetActorLocation();
+			position.Z += 50.0f;
 			//position -= GetActorLocation();
 			//position.Z = autrePortail->GetActorLocation().Z;
 			FHitResult HitResult;

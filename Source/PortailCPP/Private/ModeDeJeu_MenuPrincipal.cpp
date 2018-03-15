@@ -61,10 +61,10 @@ void AModeDeJeu_MenuPrincipal::GenererCarte(int nbJoueurs)
 	//on rempli avec des valeurs hard-codées...
 	ListeCompleteNiveaux.Add(new InformationsNiveau(4, FName("Ventilation"), 0));
 	ListeCompleteNiveaux.Add(new InformationsNiveau(4, FName("Metro"), 1));
-	ListeCompleteNiveaux.Add(new InformationsNiveau(4, FName("Hall"), 2));
+	ListeCompleteNiveaux.Add(new InformationsNiveau(2, FName("Hall"), 2));
 
-	//les quelques niveaux qui seront choisis pour la partie qui vient
 	TArray<InformationsNiveau*> NiveauxChoisis;
+	
 	//sera plus élevé quand on aura plus de niveaux de faits
 	///IMPORTANT!!! DOIT ÊTRE PLUS PETIT QUE LA TAILLE DE LA LISTE DE NIVEAUX
 	const int NbNiveauxVoulus = 3;
@@ -167,5 +167,72 @@ void AModeDeJeu_MenuPrincipal::GenererCarte(int nbJoueurs)
 	for (auto i = 0; i < NiveauxChoisis.Num(); i++)
 	{
 		GestionnaireDeNiveaux->ChargerNiveau(NiveauxChoisis[i]->GetNom());
+	}
+
+	//on va chercher tous les portails
+	//ne fonctionne pas : ne peut pas accéder aux objets dans les niveaux streamés.
+	/*
+	for (TActorIterator<APortail> ActorItr(GestionnaireDeNiveaux->GetOuter()->GetWorld()); ActorItr; ++ActorItr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("ajout d'un portail à la liste"));
+		APortail *Portail = *ActorItr;
+		//on vérifie si le portail a un tag qui contient le nom d'un niveau
+		for (InformationsNiveau* Niveau : NiveauxChoisis)
+		{
+			if (Portail->Tags.Contains(Niveau->GetNom()))
+			{
+				//on ajoute le portail à la liste de portails du niveau
+				UE_LOG(LogTemp, Warning, TEXT("tag portail : "));
+				Niveau->listePortails.Add(Portail);
+				break;
+			}
+		}
+	}
+	*/
+	
+	TArray<AActor*> FoundActors;
+	UGameplayStatics::GetAllActorsOfClass(GestionnaireDeNiveaux->GetOuter()->GetWorld(), APortail::StaticClass(), FoundActors);
+	for (AActor * ActeurPortail : FoundActors)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("ajout d'un portail à la liste"));
+		APortail *Portail = Cast<APortail>(ActeurPortail);
+		//on vérifie si le portail a un tag qui contient le nom d'un niveau
+		for (InformationsNiveau* Niveau : NiveauxChoisis)
+		{
+			if (Portail->Tags.Contains(Niveau->GetNom()))
+			{
+				//on ajoute le portail à la liste de portails du niveau
+				UE_LOG(LogTemp, Warning, TEXT("tag portail : "));
+				Niveau->listePortails.Add(Portail);
+				break;
+			}
+		}
+	}
+
+	UE_LOG(LogTemp, Warning, TEXT("connexion des portails"));
+	///on a maintenant tous les portails placés dans leurs niveaux respectifs
+
+	ConnecterLesPortails(NiveauxChoisis);
+}
+
+void AModeDeJeu_MenuPrincipal::ConnecterLesPortails(TArray<InformationsNiveau*> NiveauxChoisis)
+{
+	//on relie les portails 
+	for (InformationsNiveau* Niveau : NiveauxChoisis)
+	{
+		for (int idNiveau : Niveau->GetListeNiveauxConnectes())
+		{
+			APortail * Portail1 = Niveau->GetProchainPortailNonConnecte();
+			APortail * Portail2 = NiveauxChoisis[idNiveau]->GetProchainPortailNonConnecte();
+			if (Portail1 && Portail2)
+			{
+				UE_LOG(LogTemp, Warning, TEXT("portails non null"));
+				Portail1->connecterDeuxPortails(Portail2);
+			}
+			else
+			{
+				UE_LOG(LogTemp, Warning, TEXT("portail null"));
+			}
+		}
 	}
 }
