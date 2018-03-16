@@ -10,7 +10,7 @@ Liste des éléments du jeu :
 - Armes, projectiles (FAIT)
 - Gestion des points de vie (FAIT)
 - Objets à ramasser : armes, santé, armure
-- Génération des cartes
+- Génération des cartes (FAIT)
 - Multijoueur
 - Apparition des joueurs
 - Logique de la partie : victoire, pointage, etc.

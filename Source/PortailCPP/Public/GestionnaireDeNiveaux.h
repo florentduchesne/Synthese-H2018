@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Engine/LevelStreaming.h"
+#include "Engine/World.h"
 #include "Kismet/GameplayStatics.h"
 #include "GestionnaireDeNiveaux.generated.h"
 
@@ -20,13 +21,19 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	
+	
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UFUNCTION(BlueprintCallable, Category="GestionNiveaux")
-	void ChargerNiveau(FName nomNiveau);
+	void ChargerNiveau(FName nomNiveau, int IdStream);
+	//UFUNCTION(BlueprintCallable, Category = "Level Streaming")
+	//void NiveauEstCharge();
+
+	bool NiveauEstCharge(FName nomNiveau);
+
 	void DechargerNiveau(FName nomNiveau);
 	void ToutDecharger();
 	void SelectionnerNiveauxACharger();

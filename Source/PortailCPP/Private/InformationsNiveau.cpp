@@ -26,13 +26,11 @@ APortail * InformationsNiveau::GetProchainPortailNonConnecte()
 {
 	for (APortail * Portail : listePortails)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("entre dans la boucle"));
-		if (!Portail->estConnecte())
+		if (!Portail->bConnecte)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("portail non connecte"));
+			Portail->bConnecte = true;
 			return Portail;
 		}
 	}
-	UE_LOG(LogTemp, Warning, TEXT("retourne null"));
 	return nullptr;
 }
