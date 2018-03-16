@@ -12,6 +12,7 @@
 #include "Portail.h"
 #include "GestionnaireDeNiveaux.h"
 #include "Personnage/Personnage.h"
+#include "GameFramework/PlayerStart.h"
 #include "InformationsNiveau.h"
 #include "Blueprint/UserWidget.h"
 #include "ModeDeJeu_MenuPrincipal.generated.h"
@@ -26,15 +27,21 @@ class PORTAILCPP_API AModeDeJeu_MenuPrincipal : public AGameModeBase
 
 	StatistiquesDuJoueur * StatsJoueurs[4];
 
-	void SelectionnerNiveaux(TArray<InformationsNiveau*> * const NiveauxChoisis, TArray<InformationsNiveau*> ListeCompleteNiveaux, int NbNiveauxVoulus);
+	TArray<InformationsNiveau*> NiveauxChoisis;
 
-	void RelierNiveaux(TArray<InformationsNiveau*> * const NiveauxChoisis);
+	void SelectionnerNiveaux(TArray<InformationsNiveau*> ListeCompleteNiveaux, int NbNiveauxVoulus);
 
-	AGestionnaireDeNiveaux * ChargerLesNiveaux(TArray<InformationsNiveau*> NiveauxChoisis);
+	void RelierNiveaux();
 
-	void ConnecterLesPortails(TArray<InformationsNiveau*> NiveauxChoisis);
+	AGestionnaireDeNiveaux * ChargerLesNiveaux();
 
-	void TrouverTousLesPortailsCharges(TArray<InformationsNiveau*> * const NiveauxChoisis, AGestionnaireDeNiveaux * const GestionnaireDeNiveaux);
+	void ConnecterLesPortails();
+
+	void TrouverTousLesPortailsCharges(AGestionnaireDeNiveaux * const GestionnaireDeNiveaux);
+
+	void ChercherPointsApparition();
+
+	void PlacerJoueurs(int NbJoueurs);
 	
 public:
 	AModeDeJeu_MenuPrincipal();

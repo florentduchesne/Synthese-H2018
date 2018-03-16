@@ -48,7 +48,7 @@ protected:
 	int PointsDeVie = 100;
 	int Armure = 50;
 
-	int NoJoueur = 3;
+	int NoJoueur;
 
 	// Camera du personnage
 	UPROPERTY(VisibleAnywhere)
@@ -89,6 +89,8 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	void SetNoJoueur(int _NoJoueur);
 	
 	///on bloque et débloque la téléportation dans le but d'éviter que le joueur se téléporte à répétition d'un téléporteur à l'autre jusqu'au StackOverflow
 	//débloque la téléportation après un court délai

@@ -62,11 +62,9 @@ void AModeDeJeu_MenuPrincipal::GenererCarte(int nbJoueurs)
 	ListeCompleteNiveaux.Add(new InformationsNiveau(4, FName("Ventilation"), 0));
 	ListeCompleteNiveaux.Add(new InformationsNiveau(4, FName("Metro"), 1));
 	ListeCompleteNiveaux.Add(new InformationsNiveau(2, FName("Hall"), 2));
-
-	TArray<InformationsNiveau*> NiveauxChoisis;
 	
 	//sera plus élevé quand on aura plus de niveaux de faits
-	///IMPORTANT!!! DOIT ÊTRE PLUS PETIT QUE LA TAILLE DE LA LISTE DE NIVEAUX
+	///IMPORTANT!!! DOIT ÊTRE PLUS PETIT OU ÉGAL À LA TAILLE DE LA LISTE DE NIVEAUX
 	const int NbNiveauxVoulus = 3;
 
 	if (NbNiveauxVoulus > ListeCompleteNiveaux.Num())
@@ -75,9 +73,9 @@ void AModeDeJeu_MenuPrincipal::GenererCarte(int nbJoueurs)
 		return;
 	}
 
-	SelectionnerNiveaux(&NiveauxChoisis, ListeCompleteNiveaux, NbNiveauxVoulus);
+	SelectionnerNiveaux(ListeCompleteNiveaux, NbNiveauxVoulus);
 
-	AGestionnaireDeNiveaux* GestionnaireDeNiveaux = ChargerLesNiveaux(NiveauxChoisis);
+	AGestionnaireDeNiveaux* GestionnaireDeNiveaux = ChargerLesNiveaux();
 
 	//print
 	for (auto i = 0; i < NiveauxChoisis.Num(); i++)
@@ -86,7 +84,8 @@ void AModeDeJeu_MenuPrincipal::GenererCarte(int nbJoueurs)
 		UE_LOG(LogTemp, Warning, TEXT("Nombre de portails : %d"), NiveauxChoisis[i]->GetNbPortailsNonConnectes());
 	}
 
-	RelierNiveaux(&NiveauxChoisis);
+	RelierNiveaux();
+
 	//print
 	for (auto i = 0; i < NiveauxChoisis.Num(); i++)
 	{
@@ -100,7 +99,7 @@ void AModeDeJeu_MenuPrincipal::GenererCarte(int nbJoueurs)
 	}
 
 	//on va chercher tous les portails de tous les niveaux chargés et on les sauvegarde dans NiveauxChoisis
-	TrouverTousLesPortailsCharges(&NiveauxChoisis, GestionnaireDeNiveaux);
+	TrouverTousLesPortailsCharges(GestionnaireDeNiveaux);
 
 	//print
 	for (InformationsNiveau* Niveau : NiveauxChoisis)
@@ -117,10 +116,14 @@ void AModeDeJeu_MenuPrincipal::GenererCarte(int nbJoueurs)
 	}
 
 	//on connecte les portails pour vrai
-	ConnecterLesPortails(NiveauxChoisis);
+	ConnecterLesPortails();
+
+	ChercherPointsApparition();
+
+	PlacerJoueurs(nbJoueurs);
 }
 
-void AModeDeJeu_MenuPrincipal::SelectionnerNiveaux(TArray<InformationsNiveau*> * const NiveauxChoisis, TArray<InformationsNiveau*> ListeCompleteNiveaux, int NbNiveauxVoulus)
+void AModeDeJeu_MenuPrincipal::SelectionnerNiveaux(TArray<InformationsNiveau*> ListeCompleteNiveaux, int NbNiveauxVoulus)
 {
 	//on place le nombre de niveaux voulus de la liste des niveaux complète vers la liste de niveaux choisis
 	for (auto i = 0; i < NbNiveauxVoulus; i++)
@@ -132,16 +135,16 @@ void AModeDeJeu_MenuPrincipal::SelectionnerNiveaux(TArray<InformationsNiveau*> *
 			int IdNiveau = FMath::RandRange(0, ListeCompleteNiveaux.Num() - 1);
 			UE_LOG(LogTemp, Warning, TEXT("Id choisi aléatoirement : %d"), IdNiveau);
 			//si le niveau n'a pas déjà été choisi, on l'ajoute à la liste. Sinon, on recommence jusqu'à tomber sur un niveau non choisi.
-			if (!NiveauxChoisis->Contains(ListeCompleteNiveaux[IdNiveau]))
+			if (!NiveauxChoisis.Contains(ListeCompleteNiveaux[IdNiveau]))
 			{
-				NiveauxChoisis->Add(ListeCompleteNiveaux[IdNiveau]);
+				NiveauxChoisis.Add(ListeCompleteNiveaux[IdNiveau]);
 				NiveauTrouve = true;
 			}
 		}
 	}
 }
 
-AGestionnaireDeNiveaux * AModeDeJeu_MenuPrincipal::ChargerLesNiveaux(TArray<InformationsNiveau*> NiveauxChoisis)
+AGestionnaireDeNiveaux * AModeDeJeu_MenuPrincipal::ChargerLesNiveaux()
 {
 	AGestionnaireDeNiveaux* GestionnaireDeNiveaux = GetWorld()->SpawnActor<AGestionnaireDeNiveaux>(AGestionnaireDeNiveaux::StaticClass());
 	UE_LOG(LogTemp, Warning, TEXT("Generation de la carte en cours"));
@@ -155,17 +158,17 @@ AGestionnaireDeNiveaux * AModeDeJeu_MenuPrincipal::ChargerLesNiveaux(TArray<Info
 	return GestionnaireDeNiveaux;
 }
 
-void AModeDeJeu_MenuPrincipal::RelierNiveaux(TArray<InformationsNiveau*> * const NiveauxChoisis)
+void AModeDeJeu_MenuPrincipal::RelierNiveaux()
 {
 	//on associe les pièces ensemble de sorte qu'elles soient toutes reliées entre elles d'une manière ou d'une autre
-	for (auto i = 0; i < NiveauxChoisis->Num() - 1; i++)
+	for (auto i = 0; i < NiveauxChoisis.Num() - 1; i++)
 	{
 		//si une pièce et sa suivante ont une connexion de libre, on les associe
-		if ((*NiveauxChoisis)[i]->GetNbPortailsNonConnectes() && (*NiveauxChoisis)[i + 1]->GetNbPortailsNonConnectes())
+		if (NiveauxChoisis[i]->GetNbPortailsNonConnectes() && NiveauxChoisis[i + 1]->GetNbPortailsNonConnectes())
 		{
 			//connecter les deux pieces
-			(*NiveauxChoisis)[i]->ConnecterNiveau(i + 1);
-			(*NiveauxChoisis)[i + 1]->ConnecterNiveau(i);
+			NiveauxChoisis[i]->ConnecterNiveau(i + 1);
+			NiveauxChoisis[i + 1]->ConnecterNiveau(i);
 		}
 	}
 
@@ -174,44 +177,44 @@ void AModeDeJeu_MenuPrincipal::RelierNiveaux(TArray<InformationsNiveau*> * const
 	int NoRandom;
 
 	//on associe les dernières portes ensemble. Rendu à ce point, toutes les pièces sont accessibles, on arrange donc les portes restantes.
-	for (auto i = NiveauxChoisis->Num() - 1; i >= 0; i--)
+	for (auto i = NiveauxChoisis.Num() - 1; i >= 0; i--)
 	{
-		while ((*NiveauxChoisis)[i]->GetNbPortailsNonConnectes())
+		while (NiveauxChoisis[i]->GetNbPortailsNonConnectes())
 		{
 			NiveauToutSeul = true;
-			for (auto j = 0; j < NiveauxChoisis->Num(); j++)
+			for (auto j = 0; j < NiveauxChoisis.Num(); j++)
 			{
-				if ((*NiveauxChoisis)[j]->GetNbPortailsNonConnectes() && i != j)
+				if (NiveauxChoisis[j]->GetNbPortailsNonConnectes() && i != j)
 				{
 					NiveauToutSeul = false;
 				}
 			}
 			if (!NiveauToutSeul)
 			{
-				NoRandom = FMath::RandRange(0, NiveauxChoisis->Num() - i);
-				if ((*NiveauxChoisis)[NoRandom]->GetNbPortailsNonConnectes() && NoRandom != i)
+				NoRandom = FMath::RandRange(0, NiveauxChoisis.Num() - i);
+				if (NiveauxChoisis[NoRandom]->GetNbPortailsNonConnectes() && NoRandom != i)
 				{
 					//connecter les deux pieces
-					(*NiveauxChoisis)[i]->ConnecterNiveau(NoRandom);
-					(*NiveauxChoisis)[NoRandom]->ConnecterNiveau(i);
+					NiveauxChoisis[i]->ConnecterNiveau(NoRandom);
+					NiveauxChoisis[NoRandom]->ConnecterNiveau(i);
 				}
 			}
 			//si la pièce est la dernière toute seule, on la connecte à elle même avec les deux derniers portails de libres.
 			else
 			{
 				//connecter les deux pieces
-				(*NiveauxChoisis)[i]->ConnecterNiveau(i);
-				(*NiveauxChoisis)[i]->ConnecterNiveau(i);
+				NiveauxChoisis[i]->ConnecterNiveau(i);
+				NiveauxChoisis[i]->ConnecterNiveau(i);
 			}
 		}
 	}
 }
 
-void AModeDeJeu_MenuPrincipal::TrouverTousLesPortailsCharges(TArray<InformationsNiveau*> * const NiveauxChoisis, AGestionnaireDeNiveaux* GestionnaireDeNiveaux)
+void AModeDeJeu_MenuPrincipal::TrouverTousLesPortailsCharges(AGestionnaireDeNiveaux* GestionnaireDeNiveaux)
 {
 	//vérifier si tous les niveaux sont chargés
 	bool bTousCharges = true;
-	for (InformationsNiveau* Niveau : *NiveauxChoisis)
+	for (InformationsNiveau* Niveau : NiveauxChoisis)
 	{
 		if (!GestionnaireDeNiveaux->NiveauEstCharge(Niveau->GetNom()))
 		{
@@ -221,6 +224,7 @@ void AModeDeJeu_MenuPrincipal::TrouverTousLesPortailsCharges(TArray<Informations
 
 	if (bTousCharges)
 	{
+		//fait la même chose que l'itérateur
 		/*TArray<AActor*> ActeursTrouves;
 		UGameplayStatics::GetAllActorsOfClass(GetWorld(), APortail::StaticClass(), ActeursTrouves);
 		for (AActor * ActeurPortail : ActeursTrouves)
@@ -238,11 +242,11 @@ void AModeDeJeu_MenuPrincipal::TrouverTousLesPortailsCharges(TArray<Informations
 			}
 		}*/
 		//on va chercher tous les portails de tous les niveaux chargés
-		for (TActorIterator<APortail> ActorItr(GestionnaireDeNiveaux->GetOuter()->GetWorld()); ActorItr; ++ActorItr)
+		for (TActorIterator<APortail> ActorItr(GetWorld()); ActorItr; ++ActorItr)
 		{
 			APortail *Portail = *ActorItr;
 			//on vérifie si le portail a un tag qui contient le nom d'un niveau
-			for (InformationsNiveau* Niveau : *NiveauxChoisis)
+			for (InformationsNiveau* Niveau : NiveauxChoisis)
 			{
 				if (Portail->Tags.Contains(Niveau->GetNom()))
 				{
@@ -254,11 +258,11 @@ void AModeDeJeu_MenuPrincipal::TrouverTousLesPortailsCharges(TArray<Informations
 		}
 	}
 	else {
-		TrouverTousLesPortailsCharges(NiveauxChoisis, GestionnaireDeNiveaux);
+		TrouverTousLesPortailsCharges(GestionnaireDeNiveaux);
 	}
 }
 
-void AModeDeJeu_MenuPrincipal::ConnecterLesPortails(TArray<InformationsNiveau*> NiveauxChoisis)
+void AModeDeJeu_MenuPrincipal::ConnecterLesPortails()
 {
 	//on relie les portails 
 	for (InformationsNiveau* Niveau : NiveauxChoisis)
@@ -284,6 +288,48 @@ void AModeDeJeu_MenuPrincipal::ConnecterLesPortails(TArray<InformationsNiveau*> 
 				{
 					UE_LOG(LogTemp, Warning, TEXT("portail null 2 : %s"), *Portail2->GetName());
 					Portail2->bConnecte = false;
+				}
+			}
+		}
+	}
+}
+
+void AModeDeJeu_MenuPrincipal::ChercherPointsApparition()
+{
+	for (TActorIterator<APlayerStart> ActorItr(GetWorld()); ActorItr; ++ActorItr)
+	{
+		APlayerStart *PointApparition = *ActorItr;
+		//on vérifie si le portail a un tag qui contient le nom d'un niveau
+		for (InformationsNiveau* Niveau : NiveauxChoisis)
+		{
+			if (PointApparition->Tags.Contains(Niveau->GetNom()))
+			{
+				//on ajoute le portail à la liste de portails du niveau
+				Niveau->AjouterPointApparition(PointApparition);
+				break;
+			}
+		}
+	}
+}
+
+void AModeDeJeu_MenuPrincipal::PlacerJoueurs(int NbJoueurs)
+{
+	TArray<int> IdNiveauxDejaPris;
+	for (int i = 0; i < NbJoueurs; i++)
+	{
+		for (int j = 0; j < NiveauxChoisis.Num(); j++)
+		{
+			for (APlayerStart * PointApparition : NiveauxChoisis[j]->GetListePointsApparition())
+			{
+				if (!IdNiveauxDejaPris.Contains(j))
+				{
+					IdNiveauxDejaPris.Add(j);
+					APawn * Pion = SpawnDefaultPawnFor(GetWorld()->SpawnActor<APlayerController>(APlayerController::StaticClass()), PointApparition);
+					APersonnage * Personnage = Cast<APersonnage>(Pion);
+					Personnage->SetNoJoueur(i);
+					/*APersonnage * Personnage = GetWorld()->SpawnActor<APersonnage>(APersonnage::StaticClass());
+					Personnage->SetActorLocation(PointApparition->GetActorLocation());
+					*/
 				}
 			}
 		}

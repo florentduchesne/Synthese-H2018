@@ -33,8 +33,6 @@ APersonnage::APersonnage()
 
 	arme = CreateDefaultSubobject<UFusilARafales>(TEXT("Arme"));
 
-	arme->SetNoJoueur(NoJoueur);
-
 	arme->SetupAttachment(camera);
 
 	arme->getMesh()->SetupAttachment(camera);
@@ -58,6 +56,12 @@ void APersonnage::BeginPlay()
 void APersonnage::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+}
+
+void APersonnage::SetNoJoueur(int _NoJoueur)
+{
+	NoJoueur = _NoJoueur;
+	arme->SetNoJoueur(NoJoueur);
 }
 
 // Called to bind functionality to input

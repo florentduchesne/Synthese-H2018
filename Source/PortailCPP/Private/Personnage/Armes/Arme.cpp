@@ -43,7 +43,7 @@ void UArme::Recharger()
 
 void UArme::LancerRechargement()
 {
-	if (bADesBallesDansChargeur)
+	if (bADesBallesDansChargeur && MunitionsDansChargeur < TailleChargeur)
 	{
 		FTimerHandle TimerHandle;
 		GetOuter()->GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UArme::Recharger, TempsRecharge, false);

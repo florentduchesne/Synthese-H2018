@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameFramework/PlayerStart.h"
 #include "Portail.h"
 
 /**
@@ -18,6 +19,9 @@ class PORTAILCPP_API InformationsNiveau
 	//id unique, permet de savoir avec quel autre niveau celui-ci est connecté
 	int Id;
 
+	//tous les points d'apparition dans une piece
+	TArray<APlayerStart*> ListePointsApparition;
+
 public:
 	InformationsNiveau(int NbPortails, FName Nom, int Id);
 	~InformationsNiveau();
@@ -32,4 +36,6 @@ public:
 	TArray<int> GetListeNiveauxConnectes() { return IdPiecesConnectees; };
 	int GetId() { return Id; };
 	FName GetNom() { return Nom; };
+	void AjouterPointApparition(APlayerStart * PlayerStart);
+	TArray<APlayerStart*> GetListePointsApparition() { return ListePointsApparition; };
 };
