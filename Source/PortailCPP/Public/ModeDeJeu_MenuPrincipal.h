@@ -26,11 +26,15 @@ class PORTAILCPP_API AModeDeJeu_MenuPrincipal : public AGameModeBase
 
 	StatistiquesDuJoueur * StatsJoueurs[4];
 
+	void SelectionnerNiveaux(TArray<InformationsNiveau*> * const NiveauxChoisis, TArray<InformationsNiveau*> ListeCompleteNiveaux, int NbNiveauxVoulus);
+
+	void RelierNiveaux(TArray<InformationsNiveau*> * const NiveauxChoisis);
+
 	AGestionnaireDeNiveaux * ChargerLesNiveaux(TArray<InformationsNiveau*> NiveauxChoisis);
 
 	void ConnecterLesPortails(TArray<InformationsNiveau*> NiveauxChoisis);
 
-	void TrouverTousLesPortailsCharges(TArray<InformationsNiveau*> * NiveauxChoisis, AGestionnaireDeNiveaux* GestionnaireDeNiveaux);
+	void TrouverTousLesPortailsCharges(TArray<InformationsNiveau*> * const NiveauxChoisis, AGestionnaireDeNiveaux * const GestionnaireDeNiveaux);
 	
 public:
 	AModeDeJeu_MenuPrincipal();
