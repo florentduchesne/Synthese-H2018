@@ -25,23 +25,51 @@ class PORTAILCPP_API AModeDeJeu_MenuPrincipal : public AGameModeBase
 {
 	GENERATED_BODY()
 
-	StatistiquesDuJoueur * StatsJoueurs[4];
+		AGestionnaireDeNiveaux* GestionnaireDeNiveaux;
 
+	//-----------------------------------------
+	//---------OUVERTURE DE LA PARTIE----------
+	//-----------------------------------------
+
+	//liste de tous les niveaux qui ont été choisis par le générateur de carte au lancement d'une partie
 	TArray<InformationsNiveau*> NiveauxChoisis;
 
+	//choisis les niveaux qui seront utilisés pendant la partie
 	void SelectionnerNiveaux(TArray<InformationsNiveau*> ListeCompleteNiveaux, int NbNiveauxVoulus);
 
+	//sélectionne quels niveaux seront connectés ensemble (NE CONNECTE PAS LES PORTAILS)
 	void RelierNiveaux();
 
+	//charge les niveaux
 	AGestionnaireDeNiveaux * ChargerLesNiveaux();
 
+	//connecte les portails de tous les niveaux de manière à ce que tous les niveaux soient accessibles
 	void ConnecterLesPortails();
 
+	//Trouve tous les acteurs de type APortail chargés dans le jeu, et les stock dans NiveauxChoisis
 	void TrouverTousLesPortailsCharges(AGestionnaireDeNiveaux * const GestionnaireDeNiveaux);
 
+	//Trouve tous les acteurs de type PointApparition chargés dans le jeu, et les stock dans NiveauChoisis
 	void ChercherPointsApparition();
 
+	//Supprime tous les objets APersonnage déjà présent (ex: le personnage par défaut), et en crée un certain nombre, placés dans les PointsApparitions sélectionnés précédemment
 	void PlacerJoueurs(int NbJoueurs);
+
+	//-----------------------------------------
+	//---------FERMETURE DE LA PARTIE----------
+	//-----------------------------------------
+
+	void PartieTerminee(int idNoJoueurGagnant);
+
+	void DechargerCarte();
+
+	void DetruireTousLesJoueurs();
+
+	//-----------------------------------------
+	//--------DÉROULEMENT DE LA PARTIE---------
+	//-----------------------------------------
+
+	StatistiquesDuJoueur * StatsJoueurs[4];
 	
 public:
 	AModeDeJeu_MenuPrincipal();
@@ -59,6 +87,7 @@ public:
 
 	void JoueurEnTueUnAutre(int IndexJoueurTueur, int IndexJoueurMort);
 
+	//appelle toutes les fonctions d'ouverture de la partie
 	UFUNCTION(BlueprintCallable, Category = "GenerationCarte")
 	void GenererCarte(int nbJoueurs);
 };

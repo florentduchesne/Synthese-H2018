@@ -8,6 +8,7 @@ AModeDeJeu_MenuPrincipal::AModeDeJeu_MenuPrincipal()
 {
 	// set default pawn class to our Blueprinted character
 	DefaultPawnClass = APersonnage::StaticClass();
+	PlayerControllerClass = APlayerController::StaticClass();
 	UE_LOG(LogTemp, Warning, TEXT("constructeur game mode"));
 
 	for (auto i = 0; i < 4; i++)
@@ -21,12 +22,14 @@ void AModeDeJeu_MenuPrincipal::BeginPlay()
 	Super::BeginPlay();
 	UE_LOG(LogTemp, Warning, TEXT("begin play game mode"));
 
+	//fait apparaître un GestionnaireDeNiveaux
+	GestionnaireDeNiveaux = GetWorld()->SpawnActor<AGestionnaireDeNiveaux>(AGestionnaireDeNiveaux::StaticClass());
+
 	ChangeMenuWidget(StartingWidgetClass);
 }
 
 void AModeDeJeu_MenuPrincipal::ChangeMenuWidget(TSubclassOf<UUserWidget> NewWidgetClass)
 {
-
 	UE_LOG(LogTemp, Warning, TEXT("change menu widget game mode"));
 	if (CurrentWidget != nullptr)
 	{
@@ -40,17 +43,6 @@ void AModeDeJeu_MenuPrincipal::ChangeMenuWidget(TSubclassOf<UUserWidget> NewWidg
 		{
 			CurrentWidget->AddToViewport();
 		}
-	}
-}
-
-void AModeDeJeu_MenuPrincipal::JoueurEnTueUnAutre(int IndexJoueurTueur, int IndexJoueurMort)
-{
-	StatsJoueurs[IndexJoueurTueur]->NbMeurtres++;
-	StatsJoueurs[IndexJoueurMort]->NbMorts++;
-
-	if (StatsJoueurs[IndexJoueurTueur]->NbMeurtres == 3)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("JOUEUR %d A GAGNÉ LA PARTIE"), IndexJoueurTueur);
 	}
 }
 
@@ -75,7 +67,7 @@ void AModeDeJeu_MenuPrincipal::GenererCarte(int nbJoueurs)
 
 	SelectionnerNiveaux(ListeCompleteNiveaux, NbNiveauxVoulus);
 
-	AGestionnaireDeNiveaux* GestionnaireDeNiveaux = ChargerLesNiveaux();
+	ChargerLesNiveaux();
 
 	//print
 	for (auto i = 0; i < NiveauxChoisis.Num(); i++)
@@ -87,7 +79,7 @@ void AModeDeJeu_MenuPrincipal::GenererCarte(int nbJoueurs)
 	RelierNiveaux();
 
 	//print
-	for (auto i = 0; i < NiveauxChoisis.Num(); i++)
+	/*for (auto i = 0; i < NiveauxChoisis.Num(); i++)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Nom de la carte : %s"), *NiveauxChoisis[i]->GetNom().ToString());
 		UE_LOG(LogTemp, Warning, TEXT("ID de la carte : %d"), NiveauxChoisis[i]->GetId());
@@ -96,13 +88,13 @@ void AModeDeJeu_MenuPrincipal::GenererCarte(int nbJoueurs)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("ID de la carte connectee : %d"), NiveauxChoisis[i]->GetListeNiveauxConnectes()[j]);
 		}
-	}
+	}*/
 
 	//on va chercher tous les portails de tous les niveaux chargés et on les sauvegarde dans NiveauxChoisis
 	TrouverTousLesPortailsCharges(GestionnaireDeNiveaux);
 
 	//print
-	for (InformationsNiveau* Niveau : NiveauxChoisis)
+	/*for (InformationsNiveau* Niveau : NiveauxChoisis)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("portails du niveau : %s"), *Niveau->GetNom().ToString());
 		UE_LOG(LogTemp, Warning, TEXT("nombre de portails : %d"), Niveau->listePortails.Num());
@@ -113,7 +105,7 @@ void AModeDeJeu_MenuPrincipal::GenererCarte(int nbJoueurs)
 				UE_LOG(LogTemp, Warning, TEXT("nom portail : %s"), *Portail->GetName());
 			}
 		}
-	}
+	}*/
 
 	//on connecte les portails pour vrai
 	ConnecterLesPortails();
@@ -133,7 +125,6 @@ void AModeDeJeu_MenuPrincipal::SelectionnerNiveaux(TArray<InformationsNiveau*> L
 		{
 			//on prend un chiffre au hasard
 			int IdNiveau = FMath::RandRange(0, ListeCompleteNiveaux.Num() - 1);
-			UE_LOG(LogTemp, Warning, TEXT("Id choisi aléatoirement : %d"), IdNiveau);
 			//si le niveau n'a pas déjà été choisi, on l'ajoute à la liste. Sinon, on recommence jusqu'à tomber sur un niveau non choisi.
 			if (!NiveauxChoisis.Contains(ListeCompleteNiveaux[IdNiveau]))
 			{
@@ -146,8 +137,6 @@ void AModeDeJeu_MenuPrincipal::SelectionnerNiveaux(TArray<InformationsNiveau*> L
 
 AGestionnaireDeNiveaux * AModeDeJeu_MenuPrincipal::ChargerLesNiveaux()
 {
-	AGestionnaireDeNiveaux* GestionnaireDeNiveaux = GetWorld()->SpawnActor<AGestionnaireDeNiveaux>(AGestionnaireDeNiveaux::StaticClass());
-	UE_LOG(LogTemp, Warning, TEXT("Generation de la carte en cours"));
 
 	//on charge tous les niveaux sélectionnés
 	for (auto i = 0; i < NiveauxChoisis.Num(); i++)
@@ -273,20 +262,16 @@ void AModeDeJeu_MenuPrincipal::ConnecterLesPortails()
 			APortail * Portail2 = NiveauxChoisis[idNiveau]->GetProchainPortailNonConnecte();
 			if (Portail1 && Portail2)
 			{
-				UE_LOG(LogTemp, Warning, TEXT("deux portails connectes : %s ET %s"), *Portail1->GetName(), *Portail2->GetName());
 				Portail1->connecterDeuxPortails(Portail2);
 			}
 			else
 			{
-				UE_LOG(LogTemp, Warning, TEXT("un des deux portails est null"));
 				if (Portail1)
 				{
-					UE_LOG(LogTemp, Warning, TEXT("portail null 1 : %s"), *Portail1->GetName());
 					Portail1->bConnecte = false;
 				}
 				if (Portail2) 
 				{
-					UE_LOG(LogTemp, Warning, TEXT("portail null 2 : %s"), *Portail2->GetName());
 					Portail2->bConnecte = false;
 				}
 			}
@@ -314,24 +299,70 @@ void AModeDeJeu_MenuPrincipal::ChercherPointsApparition()
 
 void AModeDeJeu_MenuPrincipal::PlacerJoueurs(int NbJoueurs)
 {
+	//détruit le joueur par defaut
+	TArray<AActor*> ActeursTrouves;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APlayerController::StaticClass(), ActeursTrouves);
+	for (AActor * Acteur : ActeursTrouves)
+	{
+		APlayerController * Controleur = Cast<APlayerController>(Acteur);
+		if (Controleur)
+		{
+			UGameplayStatics::RemovePlayer(Controleur, true);
+		}
+	}
+	
 	TArray<int> IdNiveauxDejaPris;
+	bool bSortir = false;
 	for (int i = 0; i < NbJoueurs; i++)
 	{
 		for (int j = 0; j < NiveauxChoisis.Num(); j++)
 		{
-			for (APlayerStart * PointApparition : NiveauxChoisis[j]->GetListePointsApparition())
+			if (!IdNiveauxDejaPris.Contains(j))
 			{
-				if (!IdNiveauxDejaPris.Contains(j))
+				for (APlayerStart * PointApparition : NiveauxChoisis[j]->GetListePointsApparition())
 				{
-					IdNiveauxDejaPris.Add(j);
-					APawn * Pion = SpawnDefaultPawnFor(GetWorld()->SpawnActor<APlayerController>(APlayerController::StaticClass()), PointApparition);
-					APersonnage * Personnage = Cast<APersonnage>(Pion);
-					Personnage->SetNoJoueur(i);
-					/*APersonnage * Personnage = GetWorld()->SpawnActor<APersonnage>(APersonnage::StaticClass());
-					Personnage->SetActorLocation(PointApparition->GetActorLocation());
-					*/
+					//on cree un joueur automatiquement et on vérifie si il a bien été créé
+					APlayerController * Controleur = UGameplayStatics::CreatePlayer(PointApparition, i, true);
+					if (Controleur)
+					{
+						APawn * Pion = Controleur->GetPawn();
+						APersonnage * Personnage = Cast<APersonnage>(Pion);
+						Personnage->SetNoJoueur(i);
+						IdNiveauxDejaPris.Add(j);
+						break;
+					}
 				}
+				//break;
 			}
 		}
+	}
+}
+
+
+void AModeDeJeu_MenuPrincipal::PartieTerminee(int idNoJoueurGagnant)
+{
+
+}
+
+void AModeDeJeu_MenuPrincipal::DechargerCarte()
+{
+
+}
+
+void AModeDeJeu_MenuPrincipal::DetruireTousLesJoueurs()
+{
+
+}
+
+
+
+void AModeDeJeu_MenuPrincipal::JoueurEnTueUnAutre(int IndexJoueurTueur, int IndexJoueurMort)
+{
+	StatsJoueurs[IndexJoueurTueur]->NbMeurtres++;
+	StatsJoueurs[IndexJoueurMort]->NbMorts++;
+
+	if (StatsJoueurs[IndexJoueurTueur]->NbMeurtres == 3)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("JOUEUR %d A GAGNE LA PARTIE!!!!!!!!!!!!!!!!"), IndexJoueurTueur);
 	}
 }

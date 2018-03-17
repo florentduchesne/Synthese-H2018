@@ -16,8 +16,6 @@ APersonnage::APersonnage()
 	corps->SetRelativeRotation(FRotator(0, -90.0f, 0));
 
 	corps->SetOwnerNoSee(true);
-
-	UE_LOG(LogTemp, Warning, TEXT("constructeur personnage"));
 	
 	RootComponent = GetCapsuleComponent();
 
@@ -31,7 +29,7 @@ APersonnage::APersonnage()
 	// Permet au personnage de controler la rotation de la camera
 	camera->bUsePawnControlRotation = true;
 
-	arme = CreateDefaultSubobject<UFusilARafales>(TEXT("Arme"));
+	arme = CreateDefaultSubobject<UFusilAuto>(TEXT("Arme"));
 
 	arme->SetupAttachment(camera);
 
