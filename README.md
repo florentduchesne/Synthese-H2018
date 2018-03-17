@@ -9,13 +9,15 @@ Liste des éléments du jeu :
 - Téléporteurs (FAIT)
 - Armes, projectiles (FAIT)
 - Gestion des points de vie (FAIT)
-- Objets à ramasser : armes, santé, armure
+- Logique de la partie : victoire, pointage, etc. (FAIT)
+- Menu principal (FAIT)
 - Génération des cartes (FAIT)
-- Multijoueur
-- Apparition des joueurs
-- Logique de la partie : victoire, pointage, etc.
+- Apparition des joueurs (FAIT)
+- Réinitialiser la partie (FAIT)
+- Réapparition des joueurs quand ils meurent (FAIT)
+- Objets à ramasser : armes, santé, armure
 - ATH
-- Réinitialiser la partie
 - Tirs secondaires
 - Localisation des tirs
-- Menu principal (FAIT)
+- Menu Pause
+- Objets de gameplay dans le jeu (bumpers, zone de dégats, etc.)

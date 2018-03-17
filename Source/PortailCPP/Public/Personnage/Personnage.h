@@ -91,6 +91,7 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	void SetNoJoueur(int _NoJoueur);
+	int GetNoJoueur();
 	
 	///on bloque et débloque la téléportation dans le but d'éviter que le joueur se téléporte à répétition d'un téléporteur à l'autre jusqu'au StackOverflow
 	//débloque la téléportation après un court délai

@@ -26,7 +26,6 @@ void AGestionnaireDeNiveaux::Tick(float DeltaTime)
 void AGestionnaireDeNiveaux::ChargerNiveau(FName nomNiveau, int IdStream)
 {
 	FLatentActionInfo info;
-	//info.ExecutionFunction = "myFunctionToCall";
 	info.UUID = IdStream;
 	info.Linkage = 1;
 	UGameplayStatics::LoadStreamLevel(this, nomNiveau, true, false, info);
@@ -48,20 +47,10 @@ bool AGestionnaireDeNiveaux::NiveauEstCharge(FName nomNiveau)
 
 void AGestionnaireDeNiveaux::DechargerNiveau(FName nomNiveau)
 {
+	FLatentActionInfo info;
+	info.Linkage = 1;
+	UGameplayStatics::UnloadStreamLevel(this, nomNiveau, info);
 	ULevelStreaming *pStreaming = UGameplayStatics::GetStreamingLevel(this, nomNiveau);
-	if (pStreaming)
-	{
-		pStreaming->bShouldBeLoaded = false;
-		pStreaming->bShouldBeVisible = false;
-	}
-}
-
-void AGestionnaireDeNiveaux::ToutDecharger()
-{
-
-}
-
-void AGestionnaireDeNiveaux::SelectionnerNiveauxACharger()
-{
-
+	UE_LOG(LogTemp, Warning, TEXT("on decharge un niveau"));
+	GetWorld()->UpdateLevelStreaming();
 }

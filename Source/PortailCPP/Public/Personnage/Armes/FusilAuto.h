@@ -15,7 +15,7 @@ class PORTAILCPP_API UFusilAuto : public UArme
 {
 	GENERATED_BODY()
 
-	const int TempsEntreChaqueTir = 0.1f;
+	const float TempsEntreChaqueTir = 0.1f;
 	float TempsDepuisDernierTir = 0.0f;
 	bool bACommenceTir = false;
 	

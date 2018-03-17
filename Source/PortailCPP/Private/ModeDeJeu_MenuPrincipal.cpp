@@ -15,6 +15,8 @@ AModeDeJeu_MenuPrincipal::AModeDeJeu_MenuPrincipal()
 	{
 		StatsJoueurs[i] = new StatistiquesDuJoueur(i);
 	}
+
+	NoJoueurGagnant = -1;
 }
 
 void AModeDeJeu_MenuPrincipal::BeginPlay()
@@ -332,7 +334,7 @@ void AModeDeJeu_MenuPrincipal::PlacerJoueurs(int NbJoueurs)
 						break;
 					}
 				}
-				//break;
+				break;
 			}
 		}
 	}
@@ -341,17 +343,33 @@ void AModeDeJeu_MenuPrincipal::PlacerJoueurs(int NbJoueurs)
 
 void AModeDeJeu_MenuPrincipal::PartieTerminee(int idNoJoueurGagnant)
 {
+	DechargerCarte();
+	DetruireTousLesJoueurs();
 
+	NiveauxChoisis.Empty();
+	for (auto i = 0; i < 4; i++)
+	{
+		StatsJoueurs[i] = new StatistiquesDuJoueur(i);
+	}
+
+	ChangeMenuWidget(StartingWidgetClass);
 }
 
 void AModeDeJeu_MenuPrincipal::DechargerCarte()
 {
-
+	for (auto i = 0; i < NiveauxChoisis.Num(); i++)
+	{
+		GestionnaireDeNiveaux->DechargerNiveau(NiveauxChoisis[i]->GetNom());
+	}
 }
 
 void AModeDeJeu_MenuPrincipal::DetruireTousLesJoueurs()
 {
-
+	for (TActorIterator<APersonnage> ActorItr(GetWorld()); ActorItr; ++ActorItr)
+	{
+		APersonnage * Personnage = *ActorItr;
+		Personnage->Destroy();
+	}
 }
 
 
@@ -361,8 +379,42 @@ void AModeDeJeu_MenuPrincipal::JoueurEnTueUnAutre(int IndexJoueurTueur, int Inde
 	StatsJoueurs[IndexJoueurTueur]->NbMeurtres++;
 	StatsJoueurs[IndexJoueurMort]->NbMorts++;
 
+	for (TActorIterator<APersonnage> ActorItr(GetWorld()); ActorItr; ++ActorItr)
+	{
+		APersonnage * Personnage = *ActorItr;
+		if (Personnage->GetNoJoueur() == IndexJoueurMort)
+		{
+			APlayerController * Controleur = Cast<APlayerController>(Personnage->GetController());
+			UGameplayStatics::RemovePlayer(Controleur, true);
+			break;
+		}
+	}
+	ReapparitionJoueur(IndexJoueurMort);
+
 	if (StatsJoueurs[IndexJoueurTueur]->NbMeurtres == 3)
 	{
+		NoJoueurGagnant = IndexJoueurTueur;
 		UE_LOG(LogTemp, Warning, TEXT("JOUEUR %d A GAGNE LA PARTIE!!!!!!!!!!!!!!!!"), IndexJoueurTueur);
+		PartieTerminee(IndexJoueurTueur);
+	}
+}
+
+void AModeDeJeu_MenuPrincipal::ReapparitionJoueur(int NoJoueur)
+{
+	for (int j = 0; j < NiveauxChoisis.Num(); j++)
+	{
+		for (APlayerStart * PointApparition : NiveauxChoisis[j]->GetListePointsApparition())
+		{
+			//on cree un joueur automatiquement et on vérifie si il a bien été créé
+			APlayerController * Controleur = UGameplayStatics::CreatePlayer(PointApparition, NoJoueur, true);
+			if (Controleur)
+			{
+				APawn * Pion = Controleur->GetPawn();
+				APersonnage * Personnage = Cast<APersonnage>(Pion);
+				Personnage->SetNoJoueur(NoJoueur);
+				break;
+			}
+		}
+		break;
 	}
 }

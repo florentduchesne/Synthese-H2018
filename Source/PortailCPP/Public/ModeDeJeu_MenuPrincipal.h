@@ -70,12 +70,18 @@ class PORTAILCPP_API AModeDeJeu_MenuPrincipal : public AGameModeBase
 	//-----------------------------------------
 
 	StatistiquesDuJoueur * StatsJoueurs[4];
+
+	void ReapparitionJoueur(int NoJoueur);
 	
 public:
 	AModeDeJeu_MenuPrincipal();
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "MenuPrincipal")
 	TSubclassOf<UUserWidget> StartingWidgetClass;
+	
+	//le numéro du joueur gagnant. si égal à -1, le menu ne l'affichera pas
+	UPROPERTY(BlueprintReadOnly, Category = "MenuPrincipal")
+	int NoJoueurGagnant;
 
 	virtual void BeginPlay() override;
 

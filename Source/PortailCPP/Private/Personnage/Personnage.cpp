@@ -62,6 +62,11 @@ void APersonnage::SetNoJoueur(int _NoJoueur)
 	arme->SetNoJoueur(NoJoueur);
 }
 
+int APersonnage::GetNoJoueur()
+{
+	return NoJoueur;
+}
+
 // Called to bind functionality to input
 void APersonnage::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
