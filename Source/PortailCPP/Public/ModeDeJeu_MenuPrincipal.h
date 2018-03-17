@@ -25,7 +25,7 @@ class PORTAILCPP_API AModeDeJeu_MenuPrincipal : public AGameModeBase
 {
 	GENERATED_BODY()
 
-		AGestionnaireDeNiveaux* GestionnaireDeNiveaux;
+	AGestionnaireDeNiveaux* GestionnaireDeNiveaux;
 
 	//-----------------------------------------
 	//---------OUVERTURE DE LA PARTIE----------
@@ -47,7 +47,7 @@ class PORTAILCPP_API AModeDeJeu_MenuPrincipal : public AGameModeBase
 	void ConnecterLesPortails();
 
 	//Trouve tous les acteurs de type APortail chargés dans le jeu, et les stock dans NiveauxChoisis
-	void TrouverTousLesPortailsCharges(AGestionnaireDeNiveaux * const GestionnaireDeNiveaux);
+	void TrouverTousLesPortailsCharges();
 
 	//Trouve tous les acteurs de type PointApparition chargés dans le jeu, et les stock dans NiveauChoisis
 	void ChercherPointsApparition();
@@ -71,7 +71,23 @@ class PORTAILCPP_API AModeDeJeu_MenuPrincipal : public AGameModeBase
 
 	StatistiquesDuJoueur * StatsJoueurs[4];
 
+	//fait apparaitre un joueur sur un point d'apparition aléatoire
 	void ReapparitionJoueur(int NoJoueur);
+
+	//fait apparaitre un joueur au point d'apparition spécifié avec l'ID du PlayerController spécifié
+	void FaireApparaitreJoueur(APlayerStart * PointApparition, int NoJoueur);
+	//détruit un joueur spécifié
+	void DetruireJoueur(int NoJoueur);
+
+	//retourne un point d'apparition aléatoire (à remplacer plus tard par un point d'apparition dans un pièce où il n'y a pas de joueur)
+	APlayerStart * TrouverPointApparitionAleatoire();
+
+	const int NbMeutresRequisPourVictoire = 1;
+
+	//sera plus élevé quand on aura plus de niveaux de faits
+	///IMPORTANT!!! DOIT ÊTRE PLUS PETIT OU ÉGAL À LA TAILLE DE LA LISTE DE NIVEAUX
+	const int NbNiveauxVoulus = 3;
+
 	
 public:
 	AModeDeJeu_MenuPrincipal();
@@ -81,7 +97,7 @@ public:
 	
 	//le numéro du joueur gagnant. si égal à -1, le menu ne l'affichera pas
 	UPROPERTY(BlueprintReadOnly, Category = "MenuPrincipal")
-	int NoJoueurGagnant;
+	int NoJoueurGagnant = -1;
 
 	virtual void BeginPlay() override;
 

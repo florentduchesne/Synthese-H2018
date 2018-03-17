@@ -42,6 +42,7 @@ APersonnage::APersonnage()
 	//on change la vitesse de déplacement du personnage
 	GetCharacterMovement()->MaxWalkSpeed = 1200;
 	GetCharacterMovement()->MaxAcceleration = 3000;
+	UE_LOG(LogTemp, Warning, TEXT("Constructeur Personnage"));
 }
 
 // Called when the game starts or when spawned
@@ -166,9 +167,7 @@ void APersonnage::InfligerDegats(int degats, int NoJoueurAttaquant)
 		UE_LOG(LogTemp, Warning, TEXT("JE SUIS MORT"));
 		PointsDeVie = 100;
 	}
-	UE_LOG(LogTemp, Warning, TEXT("ARMURE DU PERSONNAGE %d"), Armure);
 	UE_LOG(LogTemp, Warning, TEXT("PV DU PERSONNAGE %d"), PointsDeVie);
-	UE_LOG(LogTemp, Warning, TEXT("DEGATS INFLIGES PAR : %d"), NoJoueurAttaquant);
 }
 
 void APersonnage::Recharger()

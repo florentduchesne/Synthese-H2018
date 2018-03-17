@@ -31,12 +31,12 @@ void AGestionnaireDeNiveaux::ChargerNiveau(FName nomNiveau, int IdStream)
 	UGameplayStatics::LoadStreamLevel(this, nomNiveau, true, false, info);
 	UE_LOG(LogTemp, Warning, TEXT("on charge un niveau"));
 	GetWorld()->UpdateLevelStreaming();
-	/*ULevelStreaming *pStreaming = UGameplayStatics::GetStreamingLevel(this, nomNiveau);
+	ULevelStreaming *pStreaming = UGameplayStatics::GetStreamingLevel(this, nomNiveau);
 	if (pStreaming)
 	{
 		pStreaming->bShouldBeLoaded = true;
 		pStreaming->bShouldBeVisible = true;
-	}*/
+	}
 }
 
 bool AGestionnaireDeNiveaux::NiveauEstCharge(FName nomNiveau)
@@ -45,12 +45,18 @@ bool AGestionnaireDeNiveaux::NiveauEstCharge(FName nomNiveau)
 	return pStreaming->IsLevelLoaded();
 }
 
-void AGestionnaireDeNiveaux::DechargerNiveau(FName nomNiveau)
+void AGestionnaireDeNiveaux::DechargerNiveau(FName nomNiveau, int IdStream)
 {
 	FLatentActionInfo info;
+	info.UUID = IdStream;
 	info.Linkage = 1;
 	UGameplayStatics::UnloadStreamLevel(this, nomNiveau, info);
-	ULevelStreaming *pStreaming = UGameplayStatics::GetStreamingLevel(this, nomNiveau);
 	UE_LOG(LogTemp, Warning, TEXT("on decharge un niveau"));
+	/*ULevelStreaming *pStreaming = UGameplayStatics::GetStreamingLevel(this, nomNiveau);
+	if (pStreaming)
+	{
+		pStreaming->bShouldBeLoaded = false;
+		pStreaming->bShouldBeVisible = false;
+	}*/
 	GetWorld()->UpdateLevelStreaming();
 }

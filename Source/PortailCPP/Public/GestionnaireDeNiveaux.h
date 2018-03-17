@@ -33,5 +33,5 @@ public:
 	//retourne si oui ou non un niveau a fini d'être chargé
 	bool NiveauEstCharge(FName nomNiveau);
 	//marque un niveau comme étant à décharger pour le level streaming
-	void DechargerNiveau(FName nomNiveau);
+	void DechargerNiveau(FName nomNiveau, int IdStream);
 };
