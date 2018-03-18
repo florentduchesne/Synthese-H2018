@@ -46,8 +46,10 @@ void AModeDeJeu_MenuPrincipal::ChangeMenuWidget(TSubclassOf<UUserWidget> NewWidg
 	}
 }
 
-void AModeDeJeu_MenuPrincipal::GenererCarte(int nbJoueurs)
+void AModeDeJeu_MenuPrincipal::GenererCarte(int _NbJoueurs)
 {
+	NbJoueurs = _NbJoueurs;
+
 	//contient les informations de tous les niveaux qui peuvent apparaître : nombre de portails, nom, Id
 	TArray<InformationsNiveau*> ListeCompleteNiveaux;
 	//on rempli avec des valeurs hard-codées...
@@ -86,29 +88,35 @@ void AModeDeJeu_MenuPrincipal::GenererCarte(int nbJoueurs)
 		}
 	}*/
 
-	//on va chercher tous les portails de tous les niveaux chargés et on les sauvegarde dans NiveauxChoisis
-	TrouverTousLesPortailsCharges();
+	InitialiserCarte();
+}
 
-	//print
-	/*for (InformationsNiveau* Niveau : NiveauxChoisis)
+void AModeDeJeu_MenuPrincipal::InitialiserCarte()
+{
+	if (NiveauxTousCharges())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("portails du niveau : %s"), *Niveau->GetNom().ToString());
-		UE_LOG(LogTemp, Warning, TEXT("nombre de portails : %d"), Niveau->listePortails.Num());
-		for (APortail * Portail : Niveau->listePortails)
-		{
-			if (Portail)
-			{
-				UE_LOG(LogTemp, Warning, TEXT("nom portail : %s"), *Portail->GetName());
-			}
-		}
-	}*/
+		UE_LOG(LogTemp, Warning, TEXT("niveaux tous charges"));
+		//on va chercher tous les portails de tous les niveaux chargés et on les sauvegarde dans NiveauxChoisis
+		TrouverTousLesPortailsCharges();
 
-	//on connecte les portails pour vrai
-	ConnecterLesPortails();
+		//on connecte les portails pour vrai
+		ConnecterLesPortails();
 
-	ChercherPointsApparition();
+		//on va chercher tous les points d'apparition
+		ChercherPointsApparition();
 
-	PlacerJoueurs(nbJoueurs);
+		//détruit tous les joueurs
+		DetruireTousLesJoueurs();
+
+		//on place tous les joueurs
+		PlacerJoueurs();
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("niveaux pas tous charges"));
+		FTimerHandle UnusedHandle;
+		GetWorldTimerManager().SetTimer(UnusedHandle, this, &AModeDeJeu_MenuPrincipal::InitialiserCarte, 1.0f, false);
+	}
 }
 
 void AModeDeJeu_MenuPrincipal::SelectionnerNiveaux(TArray<InformationsNiveau*> ListeCompleteNiveaux, int NbNiveauxVoulus)
@@ -131,15 +139,13 @@ void AModeDeJeu_MenuPrincipal::SelectionnerNiveaux(TArray<InformationsNiveau*> L
 	}
 }
 
-AGestionnaireDeNiveaux * AModeDeJeu_MenuPrincipal::ChargerLesNiveaux()
+void AModeDeJeu_MenuPrincipal::ChargerLesNiveaux()
 {
 	//on charge tous les niveaux sélectionnés
 	for (auto i = 0; i < NiveauxChoisis.Num(); i++)
 	{
 		GestionnaireDeNiveaux->ChargerNiveau(NiveauxChoisis[i]->GetNom(), i);
 	}
-
-	return GestionnaireDeNiveaux;
 }
 
 void AModeDeJeu_MenuPrincipal::RelierNiveaux()
@@ -196,40 +202,20 @@ void AModeDeJeu_MenuPrincipal::RelierNiveaux()
 
 void AModeDeJeu_MenuPrincipal::TrouverTousLesPortailsCharges()
 {
-	//vérifier si tous les niveaux sont chargés
-	bool bTousCharges = true;
-	for (InformationsNiveau* Niveau : NiveauxChoisis)
+	//on va chercher tous les portails de tous les niveaux chargés
+	for (TActorIterator<APortail> ActorItr(GetWorld()); ActorItr; ++ActorItr)
 	{
-		if (!GestionnaireDeNiveaux->NiveauEstCharge(Niveau->GetNom()))
+		APortail *Portail = *ActorItr;
+		//on vérifie si le portail a un tag qui contient le nom d'un niveau
+		for (InformationsNiveau* Niveau : NiveauxChoisis)
 		{
-			bTousCharges = false;
-		}
-	}
-
-	if (bTousCharges)
-	{
-		//on va chercher tous les portails de tous les niveaux chargés
-		for (TActorIterator<APortail> ActorItr(GetWorld()); ActorItr; ++ActorItr)
-		{
-			APortail *Portail = *ActorItr;
-			//on vérifie si le portail a un tag qui contient le nom d'un niveau
-			for (InformationsNiveau* Niveau : NiveauxChoisis)
+			if (Portail->Tags.Contains(Niveau->GetNom()))
 			{
-				if (Portail->Tags.Contains(Niveau->GetNom()))
-				{
-					UE_LOG(LogTemp, Warning, TEXT("Portail ajoute"));
-					//on ajoute le portail à la liste de portails du niveau
-					Niveau->listePortails.Add(Portail);
-					break;
-				}
+				//on ajoute le portail à la liste de portails du niveau
+				Niveau->listePortails.Add(Portail);
+				break;
 			}
 		}
-	}
-	else {
-		UE_LOG(LogTemp, Warning, TEXT("Pas tout charge"));
-		FTimerHandle UnusedHandle;
-		GetWorldTimerManager().SetTimer(UnusedHandle, this, &AModeDeJeu_MenuPrincipal::TrouverTousLesPortailsCharges, 1.0f, false);
-		//TrouverTousLesPortailsCharges(GestionnaireDeNiveaux);
 	}
 }
 
@@ -263,37 +249,44 @@ void AModeDeJeu_MenuPrincipal::ConnecterLesPortails()
 
 void AModeDeJeu_MenuPrincipal::ChercherPointsApparition()
 {
-	for (TActorIterator<APlayerStart> ActorItr(GetWorld()); ActorItr; ++ActorItr)
+	TArray<AActor*> FoundActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APlayerStart::StaticClass(), FoundActors);
+	for (AActor* Acteur : FoundActors)
 	{
-		APlayerStart *PointApparition = *ActorItr;
-		//on vérifie si le portail a un tag qui contient le nom d'un niveau
-		for (InformationsNiveau* Niveau : NiveauxChoisis)
+		APlayerStart* PointApparition = Cast<APlayerStart>(Acteur);
+		if (PointApparition)
 		{
-			if (PointApparition->Tags.Contains(Niveau->GetNom()))
+			for (InformationsNiveau* Niveau : NiveauxChoisis)
 			{
-				//on ajoute le portail à la liste de portails du niveau
-				Niveau->AjouterPointApparition(PointApparition);
-				break;
+				if (PointApparition->Tags.Contains(Niveau->GetNom()))
+				{
+					//on ajoute le portail à la liste de portails du niveau
+					Niveau->AjouterPointApparition(PointApparition);
+					UE_LOG(LogTemp, Warning, TEXT("Point apparition trouve"));
+					break;
+				}
 			}
 		}
 	}
 }
 
-void AModeDeJeu_MenuPrincipal::PlacerJoueurs(int NbJoueurs)
-{
-	//détruit tous les joueurs
-	DetruireTousLesJoueurs();
-	
+void AModeDeJeu_MenuPrincipal::PlacerJoueurs()
+{	
+	UE_LOG(LogTemp, Warning, TEXT("nb Joueurs : %d"), NbJoueurs);
 	TArray<int> IdNiveauxDejaPris;
 	bool bSortir = false;
 	for (int NoJoueur = 0; NoJoueur < NbJoueurs; NoJoueur++)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("no Joueurs : %d"), NoJoueur);
 		for (int j = 0; j < NiveauxChoisis.Num(); j++)
 		{
+			UE_LOG(LogTemp, Warning, TEXT("no point apparition : %d"), j);
 			if (!IdNiveauxDejaPris.Contains(j))
 			{
+				UE_LOG(LogTemp, Warning, TEXT("entre dans le if"));
 				for (APlayerStart * PointApparition : NiveauxChoisis[j]->GetListePointsApparition())
 				{
+					UE_LOG(LogTemp, Warning, TEXT("appel fonction faire apparaitre joueur"));
 					FaireApparaitreJoueur(PointApparition, NoJoueur);
 					break;
 				}
@@ -306,59 +299,66 @@ void AModeDeJeu_MenuPrincipal::PlacerJoueurs(int NbJoueurs)
 
 void AModeDeJeu_MenuPrincipal::PartieTerminee(int idNoJoueurGagnant)
 {
+	//décharge tous les niveaux
 	DechargerCarte();
 
+	//supprime tous les niveaux sélectionnés pour la dernière partie
 	NiveauxChoisis.Empty();
+
+	//réinitialise les stats des joueurs
 	for (auto i = 0; i < 4; i++)
 	{
 		StatsJoueurs[i] = new StatistiquesDuJoueur(i);
 	}
 
+	//détruit tous les joueurs
 	DetruireTousLesJoueurs();
 
+	//retour au menu principal
 	ChangeMenuWidget(StartingWidgetClass);
 }
 
 void AModeDeJeu_MenuPrincipal::DechargerCarte()
 {
-	UE_LOG(LogTemp, Warning, TEXT("decharger tout :"));
+	//boucle à travers tous les niveaux et les décharge
 	for (auto i = 0; i < NiveauxChoisis.Num(); i++)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("decharger niveau"));
 		GestionnaireDeNiveaux->DechargerNiveau(NiveauxChoisis[i]->GetNom(), i);
 	}
 }
 
 void AModeDeJeu_MenuPrincipal::DetruireTousLesJoueurs()
 {
-	UE_LOG(LogTemp, Warning, TEXT("detruire tous les joueurs :"));
+	//va chercher tous les objets APersonnage
 	TArray<AActor*> FoundActors;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APersonnage::StaticClass(), FoundActors);
 	for (AActor * Acteur : FoundActors)
 	{
+		//supprime le joueur
 		APersonnage * Personnage = Cast<APersonnage>(Acteur);
 		APlayerController * Controleur = Cast<APlayerController>(Personnage->GetController());
 		UGameplayStatics::RemovePlayer(Controleur, true);
-		UE_LOG(LogTemp, Warning, TEXT("joueur detruit"));
 	}
+
+	//fait réapparaitre un unique joueur pour avoir le controle du menu principal
 	APlayerStart * PointApparition = NewObject<APlayerStart>(this);
 	FaireApparaitreJoueur(PointApparition, 0);
 	PointApparition->Destroy();
 }
 
-
-
 void AModeDeJeu_MenuPrincipal::JoueurEnTueUnAutre(int IndexJoueurTueur, int IndexJoueurMort)
 {
+	//actualise les statistiques des joueurs
 	StatsJoueurs[IndexJoueurTueur]->NbMeurtres++;
 	StatsJoueurs[IndexJoueurMort]->NbMorts++;
 
+	//si un joueur gagne, met fin à la partie
 	if (StatsJoueurs[IndexJoueurTueur]->NbMeurtres == NbMeutresRequisPourVictoire)
 	{
 		NoJoueurGagnant = IndexJoueurTueur;
-		UE_LOG(LogTemp, Warning, TEXT("JOUEUR %d A GAGNE LA PARTIE!!!!!!!!!!!!!!!!"), IndexJoueurTueur);
 		PartieTerminee(IndexJoueurTueur);
 	}
+	//sinon faire réapparaître le joueur mort
 	else {
 		ReapparitionJoueur(IndexJoueurMort);
 	}
@@ -376,15 +376,21 @@ void AModeDeJeu_MenuPrincipal::ReapparitionJoueur(int NoJoueur)
 		UE_LOG(LogTemp, Warning, TEXT("point apparition manquant"));
 }
 
-void AModeDeJeu_MenuPrincipal::FaireApparaitreJoueur(APlayerStart * PointApparition, int NoJoueur)
+void AModeDeJeu_MenuPrincipal::FaireApparaitreJoueur(UObject * PointApparition, int NoJoueur)
 {
 	//on cree un joueur automatiquement et on vérifie si il a bien été créé
 	APlayerController * Controleur = UGameplayStatics::CreatePlayer(PointApparition, NoJoueur, true);
+	UE_LOG(LogTemp, Warning, TEXT("on a appele CreatePlayer"));
 	if (Controleur)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("controleur non null"));
 		APawn * Pion = Controleur->GetPawn();
 		APersonnage * Personnage = Cast<APersonnage>(Pion);
 		Personnage->SetNoJoueur(NoJoueur);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("controleur null"));
 	}
 }
 
@@ -422,4 +428,18 @@ APlayerStart * AModeDeJeu_MenuPrincipal::TrouverPointApparitionAleatoire()
 		}
 	}
 	return nullptr;
+}
+
+bool AModeDeJeu_MenuPrincipal::NiveauxTousCharges()
+{
+	//vérifier si tous les niveaux sont chargés
+	bool bTousCharges = true;
+	for (InformationsNiveau* Niveau : NiveauxChoisis)
+	{
+		if (!GestionnaireDeNiveaux->NiveauEstCharge(Niveau->GetNom()))
+		{
+			bTousCharges = false;
+		}
+	}
+	return bTousCharges;
 }

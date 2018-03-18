@@ -41,7 +41,7 @@ class PORTAILCPP_API AModeDeJeu_MenuPrincipal : public AGameModeBase
 	void RelierNiveaux();
 
 	//charge les niveaux
-	AGestionnaireDeNiveaux * ChargerLesNiveaux();
+	void ChargerLesNiveaux();
 
 	//connecte les portails de tous les niveaux de manière à ce que tous les niveaux soient accessibles
 	void ConnecterLesPortails();
@@ -53,7 +53,11 @@ class PORTAILCPP_API AModeDeJeu_MenuPrincipal : public AGameModeBase
 	void ChercherPointsApparition();
 
 	//Supprime tous les objets APersonnage déjà présent (ex: le personnage par défaut), et en crée un certain nombre, placés dans les PointsApparitions sélectionnés précédemment
-	void PlacerJoueurs(int NbJoueurs);
+	void PlacerJoueurs();
+
+	bool NiveauxTousCharges();
+
+	void InitialiserCarte();
 
 	//-----------------------------------------
 	//---------FERMETURE DE LA PARTIE----------
@@ -75,18 +79,20 @@ class PORTAILCPP_API AModeDeJeu_MenuPrincipal : public AGameModeBase
 	void ReapparitionJoueur(int NoJoueur);
 
 	//fait apparaitre un joueur au point d'apparition spécifié avec l'ID du PlayerController spécifié
-	void FaireApparaitreJoueur(APlayerStart * PointApparition, int NoJoueur);
+	void FaireApparaitreJoueur(UObject * PointApparition, int NoJoueur);
 	//détruit un joueur spécifié
 	void DetruireJoueur(int NoJoueur);
 
 	//retourne un point d'apparition aléatoire (à remplacer plus tard par un point d'apparition dans un pièce où il n'y a pas de joueur)
 	APlayerStart * TrouverPointApparitionAleatoire();
 
-	const int NbMeutresRequisPourVictoire = 1;
+	const int NbMeutresRequisPourVictoire = 3;
 
 	//sera plus élevé quand on aura plus de niveaux de faits
 	///IMPORTANT!!! DOIT ÊTRE PLUS PETIT OU ÉGAL À LA TAILLE DE LA LISTE DE NIVEAUX
 	const int NbNiveauxVoulus = 3;
+
+	int NbJoueurs;
 
 	
 public:
@@ -111,5 +117,6 @@ public:
 
 	//appelle toutes les fonctions d'ouverture de la partie
 	UFUNCTION(BlueprintCallable, Category = "GenerationCarte")
-	void GenererCarte(int nbJoueurs);
+	void GenererCarte(int _NbJoueurs);
+
 };

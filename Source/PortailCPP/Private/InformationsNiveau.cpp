@@ -35,7 +35,7 @@ APortail * InformationsNiveau::GetProchainPortailNonConnecte()
 	return nullptr;
 }
 
-void InformationsNiveau::AjouterPointApparition(APlayerStart * PlayerStart)
+void InformationsNiveau::AjouterPointApparition(APlayerStart * PointApparition)
 {
-	ListePointsApparition.Add(PlayerStart);
+	ListePointsApparition.Add(PointApparition);
 }
