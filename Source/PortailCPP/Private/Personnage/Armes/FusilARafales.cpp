@@ -3,7 +3,7 @@
 #include "FusilARafales.h"
 
 UFusilARafales::UFusilARafales()
-	:UArme(15, 2.0f, 20, "/Game/FirstPerson/FPWeapon/Mesh/SK_FPGun")
+	:UArme(15, 2.0f, 0.5f, 20, "/Game/FirstPerson/FPWeapon/Mesh/SK_FPGun")
 {
 	PrimaryComponentTick.bCanEverTick = true;
 }

@@ -20,7 +20,7 @@ public:
 	//ne devrait pas être appelé, mais requis pour le bon fonctionnement de Unreal Engine
 	UArme();
 	//initialise l'arme
-	UArme(const int _TailleChargeur, float _TempsRecharge, int Degats, FString CheminMesh);
+	UArme(const int _TailleChargeur, float _TempsRecharge, float _DelaiEntreChaqueTir, int Degats, FString CheminMesh);
 
 protected:
 	// Called when the game starts
@@ -30,7 +30,7 @@ protected:
 	USkeletalMeshComponent * mesh;
 
 	//delai entre la fin d'un tir et le début du suivant
-	float DelaiEntreChaqueTir = 0.8f;
+	float DelaiEntreChaqueTir;
 	//temps requis pour recharger
 	float TempsRecharge;
 	//nombre de balles qu'il reste dans le chargeur

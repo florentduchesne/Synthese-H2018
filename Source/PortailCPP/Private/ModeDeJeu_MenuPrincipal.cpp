@@ -366,12 +366,37 @@ void AModeDeJeu_MenuPrincipal::JoueurEnTueUnAutre(int IndexJoueurTueur, int Inde
 
 void AModeDeJeu_MenuPrincipal::ReapparitionJoueur(int NoJoueur)
 {
-	//on détruit le joueur
-	DetruireJoueur(NoJoueur);
-	//on fait apparaitre le joueur
 	APlayerStart * PointApparition = TrouverPointApparitionAleatoire();
 	if (PointApparition)
-		FaireApparaitreJoueur(PointApparition, NoJoueur);
+	{
+		for (TActorIterator<APlayerController> ActorItr(GetWorld()); ActorItr; ++ActorItr)
+		{
+			APlayerController * Controleur = *ActorItr;
+			APawn * Pion = Controleur->GetPawn();
+			if (Pion)
+			{
+				APersonnage * Personnage = Cast<APersonnage>(Pion);
+				if (Personnage)
+				{
+					if (Personnage->GetNoJoueur() == NoJoueur)
+					{
+						UE_LOG(LogTemp, Warning, TEXT("1 JOUEUR reapparu"));
+						Personnage->ReinitialiserStatistiques();
+						FRotator rotation = Personnage->GetControlRotation();
+						rotation.Yaw = Personnage->GetActorRotation().Yaw + PointApparition->GetActorRotation().Yaw;
+						Personnage->GetController()->SetControlRotation(rotation);
+
+						FVector position = PointApparition->GetActorLocation();
+
+
+						FHitResult HitResult;
+						Personnage->SetActorLocation(position, false, &HitResult, ETeleportType::None);
+						return;
+					}
+				}
+			}
+		}
+	}
 	else
 		UE_LOG(LogTemp, Warning, TEXT("point apparition manquant"));
 }

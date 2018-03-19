@@ -11,6 +11,7 @@
 #include "ConstructorHelpers.h"
 #include "TimerManager.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "UObject/UObjectGlobals.h"
 
 //toutes les armes possibles
 #include "Armes/Arme.h"
@@ -46,7 +47,7 @@ protected:
 	UArme * arme;
 
 	int PointsDeVie = 100;
-	int Armure = 50;
+	int Armure = 0;
 
 	int NoJoueur;
 
@@ -104,4 +105,8 @@ public:
 	bool PeutSeTeleporter();
 	//Le personnage recoit des degats
 	void InfligerDegats(int degats, int NoJoueurAttaquant);
+
+	void ReinitialiserStatistiques();
+
+	void ChangerArme(UClass* ClasseArme);
 };

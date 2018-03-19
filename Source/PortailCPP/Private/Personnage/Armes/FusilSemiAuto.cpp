@@ -4,7 +4,7 @@
 
 
 UFusilSemiAuto::UFusilSemiAuto()
-	:UArme(10, 1.0f, 30, "/Game/FirstPerson/FPWeapon/Mesh/SK_FPGun")
+	:UArme(10, 1.0f, 0.8f, 30, "/Game/FirstPerson/FPWeapon/Mesh/SK_FPGun")
 {}
 
 void UFusilSemiAuto::CommencerTir() {

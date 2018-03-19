@@ -165,7 +165,6 @@ void APersonnage::InfligerDegats(int degats, int NoJoueurAttaquant)
 		AModeDeJeu_MenuPrincipal * GameMode = Cast<AModeDeJeu_MenuPrincipal>(GetOuter()->GetWorld()->GetAuthGameMode());
 		GameMode->JoueurEnTueUnAutre(NoJoueurAttaquant, NoJoueur);
 		UE_LOG(LogTemp, Warning, TEXT("JE SUIS MORT"));
-		PointsDeVie = 100;
 	}
 	UE_LOG(LogTemp, Warning, TEXT("PV DU PERSONNAGE %d"), PointsDeVie);
 }
@@ -173,4 +172,52 @@ void APersonnage::InfligerDegats(int degats, int NoJoueurAttaquant)
 void APersonnage::Recharger()
 {
 	arme->LancerRechargement();
+}
+
+void APersonnage::ReinitialiserStatistiques()
+{
+	//ChangerArme(UFusilSemiAuto::StaticClass());
+	 
+	PointsDeVie = 100;
+	Armure = 0;
+}
+
+void APersonnage::ChangerArme(UClass* SousClasseDeArme)
+{
+	arme->getMesh()->UnregisterComponent();
+	//arme->DestroyComponent();
+	arme->UnregisterComponent();
+	UE_LOG(LogTemp, Warning, TEXT("arme detruite"));
+
+	UArme * NouvelleArme{ nullptr };
+
+	if (SousClasseDeArme == UFusilSemiAuto::StaticClass())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("semi auto"));
+		NouvelleArme = NewObject<UFusilSemiAuto>(this, FName("nouvelleArme"));
+	}
+	else if (SousClasseDeArme == UFusilAuto::StaticClass())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("auto"));
+		NouvelleArme = NewObject<UFusilAuto>(UFusilAuto::StaticClass());
+	}
+	else if (SousClasseDeArme == UFusilARafales::StaticClass())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("rafales"));
+		NouvelleArme = NewObject<UFusilARafales>(UFusilARafales::StaticClass());
+	}			
+	
+	if (NouvelleArme)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("arme non nulle"));
+
+		arme = NouvelleArme;
+
+		UE_LOG(LogTemp, Warning, TEXT("nom arme : %s"), *arme->GetName());
+		
+		arme->SetupAttachment(camera);
+		arme->getMesh()->SetupAttachment(camera);
+		arme->getMesh()->SetRelativeLocation(FVector(50.0f, 35.0f, -20.0f));
+		arme->getMesh()->SetRelativeRotation(FRotator(0.0f, -90.0f, 0.0f));
+	}
 }
