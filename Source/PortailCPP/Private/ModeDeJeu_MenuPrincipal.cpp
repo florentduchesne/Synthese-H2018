@@ -296,7 +296,6 @@ void AModeDeJeu_MenuPrincipal::PlacerJoueurs()
 	}
 }
 
-
 void AModeDeJeu_MenuPrincipal::PartieTerminee(int idNoJoueurGagnant)
 {
 	//décharge tous les niveaux
@@ -411,11 +410,41 @@ void AModeDeJeu_MenuPrincipal::FaireApparaitreJoueur(UObject * PointApparition, 
 		UE_LOG(LogTemp, Warning, TEXT("controleur non null"));
 		APawn * Pion = Controleur->GetPawn();
 		APersonnage * Personnage = Cast<APersonnage>(Pion);
-		Personnage->SetNoJoueur(NoJoueur);
+		///à faire : si le personnage n'existe pas, attendre un peu et réessayer
+		if (Personnage)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("set No Joueur"));
+			Personnage->SetNoJoueur(NoJoueur);
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("ERREUR PERSONNAGE NULL"));
+			AttendreQueJoueurChargent(Controleur, NoJoueur);
+		}
 	}
 	else
 	{
 		UE_LOG(LogTemp, Warning, TEXT("controleur null"));
+	}
+}
+
+void AModeDeJeu_MenuPrincipal::AttendreQueJoueurChargent(APlayerController * Controleur, int NoJoueur)
+{
+	APawn * Pion = Controleur->GetPawn();
+	APersonnage * Personnage = Cast<APersonnage>(Pion);
+	if (Personnage)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("set No Joueur"));
+		Personnage->SetNoJoueur(NoJoueur);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("ERREUR PERSONNAGE NULL ENCORE"));
+		FTimerDelegate TimerDel;
+		FTimerHandle TimerHandle;
+		//on rappelle la fonction dans 0.1 seconde
+		TimerDel.BindUFunction(this, FName("AttendreQueJoueurChargent"), Controleur, NoJoueur);
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDel, 0.1f, false);
 	}
 }
 

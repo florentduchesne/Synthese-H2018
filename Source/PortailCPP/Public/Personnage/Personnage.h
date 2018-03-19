@@ -84,6 +84,13 @@ protected:
 	UFUNCTION()
 	void TerminerSaut();
 
+	UFUNCTION()
+	void CommencerTir();
+	UFUNCTION()
+	void TerminerTir();
+	UFUNCTION()
+	void Rechargement();
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -109,4 +116,5 @@ public:
 	void ReinitialiserStatistiques();
 
 	void ChangerArme(UClass* ClasseArme);
+
 };

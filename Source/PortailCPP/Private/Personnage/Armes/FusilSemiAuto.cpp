@@ -5,7 +5,9 @@
 
 UFusilSemiAuto::UFusilSemiAuto()
 	:UArme(10, 1.0f, 0.8f, 30, "/Game/FirstPerson/FPWeapon/Mesh/SK_FPGun")
-{}
+{
+	UE_LOG(LogTemp, Warning, TEXT("constructeur Semi Auto"));
+}
 
 void UFusilSemiAuto::CommencerTir() {
 	FaireApparaitreProjectile();

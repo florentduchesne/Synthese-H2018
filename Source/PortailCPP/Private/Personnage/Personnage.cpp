@@ -21,7 +21,7 @@ APersonnage::APersonnage()
 
 	corps->SetupAttachment(RootComponent);
 
-	// Cree une camera avec le modele par defaut
+	// Cree une camera
 	camera = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
 	// attache la camera a la capsule
 	camera->SetupAttachment(RootComponent);
@@ -81,11 +81,13 @@ void APersonnage::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	//saut
 	PlayerInputComponent->BindAction("Sauter", IE_Pressed, this, &APersonnage::DebuterSaut);
 	PlayerInputComponent->BindAction("Sauter", IE_Released, this, &APersonnage::TerminerSaut);
+
+	///pas le choix de passer par une fonction membre de APersonnage, sinon quand on change d'arme ça brise tout...
 	//tir
-	PlayerInputComponent->BindAction("Tirer", IE_Pressed, arme, &UArme::CommencerTirSuper);
-	PlayerInputComponent->BindAction("Tirer", IE_Released, arme, &UArme::TerminerTirSuper);
+	PlayerInputComponent->BindAction("Tirer", IE_Pressed, this, &APersonnage::CommencerTir);
+	PlayerInputComponent->BindAction("Tirer", IE_Released, this, &APersonnage::TerminerTir);
 	//recharger
-	PlayerInputComponent->BindAction("Recharger", IE_Pressed, arme, &UArme::LancerRechargement);
+	PlayerInputComponent->BindAction("Recharger", IE_Pressed, this, &APersonnage::Rechargement);
 }
 
 void APersonnage::Avancer(float Value)
@@ -176,7 +178,7 @@ void APersonnage::Recharger()
 
 void APersonnage::ReinitialiserStatistiques()
 {
-	//ChangerArme(UFusilSemiAuto::StaticClass());
+	ChangerArme(UFusilARafales::StaticClass());
 	 
 	PointsDeVie = 100;
 	Armure = 0;
@@ -184,40 +186,45 @@ void APersonnage::ReinitialiserStatistiques()
 
 void APersonnage::ChangerArme(UClass* SousClasseDeArme)
 {
-	arme->getMesh()->UnregisterComponent();
-	//arme->DestroyComponent();
-	arme->UnregisterComponent();
-	UE_LOG(LogTemp, Warning, TEXT("arme detruite"));
-
-	UArme * NouvelleArme{ nullptr };
-
+	arme->DestroyComponent();
 	if (SousClasseDeArme == UFusilSemiAuto::StaticClass())
 	{
 		UE_LOG(LogTemp, Warning, TEXT("semi auto"));
-		NouvelleArme = NewObject<UFusilSemiAuto>(this, FName("nouvelleArme"));
+		arme = NewObject<UFusilSemiAuto>(this, FName("nouvelleArme"));
 	}
 	else if (SousClasseDeArme == UFusilAuto::StaticClass())
 	{
 		UE_LOG(LogTemp, Warning, TEXT("auto"));
-		NouvelleArme = NewObject<UFusilAuto>(UFusilAuto::StaticClass());
+		arme = NewObject<UFusilAuto>(this, FName("nouvelleArme"));
 	}
 	else if (SousClasseDeArme == UFusilARafales::StaticClass())
 	{
 		UE_LOG(LogTemp, Warning, TEXT("rafales"));
-		NouvelleArme = NewObject<UFusilARafales>(UFusilARafales::StaticClass());
-	}			
-	
-	if (NouvelleArme)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("arme non nulle"));
-
-		arme = NouvelleArme;
-
-		UE_LOG(LogTemp, Warning, TEXT("nom arme : %s"), *arme->GetName());
-		
-		arme->SetupAttachment(camera);
-		arme->getMesh()->SetupAttachment(camera);
-		arme->getMesh()->SetRelativeLocation(FVector(50.0f, 35.0f, -20.0f));
-		arme->getMesh()->SetRelativeRotation(FRotator(0.0f, -90.0f, 0.0f));
+		arme = NewObject<UFusilARafales>(this, FName("nouvelleArme"));
 	}
+
+	UE_LOG(LogTemp, Warning, TEXT("nom arme : %s"), *arme->GetName());
+	UE_LOG(LogTemp, Warning, TEXT("nom arme mesh : %s"), *arme->getMesh()->GetName());
+
+	arme->SetupAttachment(camera);
+	arme->getMesh()->SetupAttachment(camera);
+	arme->getMesh()->SetRelativeLocation(FVector(50.0f, 35.0f, -20.0f));
+	arme->getMesh()->SetRelativeRotation(FRotator(0.0f, -90.0f, 0.0f));
+	arme->SetNoJoueur(GetNoJoueur());
+	arme->RegisterComponent();
+}
+
+void APersonnage::CommencerTir()
+{
+	arme->CommencerTirSuper();
+}
+
+void APersonnage::TerminerTir()
+{
+	arme->TerminerTirSuper();
+}
+
+void APersonnage::Rechargement()
+{
+	arme->LancerRechargement();
 }

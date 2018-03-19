@@ -80,6 +80,9 @@ class PORTAILCPP_API AModeDeJeu_MenuPrincipal : public AGameModeBase
 
 	//fait apparaitre un joueur au point d'apparition spécifié avec l'ID du PlayerController spécifié
 	void FaireApparaitreJoueur(UObject * PointApparition, int NoJoueur);
+
+	void AttendreQueJoueurChargent(APlayerController * Controleur, int NoJoueur);
+
 	//détruit un joueur spécifié
 	void DetruireJoueur(int NoJoueur);
 
