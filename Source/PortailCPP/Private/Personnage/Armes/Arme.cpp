@@ -10,14 +10,11 @@ UArme::UArme()
 UArme::UArme(const int _TailleChargeur, float _TempsRecharge, float _DelaiEntreChaqueTir, int Degats, FString CheminMesh)
 	:TailleChargeur( _TailleChargeur ), TempsRecharge(_TempsRecharge), DelaiEntreChaqueTir(_DelaiEntreChaqueTir), Degats(Degats)
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = false;
 	
 	mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("MeshArme"));
 	const ConstructorHelpers::FObjectFinder<USkeletalMesh> MeshObj((TEXT("%s"), *CheminMesh));
 	mesh->SetSkeletalMeshWithoutResettingAnimation(MeshObj.Object);
-	//UKismetSystemLibrary::PrintString(this, *FString("balles dans chargeur : " + FString::FromInt(_tailleChargeur)), true, true, FColor::Red, 5.0f);
 
 	if (!DelaiEntreChaqueTir)
 	{

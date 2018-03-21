@@ -11,7 +11,6 @@ UFusilAuto::UFusilAuto()
 
 void UFusilAuto::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
-	
 	if (bACommenceTir)
 	{
 		if (ADesBallesDansChargeur())

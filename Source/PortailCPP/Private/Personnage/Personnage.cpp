@@ -83,6 +83,7 @@ void APersonnage::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	PlayerInputComponent->BindAction("Sauter", IE_Released, this, &APersonnage::TerminerSaut);
 
 	///pas le choix de passer par une fonction membre de APersonnage, sinon quand on change d'arme ça brise tout...
+
 	//tir
 	PlayerInputComponent->BindAction("Tirer", IE_Pressed, this, &APersonnage::CommencerTir);
 	PlayerInputComponent->BindAction("Tirer", IE_Released, this, &APersonnage::TerminerTir);
@@ -171,6 +172,40 @@ void APersonnage::InfligerDegats(int degats, int NoJoueurAttaquant)
 	UE_LOG(LogTemp, Warning, TEXT("PV DU PERSONNAGE %d"), PointsDeVie);
 }
 
+bool APersonnage::Soigner(int NbPointsDeVie)
+{
+	if (PointsDeVie == 100)
+	{
+		return false;
+	}
+	else
+	{
+		PointsDeVie += NbPointsDeVie;
+		if (PointsDeVie > 100)
+		{
+			PointsDeVie = 100;
+		}
+		return true;
+	}
+}
+
+bool APersonnage::EquiperArmure(int NbArmure)
+{
+	if (Armure == 100)
+	{
+		return false;
+	}
+	else
+	{
+		Armure += NbArmure;
+		if (Armure > 100)
+		{
+			Armure = 100;
+		}
+		return true;
+	}
+}
+
 void APersonnage::Recharger()
 {
 	arme->LancerRechargement();
@@ -184,25 +219,29 @@ void APersonnage::ReinitialiserStatistiques()
 	Armure = 0;
 }
 
-void APersonnage::ChangerArme(UClass* SousClasseDeArme)
+bool APersonnage::ChangerArme(TSubclassOf<UArme> SousClasseDeArme)
 {
+	if (SousClasseDeArme == arme->StaticClass())
+	{
+		return false;
+	}
 	arme->DestroyComponent();
 	if (SousClasseDeArme == UFusilSemiAuto::StaticClass())
 	{
 		UE_LOG(LogTemp, Warning, TEXT("semi auto"));
-		arme = NewObject<UFusilSemiAuto>(this, FName("nouvelleArme"));
+		arme = NewObject<UFusilSemiAuto>(this, FName("FusilSemiAuto"));
 	}
 	else if (SousClasseDeArme == UFusilAuto::StaticClass())
 	{
 		UE_LOG(LogTemp, Warning, TEXT("auto"));
-		arme = NewObject<UFusilAuto>(this, FName("nouvelleArme"));
+		arme = NewObject<UFusilAuto>(this, FName("FusilAuto"));
 	}
 	else if (SousClasseDeArme == UFusilARafales::StaticClass())
 	{
 		UE_LOG(LogTemp, Warning, TEXT("rafales"));
-		arme = NewObject<UFusilARafales>(this, FName("nouvelleArme"));
+		arme = NewObject<UFusilARafales>(this, FName("FusilARafales"));
 	}
-
+	//UE_LOG(LogTemp, Warning, TEXT("classe arme : %s"), *SousClasseDeArme);
 	UE_LOG(LogTemp, Warning, TEXT("nom arme : %s"), *arme->GetName());
 	UE_LOG(LogTemp, Warning, TEXT("nom arme mesh : %s"), *arme->getMesh()->GetName());
 
@@ -212,6 +251,8 @@ void APersonnage::ChangerArme(UClass* SousClasseDeArme)
 	arme->getMesh()->SetRelativeRotation(FRotator(0.0f, -90.0f, 0.0f));
 	arme->SetNoJoueur(GetNoJoueur());
 	arme->RegisterComponent();
+
+	return true;
 }
 
 void APersonnage::CommencerTir()

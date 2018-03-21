@@ -115,7 +115,7 @@ void AModeDeJeu_MenuPrincipal::InitialiserCarte()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("niveaux pas tous charges"));
 		FTimerHandle UnusedHandle;
-		GetWorldTimerManager().SetTimer(UnusedHandle, this, &AModeDeJeu_MenuPrincipal::InitialiserCarte, 1.0f, false);
+		GetWorldTimerManager().SetTimer(UnusedHandle, this, &AModeDeJeu_MenuPrincipal::InitialiserCarte, 0.1f, false);
 	}
 }
 

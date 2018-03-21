@@ -55,8 +55,10 @@ class PORTAILCPP_API AModeDeJeu_MenuPrincipal : public AGameModeBase
 	//Supprime tous les objets APersonnage déjà présent (ex: le personnage par défaut), et en crée un certain nombre, placés dans les PointsApparitions sélectionnés précédemment
 	void PlacerJoueurs();
 
+	//retourne vrai si tous les niveaux ont terminé d'être chargés
 	bool NiveauxTousCharges();
 
+	//connecte les portails, va chercher les points d'apparition et fait apparaître les joueurs
 	void InitialiserCarte();
 
 	//-----------------------------------------

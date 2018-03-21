@@ -112,9 +112,13 @@ public:
 	bool PeutSeTeleporter();
 	//Le personnage recoit des degats
 	void InfligerDegats(int degats, int NoJoueurAttaquant);
+	//le personnage est soigné
+	bool Soigner(int NbPointsDeVie);
+	//le personnage gagne de l'armure
+	bool EquiperArmure(int NbArmure);
 
 	void ReinitialiserStatistiques();
 
-	void ChangerArme(UClass* ClasseArme);
+	bool ChangerArme(TSubclassOf<UArme> SousClasseDeArme);
 
 };
