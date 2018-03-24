@@ -2,6 +2,7 @@
 
 #include "Projectile.h"
 #include "PortailCPP/Public/Personnage/Personnage.h"
+#include "PortailCPP/Public/ObjetsAuSol/ObjetAuSol.h"
 
 // Sets default values
 AProjectile::AProjectile()
@@ -12,7 +13,7 @@ AProjectile::AProjectile()
 	// Use a sphere as a simple collision representation
 	CollisionComp = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComp"));
 	CollisionComp->InitSphereRadius(5.0f);
-	CollisionComp->BodyInstance.SetCollisionProfileName("Projectile");
+	CollisionComp->SetCollisionProfileName(TEXT("Projectile"));
 	CollisionComp->OnComponentHit.AddDynamic(this, &AProjectile::OnHit);// set up a notification for when this component hits something blocking
 
 	// Players can't walk on it
@@ -73,6 +74,17 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimi
 	{
 		personnageTouche->InfligerDegats(Degats, NoJoueur);
 	}
+	if (AObjetAuSol * ObjetAuSol = Cast<AObjetAuSol>(OtherActor))
+	{
+		
+		UE_LOG(LogTemp, Warning, TEXT("comp touche : %s"), *HitComp->GetName());
+		UE_LOG(LogTemp, Warning, TEXT("cible touchee : %s"), *OtherActor->GetName());
+		UE_LOG(LogTemp, Warning, TEXT("cible touchee : %s"), *OtherComp->GetName());
+		UE_LOG(LogTemp, Warning, TEXT("obj au sol"));
+		return;
+	}
 	//détruit le projectile
+	
+	UE_LOG(LogTemp, Warning, TEXT("detruit"));
 	Destroy();
 }

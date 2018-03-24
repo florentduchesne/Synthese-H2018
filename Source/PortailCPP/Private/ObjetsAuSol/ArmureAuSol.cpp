@@ -2,12 +2,9 @@
 
 #include "ArmureAuSol.h"
 
-
-
 AArmureAuSol::AArmureAuSol()
 	:AObjetAuSol(10.0f, "/Engine/BasicShapes/Cube", ETypeDeMeshEnum::StaticMesh)
 {}
-
 
 bool AArmureAuSol::RamasseParUnJoueur(APersonnage * Personnage)
 {

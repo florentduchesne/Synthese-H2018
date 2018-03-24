@@ -38,7 +38,7 @@ APersonnage::APersonnage()
 	arme->getMesh()->SetRelativeLocation(FVector(50.0f, 35.0f, -20.0f));
 
 	arme->getMesh()->SetRelativeRotation(FRotator(0.0f, -90.0f, 0.0f));
-
+	
 	//on change la vitesse de déplacement du personnage
 	GetCharacterMovement()->MaxWalkSpeed = 1200;
 	GetCharacterMovement()->MaxAcceleration = 3000;
@@ -162,7 +162,10 @@ void APersonnage::InfligerDegats(int degats, int NoJoueurAttaquant)
 	{
 		PointsDeVie -= degats;
 	}
-
+	if (ATH) 
+	{
+		ATH->MiseAJourPV(PointsDeVie);
+	}
 	if (PointsDeVie <= 0)
 	{
 		AModeDeJeu_MenuPrincipal * GameMode = Cast<AModeDeJeu_MenuPrincipal>(GetOuter()->GetWorld()->GetAuthGameMode());
@@ -185,6 +188,10 @@ bool APersonnage::Soigner(int NbPointsDeVie)
 		{
 			PointsDeVie = 100;
 		}
+		if (ATH)
+		{
+			ATH->MiseAJourPV(PointsDeVie);
+		}
 		return true;
 	}
 }
@@ -201,6 +208,10 @@ bool APersonnage::EquiperArmure(int NbArmure)
 		if (Armure > 100)
 		{
 			Armure = 100;
+		}
+		if (ATH)
+		{
+			ATH->MiseAJourArmure(Armure);
 		}
 		return true;
 	}
@@ -268,4 +279,24 @@ void APersonnage::TerminerTir()
 void APersonnage::Rechargement()
 {
 	arme->LancerRechargement();
+}
+
+void APersonnage::SetATH(AHUD * HUD)
+{
+	if (HUD)
+	{
+		ATH = Cast<AATH>(HUD);
+		if (!ATH)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("erreur set ATH"));
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("pas erreur ATH"));
+		}
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("erreur HUD"));
+	}
 }

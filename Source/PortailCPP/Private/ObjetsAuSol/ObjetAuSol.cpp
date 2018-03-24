@@ -13,10 +13,9 @@ AObjetAuSol::AObjetAuSol(float _DelaisAvantReapparition, FString CheminMesh, ETy
 	PrimaryActorTick.bCanEverTick = false;
 
 	SphereCollisions = CreateDefaultSubobject<USphereComponent>(FName("SphereCollisions"));
-	SphereCollisions->InitSphereRadius(50.0f);
+	SphereCollisions->InitSphereRadius(30.0f);
 	SphereCollisions->SetRelativeLocation(FVector(0, 0, 50));
-	SphereCollisions->SetCollisionProfileName(TEXT("OverlapAll"));
-	SphereCollisions->SetSimulatePhysics(false);
+	SphereCollisions->SetCollisionProfileName(FName("ObjetAuSol"));
 	RootComponent = SphereCollisions;
 
 	if (TypeDeMesh == ETypeDeMeshEnum::SkeletalMesh)
@@ -56,13 +55,6 @@ void AObjetAuSol::BeginPlay()
 {
 	Super::BeginPlay();
 	
-}
-
-// Called every frame
-void AObjetAuSol::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
 }
 
 void AObjetAuSol::OnCollision(AActor * overlappedActor, AActor * otherActor)

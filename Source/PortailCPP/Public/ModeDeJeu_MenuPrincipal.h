@@ -27,6 +27,8 @@ class PORTAILCPP_API AModeDeJeu_MenuPrincipal : public AGameModeBase
 
 	AGestionnaireDeNiveaux* GestionnaireDeNiveaux;
 
+	void PlacerUnUniqueJoueur();
+
 	//-----------------------------------------
 	//---------OUVERTURE DE LA PARTIE----------
 	//-----------------------------------------

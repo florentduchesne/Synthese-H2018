@@ -24,6 +24,8 @@
 #include "Camera/CameraComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "ATH.h"
+
 #include "Personnage.generated.h"
 
 UCLASS()
@@ -50,6 +52,8 @@ protected:
 	int Armure = 0;
 
 	int NoJoueur;
+
+	AATH * ATH;
 
 	// Camera du personnage
 	UPROPERTY(VisibleAnywhere)
@@ -100,6 +104,8 @@ public:
 
 	void SetNoJoueur(int _NoJoueur);
 	int GetNoJoueur();
+
+	void SetATH(AHUD * HUD);
 	
 	///on bloque et débloque la téléportation dans le but d'éviter que le joueur se téléporte à répétition d'un téléporteur à l'autre jusqu'au StackOverflow
 	//débloque la téléportation après un court délai
