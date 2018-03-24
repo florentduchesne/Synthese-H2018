@@ -64,6 +64,8 @@ protected:
 	//retourne vrai si l'arme n'est pas en train de recharger ET qu'elle a encore une balle ou plus dans le chargeur
 	bool ADesBallesDansChargeur();
 
+	void MiseAJourATHJoueur();
+
 public:
 	USkeletalMeshComponent * getMesh();
 	

@@ -26,8 +26,8 @@ AProjectile::AProjectile()
 	// Use a ProjectileMovementComponent to govern this projectile's movement
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileComp"));
 	ProjectileMovement->UpdatedComponent = CollisionComp;
-	ProjectileMovement->InitialSpeed = 6000.f;
-	ProjectileMovement->MaxSpeed = 6000.f;
+	ProjectileMovement->InitialSpeed = 10000.f;
+	ProjectileMovement->MaxSpeed = 10000.f;
 	ProjectileMovement->bRotationFollowsVelocity = false;
 	ProjectileMovement->bShouldBounce = false;
 
@@ -37,11 +37,9 @@ AProjectile::AProjectile()
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshBalle"));
 	const ConstructorHelpers::FObjectFinder<UStaticMesh> MeshObj(TEXT("/Game/FirstPerson/Meshes/FirstPersonProjectileMesh"));
 	Mesh->SetStaticMesh(MeshObj.Object);
-	Mesh->SetWorldScale3D(FVector(0.05f, 0.05f, 0.05f));
+	Mesh->SetWorldScale3D(FVector(0.02f, 0.02f, 0.02f));
 
 	Mesh->SetupAttachment(RootComponent);
-
-	Degats = 20;
 }
 
 void AProjectile::Initialiser(int Degats, int NoJoueur)

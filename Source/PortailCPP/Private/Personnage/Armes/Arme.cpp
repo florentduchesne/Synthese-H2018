@@ -29,12 +29,6 @@ UArme::UArme(const int _TailleChargeur, float _TempsRecharge, float _DelaiEntreC
 void UArme::BeginPlay()
 {
 	Super::BeginPlay();
-	/*
-	APersonnage * Personnage = Cast<APersonnage>(GetAttachmentRootActor());
-	if (Personnage)
-	{
-		Personnage->MiseAJourBallesMax(TailleChargeur);
-	}*/
 }
 
 USkeletalMeshComponent * UArme::getMesh()
@@ -47,7 +41,7 @@ void UArme::Recharger()
 {
 	MunitionsDansChargeur = TailleChargeur;
 	bADesBallesDansChargeur = true;
-	UKismetSystemLibrary::PrintString(this, TEXT("RECHARGEMENT TERMINE"), true, true, FColor::Red, 5.0f);
+	MiseAJourATHJoueur();
 }
 
 void UArme::LancerRechargement()
@@ -57,7 +51,8 @@ void UArme::LancerRechargement()
 		FTimerHandle TimerHandle;
 		GetOuter()->GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UArme::Recharger, TempsRecharge, false);
 		bADesBallesDansChargeur = false;
-		UKismetSystemLibrary::PrintString(this, TEXT("RECHARGEMENT"), true, true, FColor::Red, 5.0f);
+		MunitionsDansChargeur = 0;
+		MiseAJourATHJoueur();
 	}
 }
 
@@ -122,14 +117,19 @@ void UArme::FaireApparaitreProjectile()
 		//diminue le nombre de balles dans le chargeur
 		MunitionsDansChargeur -= 1;
 	}
-	APersonnage * Personnage = Cast<APersonnage>(GetAttachmentRootActor());
-	if (Personnage)
-	{
-		Personnage->MiseAJourBallesDansChargeur(MunitionsDansChargeur);
-	}
+	MiseAJourATHJoueur();
 }
 
 void UArme::SetNoJoueur(int NoJoueur)
 {
 	this->NoJoueur = NoJoueur;
+}
+
+void UArme::MiseAJourATHJoueur()
+{
+	APersonnage * Personnage = Cast<APersonnage>(GetAttachmentRootActor());
+	if (Personnage)
+	{
+		Personnage->MiseAJourBallesDansChargeur(MunitionsDansChargeur);
+	}
 }

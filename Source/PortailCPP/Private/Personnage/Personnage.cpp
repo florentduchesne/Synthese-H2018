@@ -268,6 +268,9 @@ bool APersonnage::ChangerArme(TSubclassOf<UArme> SousClasseDeArme)
 	arme->SetNoJoueur(GetNoJoueur());
 	arme->RegisterComponent();
 
+	ATH->MiseAJourBallesMax(arme->GetBallesMax());
+	ATH->MiseAJourBallesDansChargeur(arme->GetBallesDansChargeur());
+
 	return true;
 }
 
@@ -289,6 +292,8 @@ void APersonnage::Rechargement()
 void APersonnage::SetATH(AHUD * HUD)
 {
 	ATH = Cast<AATH>(HUD);
+	ATH->MiseAJourBallesMax(arme->GetBallesMax());
+	ATH->MiseAJourBallesDansChargeur(arme->GetBallesDansChargeur());
 }
 
 void APersonnage::MiseAJourNbMeurtresATH(int Meurtres)
