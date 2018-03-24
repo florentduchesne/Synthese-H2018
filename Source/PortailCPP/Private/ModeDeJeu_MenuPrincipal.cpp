@@ -353,6 +353,12 @@ void AModeDeJeu_MenuPrincipal::JoueurEnTueUnAutre(int IndexJoueurTueur, int Inde
 	StatsJoueurs[IndexJoueurTueur]->NbMeurtres++;
 	StatsJoueurs[IndexJoueurMort]->NbMorts++;
 
+	APersonnage * Personnage = GetJoueurParIndex(IndexJoueurTueur);
+	if (Personnage)
+	{
+		Personnage->MiseAJourNbMeurtresATH(StatsJoueurs[IndexJoueurTueur]->NbMeurtres);
+	}
+
 	//si un joueur gagne, met fin à la partie
 	if (StatsJoueurs[IndexJoueurTueur]->NbMeurtres == NbMeutresRequisPourVictoire)
 	{
@@ -370,32 +376,20 @@ void AModeDeJeu_MenuPrincipal::ReapparitionJoueur(int NoJoueur)
 	APlayerStart * PointApparition = TrouverPointApparitionAleatoire();
 	if (PointApparition)
 	{
-		for (TActorIterator<APlayerController> ActorItr(GetWorld()); ActorItr; ++ActorItr)
+		APersonnage * Personnage = GetJoueurParIndex(NoJoueur);
+		if (Personnage)
 		{
-			APlayerController * Controleur = *ActorItr;
-			APawn * Pion = Controleur->GetPawn();
-			if (Pion)
-			{
-				APersonnage * Personnage = Cast<APersonnage>(Pion);
-				if (Personnage)
-				{
-					if (Personnage->GetNoJoueur() == NoJoueur)
-					{
-						UE_LOG(LogTemp, Warning, TEXT("1 JOUEUR reapparu"));
-						Personnage->ReinitialiserStatistiques();
-						FRotator rotation = Personnage->GetControlRotation();
-						rotation.Yaw = Personnage->GetActorRotation().Yaw + PointApparition->GetActorRotation().Yaw;
-						Personnage->GetController()->SetControlRotation(rotation);
+			UE_LOG(LogTemp, Warning, TEXT("1 JOUEUR reapparu"));
+			Personnage->ReinitialiserStatistiques();
+			FRotator rotation = Personnage->GetControlRotation();
+			rotation.Yaw = Personnage->GetActorRotation().Yaw + PointApparition->GetActorRotation().Yaw;
+			Personnage->GetController()->SetControlRotation(rotation);
 
-						FVector position = PointApparition->GetActorLocation();
+			FVector position = PointApparition->GetActorLocation();
 
-
-						FHitResult HitResult;
-						Personnage->SetActorLocation(position, false, &HitResult, ETeleportType::None);
-						return;
-					}
-				}
-			}
+			FHitResult HitResult;
+			Personnage->SetActorLocation(position, false, &HitResult, ETeleportType::None);
+			return;
 		}
 	}
 	else
@@ -404,22 +398,11 @@ void AModeDeJeu_MenuPrincipal::ReapparitionJoueur(int NoJoueur)
 
 void AModeDeJeu_MenuPrincipal::DetruireJoueur(int NoJoueur)
 {
-	for (TActorIterator<APlayerController> ActorItr(GetWorld()); ActorItr; ++ActorItr)
+	APersonnage * Personnage = GetJoueurParIndex(NoJoueur);
+	if (Personnage)
 	{
-		APlayerController * Controleur = *ActorItr;
-		APawn * Pion = Controleur->GetPawn();
-		if (Pion)
-		{
-			APersonnage * Personnage = Cast<APersonnage>(Pion);
-			if (Personnage)
-			{
-				if (Personnage->GetNoJoueur() == NoJoueur)
-				{
-					UGameplayStatics::RemovePlayer(Controleur, true);
-					break;
-				}
-			}
-		}
+		APlayerController * Controleur = Cast<APlayerController>(Personnage->GetController());
+		UGameplayStatics::RemovePlayer(Controleur, true);
 	}
 }
 
@@ -457,4 +440,26 @@ void AModeDeJeu_MenuPrincipal::PlacerUnUniqueJoueur()
 	APlayerStart * PointApparition = NewObject<APlayerStart>(this);
 	FaireApparaitreJoueur(PointApparition, 0);
 	PointApparition->Destroy();
+}
+
+APersonnage * AModeDeJeu_MenuPrincipal::GetJoueurParIndex(int NoJoueur)
+{
+	for (TActorIterator<APlayerController> ActorItr(GetWorld()); ActorItr; ++ActorItr)
+	{
+		APlayerController * Controleur = *ActorItr;
+		APawn * Pion = Controleur->GetPawn();
+		if (Pion)
+		{
+			APersonnage * Personnage = Cast<APersonnage>(Pion);
+			if (Personnage)
+			{
+				if (Personnage->GetNoJoueur() == NoJoueur)
+				{
+					return Personnage;
+				}
+			}
+		}
+	}
+
+	return nullptr;
 }

@@ -29,7 +29,7 @@ APersonnage::APersonnage()
 	// Permet au personnage de controler la rotation de la camera
 	camera->bUsePawnControlRotation = true;
 
-	arme = CreateDefaultSubobject<UFusilAuto>(TEXT("Arme"));
+	arme = CreateDefaultSubobject<UFusilSemiAuto>(TEXT("Arme"));
 
 	arme->SetupAttachment(camera);
 
@@ -224,10 +224,15 @@ void APersonnage::Recharger()
 
 void APersonnage::ReinitialiserStatistiques()
 {
-	ChangerArme(UFusilARafales::StaticClass());
+	ChangerArme(UFusilSemiAuto::StaticClass());
 	 
 	PointsDeVie = 100;
 	Armure = 0;
+
+	ATH->MiseAJourPV(PointsDeVie);
+	ATH->MiseAJourArmure(Armure);
+	ATH->MiseAJourBallesDansChargeur(arme->GetBallesDansChargeur());
+	ATH->MiseAJourBallesMax(arme->GetBallesMax());
 }
 
 bool APersonnage::ChangerArme(TSubclassOf<UArme> SousClasseDeArme)
@@ -283,20 +288,20 @@ void APersonnage::Rechargement()
 
 void APersonnage::SetATH(AHUD * HUD)
 {
-	if (HUD)
-	{
-		ATH = Cast<AATH>(HUD);
-		if (!ATH)
-		{
-			UE_LOG(LogTemp, Warning, TEXT("erreur set ATH"));
-		}
-		else
-		{
-			UE_LOG(LogTemp, Warning, TEXT("pas erreur ATH"));
-		}
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("erreur HUD"));
-	}
+	ATH = Cast<AATH>(HUD);
+}
+
+void APersonnage::MiseAJourNbMeurtresATH(int Meurtres)
+{
+	ATH->MiseAJourMeutres(Meurtres);
+}
+
+void APersonnage::MiseAJourBallesDansChargeur(int NbBalles)
+{
+	ATH->MiseAJourBallesDansChargeur(NbBalles);
+}
+
+void APersonnage::MiseAJourBallesMax(int NbBalles)
+{
+	ATH->MiseAJourBallesMax(NbBalles);
 }

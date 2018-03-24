@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Arme.h"
+#include "PortailCPP/Public/Personnage/Personnage.h"
 
 
 // Sets default values for this component's properties
@@ -28,6 +29,12 @@ UArme::UArme(const int _TailleChargeur, float _TempsRecharge, float _DelaiEntreC
 void UArme::BeginPlay()
 {
 	Super::BeginPlay();
+	/*
+	APersonnage * Personnage = Cast<APersonnage>(GetAttachmentRootActor());
+	if (Personnage)
+	{
+		Personnage->MiseAJourBallesMax(TailleChargeur);
+	}*/
 }
 
 USkeletalMeshComponent * UArme::getMesh()
@@ -114,6 +121,11 @@ void UArme::FaireApparaitreProjectile()
 		}
 		//diminue le nombre de balles dans le chargeur
 		MunitionsDansChargeur -= 1;
+	}
+	APersonnage * Personnage = Cast<APersonnage>(GetAttachmentRootActor());
+	if (Personnage)
+	{
+		Personnage->MiseAJourBallesDansChargeur(MunitionsDansChargeur);
 	}
 }
 

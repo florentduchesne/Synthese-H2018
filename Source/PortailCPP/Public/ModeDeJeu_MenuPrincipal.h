@@ -90,6 +90,8 @@ class PORTAILCPP_API AModeDeJeu_MenuPrincipal : public AGameModeBase
 	//détruit un joueur spécifié
 	void DetruireJoueur(int NoJoueur);
 
+	APersonnage * GetJoueurParIndex(int NoJoueur);
+
 	//retourne un point d'apparition aléatoire (à remplacer plus tard par un point d'apparition dans un pièce où il n'y a pas de joueur)
 	APlayerStart * TrouverPointApparitionAleatoire();
 

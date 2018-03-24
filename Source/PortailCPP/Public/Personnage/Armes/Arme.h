@@ -76,4 +76,7 @@ public:
 	void LancerRechargement();
 
 	void SetNoJoueur(int NoJoueur);
+
+	int GetBallesDansChargeur() { return MunitionsDansChargeur; }
+	int GetBallesMax() { return TailleChargeur; }
 };

@@ -127,4 +127,8 @@ public:
 
 	bool ChangerArme(TSubclassOf<UArme> SousClasseDeArme);
 
+	void MiseAJourNbMeurtresATH(int Meurtres);
+	void MiseAJourBallesDansChargeur(int NbBalles);
+	void MiseAJourBallesMax(int NbBalles);
+
 };
