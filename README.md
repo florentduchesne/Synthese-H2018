@@ -16,7 +16,7 @@ Liste des éléments du jeu :
 - Réinitialiser la partie (FAIT)
 - Réapparition des joueurs quand ils meurent (FAIT)
 - Objets à ramasser : armes, santé, armure (FAIT)
-- ATH
+- ATH (FAIT)
 - Tirs secondaires
 - Localisation des tirs
 - Menu Pause
