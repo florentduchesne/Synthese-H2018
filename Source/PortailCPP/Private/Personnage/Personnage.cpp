@@ -42,7 +42,6 @@ APersonnage::APersonnage()
 	//on change la vitesse de déplacement du personnage
 	GetCharacterMovement()->MaxWalkSpeed = 1200;
 	GetCharacterMovement()->MaxAcceleration = 3000;
-	UE_LOG(LogTemp, Warning, TEXT("Constructeur Personnage"));
 }
 
 // Called when the game starts or when spawned

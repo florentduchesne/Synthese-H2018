@@ -55,6 +55,7 @@ void AModeDeJeu_MenuPrincipal::GenererCarte(int _NbJoueurs)
 	ListeCompleteNiveaux.Add(new InformationsNiveau(4, FName("Ventilation"), 0));
 	ListeCompleteNiveaux.Add(new InformationsNiveau(4, FName("Metro"), 1));
 	ListeCompleteNiveaux.Add(new InformationsNiveau(2, FName("Hall"), 2));
+	ListeCompleteNiveaux.Add(new InformationsNiveau(2, FName("SalleD"), 3));
 
 	if (NbNiveauxVoulus > ListeCompleteNiveaux.Num())
 	{
@@ -64,6 +65,11 @@ void AModeDeJeu_MenuPrincipal::GenererCarte(int _NbJoueurs)
 
 	//on sélectionne quels niveaux seront utilisés dans la partie,
 	SelectionnerNiveaux(ListeCompleteNiveaux, NbNiveauxVoulus);
+
+	for (InformationsNiveau * Niveau : NiveauxChoisis)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("niveau choisi : %s"), *Niveau->GetNom().ToString());
+	}
 	//on demande au gestionnaire de niveaux de charger tous les niveaux
 	ChargerLesNiveaux();
 	//on sélectionne quels niveaux seront reliés avec quels autres
@@ -243,7 +249,6 @@ void AModeDeJeu_MenuPrincipal::ChercherPointsApparition()
 				{
 					//on ajoute le portail à la liste de portails du niveau
 					Niveau->AjouterPointApparition(PointApparition);
-					UE_LOG(LogTemp, Warning, TEXT("Point apparition trouve"));
 					break;
 				}
 			}
@@ -266,9 +271,9 @@ void AModeDeJeu_MenuPrincipal::DetruireTousLesJoueurs()
 }
 
 void AModeDeJeu_MenuPrincipal::PlacerJoueurs()
-{	
+{
+	//à modifier pour qu'on ne puisse pas faire apparaitre deux joueurs dans la même pièce (retirer le commentaire)
 	TArray<int> IdNiveauxDejaPris;
-	bool bSortir = false;
 	for (int NoJoueur = 0; NoJoueur < NbJoueurs; NoJoueur++)
 	{
 		for (int j = 0; j < NiveauxChoisis.Num(); j++)
@@ -278,25 +283,26 @@ void AModeDeJeu_MenuPrincipal::PlacerJoueurs()
 				for (APlayerStart * PointApparition : NiveauxChoisis[j]->GetListePointsApparition())
 				{
 					FaireApparaitreJoueur(PointApparition, NoJoueur);
+					IdNiveauxDejaPris.Add(j);
 					break;
 				}
-				break;
+				j = NiveauxChoisis.Num();
 			}
 		}
 	}
 }
 
-void AModeDeJeu_MenuPrincipal::FaireApparaitreJoueur(UObject * PointApparition, int NoJoueur)
+void AModeDeJeu_MenuPrincipal::FaireApparaitreJoueur(AActor * PointApparition, int NoJoueur)
 {
 	//on cree un joueur automatiquement et on vérifie si il a bien été créé
 	APlayerController * Controleur = UGameplayStatics::CreatePlayer(PointApparition, NoJoueur, true);
 	if (Controleur)
 	{
-		AttendreQueJoueurChargent(Controleur, NoJoueur);
+		AttendreQueJoueurCharge(Controleur, NoJoueur, PointApparition);
 	}
 }
 
-void AModeDeJeu_MenuPrincipal::AttendreQueJoueurChargent(APlayerController * Controleur, int NoJoueur)
+void AModeDeJeu_MenuPrincipal::AttendreQueJoueurCharge(APlayerController * Controleur, int NoJoueur, AActor * PointApparition)
 {
 	APawn * Pion = Controleur->GetPawn();
 	APersonnage * Personnage = Cast<APersonnage>(Pion);
@@ -304,13 +310,14 @@ void AModeDeJeu_MenuPrincipal::AttendreQueJoueurChargent(APlayerController * Con
 	{
 		Personnage->SetNoJoueur(NoJoueur);
 		Personnage->SetATH(Controleur->GetHUD());
+		Personnage->SetActorLocation(PointApparition->GetActorLocation());
 	}
 	else
 	{
 		FTimerDelegate TimerDel;
 		FTimerHandle TimerHandle;
 		//on rappelle la fonction dans 0.1 seconde
-		TimerDel.BindUFunction(this, FName("AttendreQueJoueurChargent"), Controleur, NoJoueur);
+		TimerDel.BindUFunction(this, FName("AttendreQueJoueurCharge"), Controleur, NoJoueur);
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDel, 0.1f, false);
 	}
 }
@@ -349,6 +356,7 @@ void AModeDeJeu_MenuPrincipal::DechargerCarte()
 
 void AModeDeJeu_MenuPrincipal::JoueurEnTueUnAutre(int IndexJoueurTueur, int IndexJoueurMort)
 {
+	UE_LOG(LogTemp, Warning, TEXT("joueur mort"));
 	//actualise les statistiques des joueurs
 	StatsJoueurs[IndexJoueurTueur]->NbMeurtres++;
 	StatsJoueurs[IndexJoueurMort]->NbMorts++;
@@ -408,16 +416,17 @@ void AModeDeJeu_MenuPrincipal::DetruireJoueur(int NoJoueur)
 
 APlayerStart * AModeDeJeu_MenuPrincipal::TrouverPointApparitionAleatoire()
 {
-	int NoRandom = FMath::RandRange(0, NiveauxChoisis.Num() - 1);
+	int NoRandom;
 	APlayerStart * PointApparition{ nullptr };
 	while (!PointApparition)
 	{
-		for (APlayerStart * PointApparition : NiveauxChoisis[NoRandom]->GetListePointsApparition())
+		NoRandom = FMath::RandRange(0, NiveauxChoisis.Num() - 1);
+		for (APlayerStart * Point : NiveauxChoisis[NoRandom]->GetListePointsApparition())
 		{
-			return PointApparition;
+			PointApparition = Point;
 		}
 	}
-	return nullptr;
+	return PointApparition;
 }
 
 bool AModeDeJeu_MenuPrincipal::NiveauxTousCharges()
