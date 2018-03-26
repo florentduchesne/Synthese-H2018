@@ -99,7 +99,7 @@ class PORTAILCPP_API AModeDeJeu_MenuPrincipal : public AGameModeBase
 
 	//sera plus élevé quand on aura plus de niveaux de faits
 	///IMPORTANT!!! DOIT ÊTRE PLUS PETIT OU ÉGAL À LA TAILLE DE LA LISTE DE NIVEAUX
-	const int NbNiveauxVoulus = 3;
+	const int NbNiveauxVoulus = 4;
 
 	int NbJoueurs;
 

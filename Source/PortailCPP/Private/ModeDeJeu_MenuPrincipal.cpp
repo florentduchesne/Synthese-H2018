@@ -238,6 +238,7 @@ void AModeDeJeu_MenuPrincipal::ChercherPointsApparition()
 {
 	TArray<AActor*> FoundActors;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APlayerStart::StaticClass(), FoundActors);
+	UE_LOG(LogTemp, Warning, TEXT("nb points apparition total : %d"), FoundActors.Num());
 	for (AActor* Acteur : FoundActors)
 	{
 		APlayerStart* PointApparition = Cast<APlayerStart>(Acteur);
@@ -280,13 +281,15 @@ void AModeDeJeu_MenuPrincipal::PlacerJoueurs()
 		{
 			if (!IdNiveauxDejaPris.Contains(j))
 			{
+				UE_LOG(LogTemp, Warning, TEXT("on va creer un joueur... %d nb points apparition"), NiveauxChoisis[j]->GetListePointsApparition().Num());
+				UE_LOG(LogTemp, Warning, TEXT("nom niveau : %s"), *NiveauxChoisis[j]->GetNom().ToString());
 				for (APlayerStart * PointApparition : NiveauxChoisis[j]->GetListePointsApparition())
 				{
 					FaireApparaitreJoueur(PointApparition, NoJoueur);
 					IdNiveauxDejaPris.Add(j);
 					break;
 				}
-				j = NiveauxChoisis.Num();
+				break;
 			}
 		}
 	}
@@ -295,6 +298,7 @@ void AModeDeJeu_MenuPrincipal::PlacerJoueurs()
 void AModeDeJeu_MenuPrincipal::FaireApparaitreJoueur(AActor * PointApparition, int NoJoueur)
 {
 	//on cree un joueur automatiquement et on vérifie si il a bien été créé
+	UE_LOG(LogTemp, Warning, TEXT("joueur cree"));
 	APlayerController * Controleur = UGameplayStatics::CreatePlayer(PointApparition, NoJoueur, true);
 	if (Controleur)
 	{
