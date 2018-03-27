@@ -2,8 +2,8 @@
 
 #include "InformationsNiveau.h"
 
-InformationsNiveau::InformationsNiveau(int NbPortails, FName Nom, int Id)
-	:NbPortails{NbPortails}, Nom{Nom},  Id{Id}
+InformationsNiveau::InformationsNiveau(int NbPortailsAConnecter, FName Nom, int Id)
+	:NbPortailsAConnecter{ NbPortailsAConnecter }, Nom{Nom},  Id{Id}
 {
 
 }
@@ -12,14 +12,14 @@ InformationsNiveau::~InformationsNiveau()
 {
 }
 
-int InformationsNiveau::GetNbPortailsNonConnectes()
-{
-	return NbPortails - IdPiecesConnectees.Num();
-}
-
 void InformationsNiveau::ConnecterNiveau(int IdNiveau)
 {
 	IdPiecesConnectees.Add(IdNiveau);
+	NbPortailsAConnecter--;
+	if (NbPortailsAConnecter < 0)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("ERREUR NB PORTAILS A CONNECTER < 0"));
+	}
 }
 
 APortail * InformationsNiveau::GetProchainPortailNonConnecte()

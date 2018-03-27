@@ -29,7 +29,6 @@ void AGestionnaireDeNiveaux::ChargerNiveau(FName nomNiveau, int IdStream)
 	info.UUID = IdStream;
 	info.Linkage = 1;
 	UGameplayStatics::LoadStreamLevel(this, nomNiveau, true, true, info);
-	UE_LOG(LogTemp, Warning, TEXT("on charge un niveau"));
 	GetWorld()->UpdateLevelStreaming();
 	/*ULevelStreaming *pStreaming = UGameplayStatics::GetStreamingLevel(this, nomNiveau);
 	if (pStreaming)

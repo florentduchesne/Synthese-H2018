@@ -12,7 +12,7 @@
 class PORTAILCPP_API InformationsNiveau
 {
 	//nombre de portails possibles dans la piece : devrait etre entre 2 et 4
-	int NbPortails;
+	int NbPortailsAConnecter;
 	TArray<int> IdPiecesConnectees;
 	//nom du niveau : primordial pour charger le niveau
 	FName Nom;
@@ -23,7 +23,7 @@ class PORTAILCPP_API InformationsNiveau
 	TArray<APlayerStart*> ListePointsApparition;
 
 public:
-	InformationsNiveau(int NbPortails, FName Nom, int Id);
+	InformationsNiveau(int NbPortailsAConnecter, FName Nom, int Id);
 	~InformationsNiveau();
 
 	//liste de tous les portails du niveau
@@ -31,7 +31,7 @@ public:
 
 	APortail * GetProchainPortailNonConnecte();
 
-	int GetNbPortailsNonConnectes();
+	int GetNbPortailsNonConnectes() { return NbPortailsAConnecter; };
 	void ConnecterNiveau(int IdNiveau);
 	TArray<int> GetListeNiveauxConnectes() { return IdPiecesConnectees; };
 	int GetId() { return Id; };
