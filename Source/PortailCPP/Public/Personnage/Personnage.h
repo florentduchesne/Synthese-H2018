@@ -116,6 +116,7 @@ public:
 	void BloquerTeleportation();
 	//retourne si oui ou non, le personnage a le droit de se téléporter
 	bool PeutSeTeleporter();
+
 	//Le personnage recoit des degats
 	void InfligerDegats(int degats, int NoJoueurAttaquant);
 	//le personnage est soigné

@@ -56,6 +56,7 @@ void AModeDeJeu_MenuPrincipal::GenererCarte(int _NbJoueurs)
 	ListeCompleteNiveaux.Add(new InformationsNiveau(4, FName("Metro"), 1));
 	ListeCompleteNiveaux.Add(new InformationsNiveau(2, FName("Hall"), 2));
 	ListeCompleteNiveaux.Add(new InformationsNiveau(2, FName("SalleD"), 3));
+	ListeCompleteNiveaux.Add(new InformationsNiveau(4, FName("Appartement"), 4));
 
 	if (NbNiveauxVoulus > ListeCompleteNiveaux.Num())
 	{
@@ -72,10 +73,8 @@ void AModeDeJeu_MenuPrincipal::GenererCarte(int _NbJoueurs)
 	}
 	//on demande au gestionnaire de niveaux de charger tous les niveaux
 	ChargerLesNiveaux();
-	UE_LOG(LogTemp, Warning, TEXT("on relie les niveaux"));
 	//on sélectionne quels niveaux seront reliés avec quels autres
 	RelierNiveaux();
-	UE_LOG(LogTemp, Warning, TEXT("on initialise la carte"));
 	//quand tous les niveaux ont terminé de charger, on connecte les portails, place les joueurs et démarre la partie
 	InitialiserCarte();
 }
@@ -105,16 +104,13 @@ void AModeDeJeu_MenuPrincipal::ChargerLesNiveaux()
 	//on charge tous les niveaux sélectionnés
 	for (auto i = 0; i < NiveauxChoisis.Num(); i++)
 	{
-
 		UE_LOG(LogTemp, Warning, TEXT("on charge un niveau"));
 		GestionnaireDeNiveaux->ChargerNiveau(NiveauxChoisis[i]->GetNom(), i);
 	}
-	UE_LOG(LogTemp, Warning, TEXT("tous les niveaux on commence a charger"));
 }
 
 void AModeDeJeu_MenuPrincipal::RelierNiveaux()
 {
-	UE_LOG(LogTemp, Warning, TEXT("relier niveaux"));
 	//on associe les pièces ensemble de sorte qu'elles soient toutes reliées entre elles d'une manière ou d'une autre
 	for (int i = 0; i < NiveauxChoisis.Num() - 1; i++)
 	{
@@ -126,7 +122,6 @@ void AModeDeJeu_MenuPrincipal::RelierNiveaux()
 			NiveauxChoisis[i + 1]->ConnecterNiveau(i);
 		}
 	}
-	UE_LOG(LogTemp, Warning, TEXT("tous relies au prochain"));
 	//est vrai si le niveau courant est le seul à avoir des portails non-connectés
 	bool NiveauToutSeul;
 	int NoRandom;
@@ -134,10 +129,8 @@ void AModeDeJeu_MenuPrincipal::RelierNiveaux()
 	//on associe les dernières portes ensemble. Rendu à ce point, toutes les pièces sont accessibles, on arrange donc les portes restantes.
 	for (int i = NiveauxChoisis.Num() - 1; i >= 0; i--)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("boucle for"));
 		while (NiveauxChoisis[i]->GetNbPortailsNonConnectes())
 		{
-			UE_LOG(LogTemp, Warning, TEXT("boucle while"));
 			NiveauToutSeul = true;
 			//on vérifie si le niveau est le dernier à avoir des connexions de libre
 			for (auto j = 0; j < NiveauxChoisis.Num(); j++)
@@ -161,7 +154,6 @@ void AModeDeJeu_MenuPrincipal::RelierNiveaux()
 			//si la pièce est la dernière toute seule, on la connecte à elle même avec les deux derniers portails de libres.
 			else
 			{
-				UE_LOG(LogTemp, Warning, TEXT("derniere piece toute seule"));
 				//connecter les deux pieces
 				NiveauxChoisis[i]->ConnecterNiveau(i);
 				NiveauxChoisis[i]->ConnecterNiveau(i);

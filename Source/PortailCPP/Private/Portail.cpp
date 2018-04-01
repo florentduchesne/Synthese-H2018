@@ -41,36 +41,34 @@ void APortail::BeginPlay()
 void APortail::OnTeleportation(AActor* overlappedActor, AActor* otherActor)
 {
 	//cast de l'acteur en Personnage
-	auto perso = Cast<APersonnage>(otherActor);
-	if (perso)
+	APersonnage * Personnage = Cast<APersonnage>(otherActor);
+	if (Personnage)
 	{
-		if (perso->PeutSeTeleporter() && autrePortail)
+		if (Personnage->PeutSeTeleporter() && autrePortail)
 		{
 			//le personnage fait dos au portail quand il en sort
 			//la rotation du personnage + la rotation de l'autre portail - ma rotation + 180
-			FRotator rotation = perso->GetControlRotation();
-			rotation.Yaw = perso->GetActorRotation().Yaw + autrePortail->GetActorRotation().Yaw - GetActorRotation().Yaw + 180.0f;
-			perso->GetController()->SetControlRotation(rotation);
+			FRotator rotation = Personnage->GetControlRotation();
+			rotation.Yaw = Personnage->GetActorRotation().Yaw + autrePortail->GetActorRotation().Yaw - GetActorRotation().Yaw + 180.0f;
+			Personnage->GetController()->SetControlRotation(rotation);
 			//on lui enleve le droit de se teleporter pour eviter un stackoverflow
-			perso->BloquerTeleportation();
+			Personnage->BloquerTeleportation();
 
-			//teleporter le joueur sur la distance qui sépare les deux portails
-			FVector position;// = perso->GetActorLocation();
-			position = autrePortail->GetActorLocation();
-			position.Z += 50.0f;
-			//position -= GetActorLocation();
-			//position.Z = autrePortail->GetActorLocation().Z;
+			//teleporter le joueur un peu devant l'autre portail
+			FVector position;
+			position = autrePortail->GetActorLocation() - autrePortail->GetActorForwardVector() * 80;
+			position.Z += 60.0f;
 			FHitResult HitResult;
-			perso->SetActorLocation(position, false, &HitResult, ETeleportType::None);//ETeleportType est None, ce qui annule tout effet de physique lorsqu'on sort du portail.
+			Personnage->SetActorLocation(position, false, &HitResult, ETeleportType::None);//ETeleportType est None, ce qui (supposément) annule tout effet de physique lorsqu'on sort du portail.
+			
+			//on enlève la physique que le joueur pouvait avoir au moment de la téléportation (si il sautait, par exemple)
+			Personnage->GetCharacterMovement()->StopMovementImmediately();
 
-			//on envoie le personnage au sol pour eviter qu'il continue dans la mauvaise direction au cas ou il serait dans un saut au moment de passer le portail.
-			/*FVector force;
-			force.Z = -5000.0f;
-			perso->AddMovementInput(force);
-			perso->GetCharacterMovement()->Velocity += force;*/
+			//FVector Direction = autrePortail->GetActorForwardVector();//FRotationMatrix(autrePortail->GetActorRotation()).GetScaledAxis(EAxis::X);
+			//Personnage->GetCharacterMovement()->AddForce((Direction * 150000000) + FVector(0, 0, 10000000));
 
 			//on appelle une fonction qui lui redonne le droit de se teleporter dans une seconde
-			perso->DebloquerTeleportationFutur();
+			Personnage->DebloquerTeleportationFutur();
 		}
 	}	
 }
@@ -86,7 +84,6 @@ void APortail::connecterDeuxPortails(APortail * portail)
 void APortail::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 bool APortail::estConnecte()

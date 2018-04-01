@@ -3,7 +3,7 @@
 #include "ArmeAuSol.h"
 
 AArmeAuSol::AArmeAuSol()
-	:AObjetAuSol(15.0f, "/Game/FirstPerson/FPWeapon/Mesh/SK_FPGun", ETypeDeMeshEnum::SkeletalMesh)
+	:AObjetAuSol(15.0f, "/Game/FirstPerson/FPWeapon/Mesh/SK_FPGun", ETypeDeMeshEnum::SkeletalMesh, ECouleurSocleEnum::Rouge)
 {}
 
 bool AArmeAuSol::RamasseParUnJoueur(APersonnage * Personnage)

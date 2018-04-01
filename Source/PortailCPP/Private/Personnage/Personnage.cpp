@@ -16,6 +16,8 @@ APersonnage::APersonnage()
 	corps->SetRelativeRotation(FRotator(0, -90.0f, 0));
 
 	corps->SetOwnerNoSee(true);
+
+	corps->SetAllMassScale(5.0f);
 	
 	RootComponent = GetCapsuleComponent();
 
@@ -39,9 +41,12 @@ APersonnage::APersonnage()
 
 	arme->getMesh()->SetRelativeRotation(FRotator(0.0f, -90.0f, 0.0f));
 	
-	//on change la vitesse de déplacement du personnage
-	GetCharacterMovement()->MaxWalkSpeed = 1200;
+	//on change es statistiques de déplacement du personnage
+	GetCharacterMovement()->MaxWalkSpeed = 1500;
 	GetCharacterMovement()->MaxAcceleration = 3000;
+	GetCharacterMovement()->AirControl = 1.5f;
+	GetCharacterMovement()->JumpZVelocity = 840.0f;
+	GetCharacterMovement()->GravityScale = 2.0f;
 }
 
 // Called when the game starts or when spawned
@@ -93,8 +98,8 @@ void APersonnage::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 void APersonnage::Avancer(float Value)
 {
 	// prend la direction dans laquelle le personnage regarde et le fait avancer sur cet axe
-	FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::X);
-	AddMovementInput(Direction, Value);
+	const FRotator YawOnlyRotation = FRotator(0.0f, GetControlRotation().Yaw, 0.0f);
+	AddMovementInput(FRotationMatrix(YawOnlyRotation).GetUnitAxis(EAxis::X), Value);
 }
 
 void APersonnage::DeplacementLateral(float Value)
