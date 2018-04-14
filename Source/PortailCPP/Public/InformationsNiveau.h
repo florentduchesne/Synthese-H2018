@@ -29,6 +29,7 @@ public:
 	//liste de tous les portails du niveau
 	TArray<APortail*> listePortails;
 
+	//À MODIFIER POUR ÊTRE + ALÉATOIRE
 	APortail * GetProchainPortailNonConnecte();
 
 	int GetNbPortailsNonConnectes() { return NbPortailsAConnecter; };

@@ -1,25 +1,27 @@
-ï»¿# Synthese-H2018
-B65 Projet SynthÃ¨se Hiver 2018
+# Synthese-H2018
+B65 Projet Synthèse Hiver 2018
 
-Il s'agit d'un Fast-FPS multijoueur local basÃ© sur Unreal Engine. Avec un gameplay classique, le jeu se dÃ©marquera par la gÃ©nÃ©ration de ses cartes faites Ã  partir de piÃ¨ces prÃ©-faites et reliÃ©es ensemble de maniÃ¨re alÃ©atoire. Les cartes auront souvent une construction illogique, improbable (ex: continuer sans arrÃªt en ligne droite et revenir Ã  son point de dÃ©part). Le but Ã©tant de redÃ©couvrir l'environnement Ã  chaque partie.
+Il s'agit d'un Fast-FPS multijoueur local basé sur Unreal Engine. Avec un gameplay classique, le jeu se démarquera par la génération de ses cartes faites à partir de pièces pré-faites et reliées ensemble de manière aléatoire. Les cartes auront souvent une construction illogique, improbable (ex: continuer sans arrêt en ligne droite et revenir à son point de départ). Le but étant de redécouvrir l'environnement à chaque partie.
 
-Liste des Ã©lÃ©ments du jeu :
+Liste des éléments du jeu :
 
-- Personnages, dÃ©placements (FAIT)
-- TÃ©lÃ©porteurs (FAIT)
+- Personnages, déplacements (FAIT)
+- Téléporteurs (FAIT)
 - Armes, projectiles (FAIT)
 - Gestion des points de vie (FAIT)
 - Logique de la partie : victoire, pointage, etc. (FAIT)
 - Menu principal (FAIT)
-- GÃ©nÃ©ration des cartes (FAIT)
+- Génération des cartes (FAIT)
 - Apparition des joueurs (FAIT)
-- RÃ©initialiser la partie (FAIT)
-- RÃ©apparition des joueurs quand ils meurent (FAIT)
+- Réinitialiser la partie (FAIT)
+- Réapparition des joueurs quand ils meurent (FAIT)
 - ATH (FAIT)
-- Tirs secondaires
-- Localisation des tirs
-- Menu Pause
+- Tirs secondaires (FAIT)
 - Objets de gameplay facultatifs
-	- Objets Ã  ramasser : armes, santÃ©, armure (FAIT)
+	- Objets à ramasser : armes, santé, armure (FAIT)
 	- Bumpers (FAIT)
-	- Zone de dÃ©gats
+- Améliorer l'aléatoire dans la génération de la carte (au niveau de la sélection des portails)
+- Donner plus de paramètres au lancement de la partie (nombre de cartes, condition de victoire)
+- Affichage des statistiques de fin de partie
+- Timer de fin de partie
+- Équilibrage des statistiques de jeu
