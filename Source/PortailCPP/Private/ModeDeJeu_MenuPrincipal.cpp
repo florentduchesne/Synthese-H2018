@@ -365,7 +365,8 @@ void AModeDeJeu_MenuPrincipal::JoueurEnTueUnAutre(int IndexJoueurTueur, int Inde
 {
 	UE_LOG(LogTemp, Warning, TEXT("joueur mort"));
 	//actualise les statistiques des joueurs
-	StatsJoueurs[IndexJoueurTueur]->NbMeurtres++;
+	if(IndexJoueurTueur != IndexJoueurMort)
+		StatsJoueurs[IndexJoueurTueur]->NbMeurtres++;
 	StatsJoueurs[IndexJoueurMort]->NbMorts++;
 
 	APersonnage * Personnage = GetJoueurParIndex(IndexJoueurTueur);

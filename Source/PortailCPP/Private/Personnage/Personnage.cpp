@@ -91,6 +91,8 @@ void APersonnage::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	//tir
 	PlayerInputComponent->BindAction("Tirer", IE_Pressed, this, &APersonnage::CommencerTir);
 	PlayerInputComponent->BindAction("Tirer", IE_Released, this, &APersonnage::TerminerTir);
+	//tir secondaire
+	PlayerInputComponent->BindAction("TirerSecondaire", IE_Pressed, this, &APersonnage::TirSecondaire);
 	//recharger
 	PlayerInputComponent->BindAction("Recharger", IE_Pressed, this, &APersonnage::Rechargement);
 }
@@ -286,6 +288,11 @@ void APersonnage::CommencerTir()
 void APersonnage::TerminerTir()
 {
 	arme->TerminerTirSuper();
+}
+
+void APersonnage::TirSecondaire()
+{
+	arme->TirSecondaire();
 }
 
 void APersonnage::Rechargement()

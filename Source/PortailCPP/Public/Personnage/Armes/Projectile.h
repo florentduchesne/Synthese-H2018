@@ -23,6 +23,7 @@ class AProjectile : public AActor
 
 	UStaticMeshComponent * Mesh;
 
+protected:
 	int Degats;
 	int NoJoueur;
 	
@@ -41,7 +42,7 @@ public:
 
 	//est appelée lorsque le projectile heurte un obstacle
 	UFUNCTION()
-	void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+	virtual void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
 	/** Returns CollisionComp subobject **/
 	FORCEINLINE class USphereComponent* GetCollisionComp() const { return CollisionComp; }

@@ -9,7 +9,15 @@
 #include "TimerManager.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Projectile.h"
+#include "ProjectileExplosif.h"
 #include "Arme.generated.h"
+
+UENUM(BlueprintType)
+enum class ETypeDeTir : uint8
+{
+	Normal 	UMETA(DisplayName = "Normal"),
+	Explosif 	UMETA(DisplayName = "Explosif")
+};
 
 UCLASS(abstract)
 class PORTAILCPP_API UArme : public USceneComponent
@@ -20,7 +28,7 @@ public:
 	//ne devrait pas être appelé, mais requis pour le bon fonctionnement de Unreal Engine
 	UArme();
 	//initialise l'arme
-	UArme(const int _TailleChargeur, float _TempsRecharge, float _DelaiEntreChaqueTir, int Degats, FString CheminMesh);
+	UArme(const int _TailleChargeur, float _TempsRecharge, float _DelaiEntreChaqueTir, int Degats, int VitesseProjectiles, FString CheminMesh);
 
 protected:
 	// Called when the game starts
@@ -37,12 +45,20 @@ protected:
 	int8 MunitionsDansChargeur;
 	//nombre de balles maximal qui entrent dans le chargeur
 	int8 TailleChargeur;
+
+	float DelaiTirSecondaire = 10.0f;
+
+	//munitions disponibles pour le tir secondaire
+	int8 MunitionsSecondaires;
 	//les dégâts qu'infligent chaque balle lorsqu'elles heurtent un personnage
 	int Degats;
 	int NoJoueur;
+	int VitesseProjectiles;
 
 	//vrai si l'arme a terminé son temps de récupération après un tir et est prête à commencer un autre tir
 	bool bDelaiEntreChaqueTirTermine = true;
+	//vrai si l'arme a terminé son temps de récupération après un tir secondaire
+	bool bDelaiEntreChaqueTirSecondaireTermine = true;
 	//vrai si l'arme n'est pas en train de recharger
 	bool bADesBallesDansChargeur = true;
 	//si oui ou non le tir a commencé
@@ -52,8 +68,10 @@ protected:
 	void Recharger();
 	//on appelle cette fonction après un délai ce qui force un délai minimal entre chaque fin et début de tir
 	void DebloquerTirDelai();
+
+	void DebloquerTirSecondaireDelai();
 	//fait apparaître un projectile et l'initialise
-	void FaireApparaitreProjectile();
+	void FaireApparaitreProjectile(ETypeDeTir TypeDeTir);
 
 	///à implémenter dans chacune des sous-classes
 	//marque le début d'un "tir" (ou une rafale, selon le type d'arme). C'est le moment où on commence à appuyer sur la gâchette
@@ -74,6 +92,9 @@ public:
 	void CommencerTirSuper();
 	//lorsque le joueur relache la touche de tir
 	void TerminerTirSuper();
+
+	void TirSecondaire();
+
 	//bloque le tir de l'arme et appelle la méthode "Recharger" après un délai
 	void LancerRechargement();
 

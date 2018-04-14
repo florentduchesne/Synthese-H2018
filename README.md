@@ -15,9 +15,11 @@ Liste des éléments du jeu :
 - Apparition des joueurs (FAIT)
 - Réinitialiser la partie (FAIT)
 - Réapparition des joueurs quand ils meurent (FAIT)
-- Objets à ramasser : armes, santé, armure (FAIT)
 - ATH (FAIT)
 - Tirs secondaires
 - Localisation des tirs
 - Menu Pause
-- Objets de gameplay dans le jeu (bumpers, zone de dégats, etc.)
+- Objets de gameplay facultatifs
+	- Objets à ramasser : armes, santé, armure (FAIT)
+	- Bumpers (FAIT)
+	- Zone de dégats

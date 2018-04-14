@@ -4,11 +4,11 @@
 
 
 UFusilSemiAuto::UFusilSemiAuto()
-	:UArme(10, 1.0f, 0.0f, 35, "/Game/FirstPerson/FPWeapon/Mesh/SK_FPGun")
+	:UArme(10, 1.0f, 0.0f, 35, 10000, "/Game/FirstPerson/FPWeapon/Mesh/SK_FPGun")
 {}
 
 void UFusilSemiAuto::CommencerTir() {
-	FaireApparaitreProjectile();
+	FaireApparaitreProjectile(ETypeDeTir::Normal);
 }
 
 void UFusilSemiAuto::TerminerTir()

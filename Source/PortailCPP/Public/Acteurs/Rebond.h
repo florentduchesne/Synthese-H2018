@@ -24,6 +24,10 @@ protected:
 
 	UStaticMeshComponent * Mesh;
 
+	TArray<APersonnage*> PersonnagesRecents;
+
+	void DebloquerPersonnage(APersonnage * Personnage);
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Rebond")
 	float ForceDuBond = 45.0f;
 

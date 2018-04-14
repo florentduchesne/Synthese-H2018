@@ -4,7 +4,7 @@
 
 
 UFusilAuto::UFusilAuto()
-	:UArme(20, 1.5f, 0.0f, 20, "/Game/FirstPerson/FPWeapon/Mesh/SK_FPGun")
+	:UArme(20, 1.5f, 0.0f, 20, 10000, "/Game/FirstPerson/FPWeapon/Mesh/SK_FPGun")
 {
 	PrimaryComponentTick.bCanEverTick = true;
 }
@@ -18,7 +18,7 @@ void UFusilAuto::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompo
 			TempsDepuisDernierTir += DeltaTime;
 			if (TempsDepuisDernierTir > TempsEntreChaqueTir)
 			{
-				FaireApparaitreProjectile();
+				FaireApparaitreProjectile(ETypeDeTir::Normal);
 				TempsDepuisDernierTir = 0.0f;
 			}
 		}

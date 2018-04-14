@@ -40,8 +40,22 @@ void ARebond::OnCollision(AActor* SelfActor, AActor* OtherActor, FVector NormalI
 	APersonnage * Personnage = Cast<APersonnage>(OtherActor);
 	if (Personnage)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("personnage collisionne !"));
-		
-		Personnage->GetCharacterMovement()->AddForce(FVector(0, 0, 1000000 * ForceDuBond));
+		if (!PersonnagesRecents.Contains(Personnage))
+		{
+			UE_LOG(LogTemp, Warning, TEXT("personnage collisionne !"));
+			//on ajoute le personnage à la liste de personnages qui ne peuvent pas sauter encore
+			PersonnagesRecents.Add(Personnage);
+			//on fait sauter le personnage
+			Personnage->GetCharacterMovement()->AddImpulse(FVector(0, 0, 10000 * ForceDuBond));
+			FTimerHandle UniqueHandle;
+			FTimerDelegate RespawnDelegate = FTimerDelegate::CreateUObject(this, &ARebond::DebloquerPersonnage, Personnage);
+			//dans 0.1 seconde on enlève le personnage de la liste
+			GetWorldTimerManager().SetTimer(UniqueHandle, RespawnDelegate, 0.1f, false);
+		}
 	}
+}
+
+void ARebond::DebloquerPersonnage(APersonnage * Personnage)
+{
+	PersonnagesRecents.Remove(Personnage);
 }

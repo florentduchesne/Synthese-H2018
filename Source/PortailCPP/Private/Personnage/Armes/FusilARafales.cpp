@@ -3,12 +3,10 @@
 #include "FusilARafales.h"
 
 UFusilARafales::UFusilARafales()
-	:UArme(15, 2.0f, 0.5f, 20, "/Game/FirstPerson/FPWeapon/Mesh/SK_FPGun")
+	:UArme(15, 2.0f, 0.5f, 20, 10000, "/Game/FirstPerson/FPWeapon/Mesh/SK_FPGun")
 {
 	PrimaryComponentTick.bCanEverTick = true;
 }
-
-
 
 void UFusilARafales::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
@@ -22,7 +20,7 @@ void UFusilARafales::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 				if (TempsDepuisDernierTir > TempsEntreChaqueTir)
 				{
 					BallesTireesDansRafale += 1;
-					FaireApparaitreProjectile();
+					FaireApparaitreProjectile(ETypeDeTir::Normal);
 					TempsDepuisDernierTir = 0.0f;
 				}
 			}

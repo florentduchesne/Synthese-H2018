@@ -12,7 +12,7 @@ AProjectile::AProjectile()
 
 	// Use a sphere as a simple collision representation
 	CollisionComp = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComp"));
-	CollisionComp->InitSphereRadius(5.0f);
+	CollisionComp->InitSphereRadius(8.0f);
 	CollisionComp->SetCollisionProfileName(TEXT("Projectile"));
 	CollisionComp->OnComponentHit.AddDynamic(this, &AProjectile::OnHit);// set up a notification for when this component hits something blocking
 
@@ -37,7 +37,7 @@ AProjectile::AProjectile()
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshBalle"));
 	const ConstructorHelpers::FObjectFinder<UStaticMesh> MeshObj(TEXT("/Game/FirstPerson/Meshes/FirstPersonProjectileMesh"));
 	Mesh->SetStaticMesh(MeshObj.Object);
-	Mesh->SetWorldScale3D(FVector(0.02f, 0.02f, 0.02f));
+	Mesh->SetWorldScale3D(FVector(0.03f, 0.03f, 0.03f));
 
 	Mesh->SetupAttachment(RootComponent);
 }
@@ -72,7 +72,7 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimi
 	{
 		personnageTouche->InfligerDegats(Degats, NoJoueur);
 	}
-	if (AObjetAuSol * ObjetAuSol = Cast<AObjetAuSol>(OtherActor))
+	/*if (AObjetAuSol * ObjetAuSol = Cast<AObjetAuSol>(OtherActor))
 	{
 		
 		UE_LOG(LogTemp, Warning, TEXT("comp touche : %s"), *HitComp->GetName());
@@ -80,9 +80,8 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimi
 		UE_LOG(LogTemp, Warning, TEXT("cible touchee : %s"), *OtherComp->GetName());
 		UE_LOG(LogTemp, Warning, TEXT("obj au sol"));
 		return;
-	}
+	}*/
 	//détruit le projectile
 	
-	UE_LOG(LogTemp, Warning, TEXT("detruit"));
 	Destroy();
 }
