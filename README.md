@@ -17,6 +17,7 @@ Liste des éléments du jeu :
 - Réapparition des joueurs quand ils meurent (FAIT)
 - ATH (FAIT)
 - Tirs secondaires (FAIT)
+- Afficher une explosion lors d'un tir secondaire (FAIT)
 - Objets de gameplay facultatifs
 	- Objets à ramasser : armes, santé, armure (FAIT)
 	- Bumpers (FAIT)
@@ -24,4 +25,5 @@ Liste des éléments du jeu :
 - Donner plus de paramètres au lancement de la partie (nombre de cartes, condition de victoire)
 - Affichage des statistiques de fin de partie
 - Timer de fin de partie
+- Ajouter des sons
 - Équilibrage des statistiques de jeu

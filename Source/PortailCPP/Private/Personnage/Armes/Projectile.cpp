@@ -27,7 +27,6 @@ AProjectile::AProjectile()
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileComp"));
 	ProjectileMovement->UpdatedComponent = CollisionComp;
 	ProjectileMovement->InitialSpeed = 10000.f;
-	ProjectileMovement->MaxSpeed = 10000.f;
 	ProjectileMovement->bRotationFollowsVelocity = false;
 	ProjectileMovement->bShouldBounce = false;
 
@@ -42,10 +41,11 @@ AProjectile::AProjectile()
 	Mesh->SetupAttachment(RootComponent);
 }
 
-void AProjectile::Initialiser(int Degats, int NoJoueur)
+void AProjectile::Initialiser(int Degats, int NoJoueur, float vitesse)
 {
 	this->Degats = Degats;
 	this->NoJoueur = NoJoueur;
+	ProjectileMovement->MaxSpeed = vitesse;
 }
 
 // Called when the game starts or when spawned
@@ -72,16 +72,5 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimi
 	{
 		personnageTouche->InfligerDegats(Degats, NoJoueur);
 	}
-	/*if (AObjetAuSol * ObjetAuSol = Cast<AObjetAuSol>(OtherActor))
-	{
-		
-		UE_LOG(LogTemp, Warning, TEXT("comp touche : %s"), *HitComp->GetName());
-		UE_LOG(LogTemp, Warning, TEXT("cible touchee : %s"), *OtherActor->GetName());
-		UE_LOG(LogTemp, Warning, TEXT("cible touchee : %s"), *OtherComp->GetName());
-		UE_LOG(LogTemp, Warning, TEXT("obj au sol"));
-		return;
-	}*/
-	//détruit le projectile
-	
 	Destroy();
 }

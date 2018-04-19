@@ -8,6 +8,10 @@
 #include "UObject/ConstructorHelpers.h"
 #include "Components/SphereComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include "ParticleHelper.h"
+#include "Particles/ParticleSystem.h"
+#include "Particles/ParticleSystemComponent.h"
+#include "Effets/EffetExplosion.h"
 #include "Projectile.h"
 #include "ProjectileExplosif.generated.h"
 
@@ -32,6 +36,8 @@ private:
 	void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit) override;
 
 	USphereComponent * SphereCollision;
+
+	UParticleSystem * ParticuleSysteme;
 
 	UFUNCTION()
 	void DebutCollisionExplosion(class UPrimitiveComponent* HitComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);

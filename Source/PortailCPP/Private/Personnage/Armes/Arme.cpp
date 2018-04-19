@@ -3,7 +3,6 @@
 #include "Arme.h"
 #include "PortailCPP/Public/Personnage/Personnage.h"
 
-
 // Sets default values for this component's properties
 UArme::UArme()
 {}
@@ -138,7 +137,7 @@ void UArme::FaireApparaitreProjectile(ETypeDeTir TypeDeTir)
 		//initialise le projectile avec les valeurs propres a l'arme
 		if (Projectile)
 		{
-			Projectile->Initialiser(DegatsBalle, NoJoueur);
+			Projectile->Initialiser(DegatsBalle, NoJoueur, VitesseProjectiles);
 		}
 	}
 	MiseAJourATHJoueur();

@@ -3,7 +3,10 @@
 #include "ProjectileExplosif.h"
 #include "PortailCPP/Public/Personnage/Personnage.h"
 
-AProjectileExplosif::AProjectileExplosif() {}
+AProjectileExplosif::AProjectileExplosif() {
+	static ConstructorHelpers::FObjectFinder<UParticleSystem> EffetExplosion(TEXT("ParticleSystem'/Game/Effets/P_Launcher_IH.P_Launcher_IH'"));
+	ParticuleSysteme = EffetExplosion.Object;
+}
 
 void AProjectileExplosif::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
@@ -32,6 +35,11 @@ void AProjectileExplosif::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor
 	}
 
 	SphereCollision->OnComponentBeginOverlap.AddDynamic(this, &AProjectileExplosif::DebutCollisionExplosion);
+
+	CollisionComp->OnComponentHit.RemoveDynamic(this, &AProjectile::OnHit);
+
+	//FX
+	UGameplayStatics::SpawnEmitterAtLocation(this, ParticuleSysteme, GetActorLocation(), GetActorRotation(), true);
 
 	FTimerHandle TimerHandle;
 	GetOuter()->GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AProjectileExplosif::Detruire, 0.5, false);

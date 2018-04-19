@@ -176,9 +176,7 @@ void APersonnage::InfligerDegats(int degats, int NoJoueurAttaquant)
 	{
 		AModeDeJeu_MenuPrincipal * GameMode = Cast<AModeDeJeu_MenuPrincipal>(GetOuter()->GetWorld()->GetAuthGameMode());
 		GameMode->JoueurEnTueUnAutre(NoJoueurAttaquant, NoJoueur);
-		UE_LOG(LogTemp, Warning, TEXT("JE SUIS MORT"));
 	}
-	UE_LOG(LogTemp, Warning, TEXT("PV DU PERSONNAGE %d"), PointsDeVie);
 }
 
 bool APersonnage::Soigner(int NbPointsDeVie)

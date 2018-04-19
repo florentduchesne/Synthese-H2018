@@ -8,15 +8,13 @@
 #include "UObject/ConstructorHelpers.h"
 #include "Components/SphereComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "Projectile.generated.h"
 
 UCLASS()
 class AProjectile : public AActor
 {
 	GENERATED_BODY()
-
-	UPROPERTY(VisibleDefaultsOnly, Category = Projectile)
-	class USphereComponent* CollisionComp;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))
 	class UProjectileMovementComponent* ProjectileMovement;
@@ -30,11 +28,16 @@ protected:
 public:	
 	// Sets default values for this actor's properties
 	AProjectile();
-	void Initialiser(int degats, int NoJoueur);
+	void Initialiser(int degats, int NoJoueur, float vitesse);
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	UParticleSystemComponent * ParticulesImpact;
+
+	UPROPERTY(VisibleDefaultsOnly, Category = Projectile)
+	class USphereComponent* CollisionComp;
 
 public:	
 	// Called every frame

@@ -4,7 +4,7 @@
 
 
 UFusilAuto::UFusilAuto()
-	:UArme(20, 1.5f, 0.0f, 20, 10000, "/Game/FirstPerson/FPWeapon/Mesh/SK_FPGun")
+	:UArme(20, 1.5f, 0.0f, 20, 5000, "/Game/FirstPerson/FPWeapon/Mesh/SK_FPGun")
 {
 	PrimaryComponentTick.bCanEverTick = true;
 }
