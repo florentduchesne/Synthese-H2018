@@ -65,6 +65,7 @@ void APersonnage::SetNoJoueur(int _NoJoueur)
 {
 	NoJoueur = _NoJoueur;
 	arme->SetNoJoueur(NoJoueur);
+	UE_LOG(LogTemp, Warning, TEXT("no joueur : %d"), NoJoueur);
 }
 
 int APersonnage::GetNoJoueur()
@@ -171,6 +172,7 @@ void APersonnage::InfligerDegats(int degats, int NoJoueurAttaquant)
 	if (ATH) 
 	{
 		ATH->MiseAJourPV(PointsDeVie);
+		ATH->MiseAJourArmure(Armure);
 	}
 	if (PointsDeVie <= 0)
 	{

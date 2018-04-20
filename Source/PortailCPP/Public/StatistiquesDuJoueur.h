@@ -3,19 +3,23 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "StatistiquesDuJoueur.generated.h"
 
 /**
  * 
  */
-class PORTAILCPP_API StatistiquesDuJoueur
+UCLASS()
+class PORTAILCPP_API UStatistiquesDuJoueur : public UObject
 {
-	
+	GENERATED_BODY()
 	FString nom = "Joueur ";
+	UStatistiquesDuJoueur();
 
 public:
-	StatistiquesDuJoueur(int NoJoueur);
-	~StatistiquesDuJoueur();
+	void SetNoJoueur(int NoJoueur);
 
+	UPROPERTY(BlueprintReadOnly, Category = "StatJoueur")
 	int NbMeurtres = 0;
+	UPROPERTY(BlueprintReadOnly, Category = "StatJoueur")
 	int NbMorts = 0;
 };

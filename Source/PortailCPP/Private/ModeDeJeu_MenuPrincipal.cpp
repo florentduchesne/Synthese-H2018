@@ -9,10 +9,7 @@ AModeDeJeu_MenuPrincipal::AModeDeJeu_MenuPrincipal()
 	DefaultPawnClass = APersonnage::StaticClass();
 	PlayerControllerClass = APlayerController::StaticClass();
 
-	for (auto i = 0; i < 4; i++)
-	{
-		StatsJoueurs[i] = new StatistiquesDuJoueur(i);
-	}
+	
 
 	NoJoueurGagnant = -1;
 }
@@ -45,9 +42,12 @@ void AModeDeJeu_MenuPrincipal::ChangeMenuWidget(TSubclassOf<UUserWidget> NewWidg
 	}
 }
 
-void AModeDeJeu_MenuPrincipal::GenererCarte(int _NbJoueurs)
+void AModeDeJeu_MenuPrincipal::GenererCarte(int _NbJoueurs, int nb_pieces)
 {
 	NbJoueurs = _NbJoueurs;
+	NbNiveauxVoulus = nb_pieces;
+
+	InitialiserStatsJoueurs();
 
 	//contient les informations de tous les niveaux qui peuvent apparaître : nombre de portails, nom, Id
 	TArray<InformationsNiveau*> ListeCompleteNiveaux;
@@ -77,6 +77,17 @@ void AModeDeJeu_MenuPrincipal::GenererCarte(int _NbJoueurs)
 	RelierNiveaux();
 	//quand tous les niveaux ont terminé de charger, on connecte les portails, place les joueurs et démarre la partie
 	InitialiserCarte();
+}
+
+void AModeDeJeu_MenuPrincipal::InitialiserStatsJoueurs()
+{
+	StatsJoueurs.Empty();
+
+	for (auto i = 0; i < NbJoueurs; i++)
+	{
+		StatsJoueurs.Add(NewObject<UStatistiquesDuJoueur>(this, FName("StatJoueur%s", i)));
+		StatsJoueurs[i]->SetNoJoueur(i);
+	}
 }
 
 void AModeDeJeu_MenuPrincipal::SelectionnerNiveaux(TArray<InformationsNiveau*> ListeCompleteNiveaux, int NbNiveauxVoulus)
@@ -211,6 +222,12 @@ void AModeDeJeu_MenuPrincipal::TrouverTousLesPortailsCharges()
 
 void AModeDeJeu_MenuPrincipal::ConnecterLesPortails()
 {
+	//on trie tous les portails de tous les niveaux de manière aléatoire
+	for (InformationsNiveau * Niveau : NiveauxChoisis)
+	{
+		Niveau->MelangerListePortails();
+	}
+
 	//on relie les portails 
 	for (InformationsNiveau* Niveau : NiveauxChoisis)
 	{
@@ -338,10 +355,11 @@ void AModeDeJeu_MenuPrincipal::PartieTerminee(int idNoJoueurGagnant)
 	NiveauxChoisis.Empty();
 
 	//réinitialise les stats des joueurs
-	for (auto i = 0; i < 4; i++)
+	/*for (auto i = 0; i < 4; i++)
 	{
-		StatsJoueurs[i] = new StatistiquesDuJoueur(i);
-	}
+		StatsJoueurs.Add(NewObject<UStatistiquesDuJoueur>(this, FName("StatJoueur%s", i)));
+		StatsJoueurs[i]->SetNoJoueur(i);
+	}*/
 
 	//détruit tous les joueurs
 	DetruireTousLesJoueurs();
@@ -363,7 +381,6 @@ void AModeDeJeu_MenuPrincipal::DechargerCarte()
 
 void AModeDeJeu_MenuPrincipal::JoueurEnTueUnAutre(int IndexJoueurTueur, int IndexJoueurMort)
 {
-	UE_LOG(LogTemp, Warning, TEXT("joueur mort"));
 	//actualise les statistiques des joueurs
 	if(IndexJoueurTueur != IndexJoueurMort)
 		StatsJoueurs[IndexJoueurTueur]->NbMeurtres++;

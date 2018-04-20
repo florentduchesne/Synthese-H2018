@@ -4,7 +4,7 @@
 #include "PortailCPP/Public/Personnage/Personnage.h"
 
 AProjectileExplosif::AProjectileExplosif() {
-	static ConstructorHelpers::FObjectFinder<UParticleSystem> EffetExplosion(TEXT("ParticleSystem'/Game/Effets/P_Launcher_IH.P_Launcher_IH'"));
+	static ConstructorHelpers::FObjectFinder<UParticleSystem> EffetExplosion(TEXT("ParticleSystem'/Game/Effets/Explosion/Effects/ParticleSystems/Weapons/RocketLauncher/Impact/P_Launcher_IH.P_Launcher_IH'"));
 	ParticuleSysteme = EffetExplosion.Object;
 }
 

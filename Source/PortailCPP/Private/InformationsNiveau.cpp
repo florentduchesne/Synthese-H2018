@@ -35,6 +35,16 @@ APortail * InformationsNiveau::GetProchainPortailNonConnecte()
 	return nullptr;
 }
 
+void InformationsNiveau::MelangerListePortails()
+{
+	for (int i = listePortails.Num() - 1; i > 0; i--) {
+		int j = FMath::FloorToInt(FMath::SRand() * (i + 1)) % listePortails.Num();
+		APortail * tempo = listePortails[i];
+		listePortails[i] = listePortails[j];
+		listePortails[j] = tempo;
+	}
+}
+
 void InformationsNiveau::AjouterPointApparition(APlayerStart * PointApparition)
 {
 	ListePointsApparition.Add(PointApparition);

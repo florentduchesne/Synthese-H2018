@@ -32,6 +32,8 @@ class PORTAILCPP_API AModeDeJeu_MenuPrincipal : public AGameModeBase
 	//-----------------------------------------
 	//---------OUVERTURE DE LA PARTIE----------
 	//-----------------------------------------
+	//vide le tableau et le remplis selon le nombre de joueurs
+	void InitialiserStatsJoueurs();
 
 	//liste de tous les niveaux qui ont été choisis par le générateur de carte au lancement d'une partie
 	TArray<InformationsNiveau*> NiveauxChoisis;
@@ -77,8 +79,6 @@ class PORTAILCPP_API AModeDeJeu_MenuPrincipal : public AGameModeBase
 	//--------DÉROULEMENT DE LA PARTIE---------
 	//-----------------------------------------
 
-	StatistiquesDuJoueur * StatsJoueurs[4];
-
 	//fait apparaitre un joueur sur un point d'apparition aléatoire
 	void ReapparitionJoueur(int NoJoueur);
 
@@ -99,7 +99,7 @@ class PORTAILCPP_API AModeDeJeu_MenuPrincipal : public AGameModeBase
 
 	//sera plus élevé quand on aura plus de niveaux de faits
 	///IMPORTANT!!! DOIT ÊTRE PLUS PETIT OU ÉGAL À LA TAILLE DE LA LISTE DE NIVEAUX
-	const int NbNiveauxVoulus = 4;
+	int NbNiveauxVoulus = 4;
 
 	int NbJoueurs;
 
@@ -114,6 +114,9 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category = "MenuPrincipal")
 	int NoJoueurGagnant = -1;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "MenuPrincipal")
+	TArray<UStatistiquesDuJoueur*> StatsJoueurs;
+
 	virtual void BeginPlay() override;
 
 	UPROPERTY()
@@ -126,6 +129,6 @@ public:
 
 	//appelle toutes les fonctions d'ouverture de la partie
 	UFUNCTION(BlueprintCallable, Category = "GenerationCarte")
-	void GenererCarte(int _NbJoueurs);
+	void GenererCarte(int _NbJoueurs, int nb_pieces);
 
 };

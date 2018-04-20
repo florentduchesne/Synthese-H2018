@@ -2,12 +2,10 @@
 
 #include "StatistiquesDuJoueur.h"
 
-StatistiquesDuJoueur::StatistiquesDuJoueur(int NoJoueur)
+UStatistiquesDuJoueur::UStatistiquesDuJoueur()
+{}
+
+void UStatistiquesDuJoueur::SetNoJoueur(int NoJoueur)
 {
 	nom += "" + NoJoueur;
-}
-
-StatistiquesDuJoueur::~StatistiquesDuJoueur()
-{
-
 }

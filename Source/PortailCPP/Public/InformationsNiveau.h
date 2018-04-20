@@ -22,9 +22,14 @@ class PORTAILCPP_API InformationsNiveau
 	//tous les points d'apparition dans une piece
 	TArray<APlayerStart*> ListePointsApparition;
 
+	
+
 public:
 	InformationsNiveau(int NbPortailsAConnecter, FName Nom, int Id);
 	~InformationsNiveau();
+
+	//trie le tableau de portails de manière aléatoire
+	void MelangerListePortails();
 
 	//liste de tous les portails du niveau
 	TArray<APortail*> listePortails;
