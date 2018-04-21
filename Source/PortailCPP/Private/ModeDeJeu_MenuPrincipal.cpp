@@ -42,10 +42,11 @@ void AModeDeJeu_MenuPrincipal::ChangeMenuWidget(TSubclassOf<UUserWidget> NewWidg
 	}
 }
 
-void AModeDeJeu_MenuPrincipal::GenererCarte(int _NbJoueurs, int nb_pieces)
+void AModeDeJeu_MenuPrincipal::GenererCarte(int _NbJoueurs, int nb_pieces, int nb_points_victoire)
 {
 	NbJoueurs = _NbJoueurs;
 	NbNiveauxVoulus = nb_pieces;
+	NbMeutresRequisPourVictoire = nb_points_victoire;
 
 	InitialiserStatsJoueurs();
 
@@ -353,13 +354,6 @@ void AModeDeJeu_MenuPrincipal::PartieTerminee(int idNoJoueurGagnant)
 
 	//supprime tous les niveaux sélectionnés pour la dernière partie
 	NiveauxChoisis.Empty();
-
-	//réinitialise les stats des joueurs
-	/*for (auto i = 0; i < 4; i++)
-	{
-		StatsJoueurs.Add(NewObject<UStatistiquesDuJoueur>(this, FName("StatJoueur%s", i)));
-		StatsJoueurs[i]->SetNoJoueur(i);
-	}*/
 
 	//détruit tous les joueurs
 	DetruireTousLesJoueurs();

@@ -95,7 +95,7 @@ class PORTAILCPP_API AModeDeJeu_MenuPrincipal : public AGameModeBase
 	//retourne un point d'apparition aléatoire (à remplacer plus tard par un point d'apparition dans un pièce où il n'y a pas de joueur)
 	APlayerStart * TrouverPointApparitionAleatoire();
 
-	const int NbMeutresRequisPourVictoire = 3;
+	int NbMeutresRequisPourVictoire = 3;
 
 	//sera plus élevé quand on aura plus de niveaux de faits
 	///IMPORTANT!!! DOIT ÊTRE PLUS PETIT OU ÉGAL À LA TAILLE DE LA LISTE DE NIVEAUX
@@ -129,6 +129,6 @@ public:
 
 	//appelle toutes les fonctions d'ouverture de la partie
 	UFUNCTION(BlueprintCallable, Category = "GenerationCarte")
-	void GenererCarte(int _NbJoueurs, int nb_pieces);
+	void GenererCarte(int _NbJoueurs, int nb_pieces, int nb_points_victoire);
 
 };

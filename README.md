@@ -22,8 +22,8 @@ Liste des éléments du jeu :
 	- Objets à ramasser : armes, santé, armure (FAIT)
 	- Bumpers (FAIT)
 - Améliorer l'aléatoire dans la génération de la carte (au niveau de la sélection des portails) (FAIT)
-- Donner plus de paramètres au lancement de la partie (nombre de cartes, condition de victoire)
-- Affichage des statistiques de fin de partie
+- Donner plus de paramètres au lancement de la partie (nombre de cartes, condition de victoire) (FAIT)
+- Affichage des statistiques de fin de partie (FAIT)
 - Timer de fin de partie
 - Ajouter des sons
 - Ajouter les maps finales
