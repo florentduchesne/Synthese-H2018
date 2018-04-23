@@ -142,8 +142,4 @@ public:
 	//appelle toutes les fonctions d'ouverture de la partie
 	UFUNCTION(BlueprintCallable, Category = "GenerationCarte")
 	void GenererCarte(int _NbJoueurs, int nb_pieces, int nb_points_victoire, int duree);
-
-	//appelé quand la partie se termine avec la fin du timer
-
-
 };
