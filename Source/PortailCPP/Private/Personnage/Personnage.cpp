@@ -136,7 +136,7 @@ void APersonnage::TerminerSaut()
 void APersonnage::DebloquerTeleportationFutur()
 {
 	FTimerHandle UnusedHandle;
-	GetWorldTimerManager().SetTimer(UnusedHandle, this, &APersonnage::DebloquerTeleportation, 0.5f, false);
+	GetWorldTimerManager().SetTimer(UnusedHandle, this, &APersonnage::DebloquerTeleportation, 0.1f, false);
 }
 
 void APersonnage::DebloquerTeleportation()

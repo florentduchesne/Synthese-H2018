@@ -95,13 +95,18 @@ class PORTAILCPP_API AModeDeJeu_MenuPrincipal : public AGameModeBase
 	//retourne un point d'apparition aléatoire (à remplacer plus tard par un point d'apparition dans un pièce où il n'y a pas de joueur)
 	APlayerStart * TrouverPointApparitionAleatoire();
 
-	int NbMeutresRequisPourVictoire = 3;
+	int NbMeutresRequisPourVictoire;
 
 	//sera plus élevé quand on aura plus de niveaux de faits
 	///IMPORTANT!!! DOIT ÊTRE PLUS PETIT OU ÉGAL À LA TAILLE DE LA LISTE DE NIVEAUX
-	int NbNiveauxVoulus = 4;
+	int NbNiveauxVoulus;
 
+	//nombre de joueurs qui participeront dans la partie
 	int NbJoueurs;
+
+	//gèrent la fin de la partie avec le timer
+	void TerminerPartieTimer();
+	FTimerHandle TimerHandleFinDePartie;
 
 	
 public:
@@ -109,6 +114,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "MenuPrincipal")
 	TSubclassOf<UUserWidget> StartingWidgetClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "WidgetPartie")
+	TSubclassOf<UUserWidget> WidgetEnPartie;
 	
 	//le numéro du joueur gagnant. si égal à -1, le menu ne l'affichera pas
 	UPROPERTY(BlueprintReadOnly, Category = "MenuPrincipal")
@@ -116,6 +124,10 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "MenuPrincipal")
 	TArray<UStatistiquesDuJoueur*> StatsJoueurs;
+
+	//le temps maximal qu'une partie peut durer
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Timer")
+	int TempsMaxPartie = 300;
 
 	virtual void BeginPlay() override;
 
@@ -129,6 +141,9 @@ public:
 
 	//appelle toutes les fonctions d'ouverture de la partie
 	UFUNCTION(BlueprintCallable, Category = "GenerationCarte")
-	void GenererCarte(int _NbJoueurs, int nb_pieces, int nb_points_victoire);
+	void GenererCarte(int _NbJoueurs, int nb_pieces, int nb_points_victoire, int duree);
+
+	//appelé quand la partie se termine avec la fin du timer
+
 
 };

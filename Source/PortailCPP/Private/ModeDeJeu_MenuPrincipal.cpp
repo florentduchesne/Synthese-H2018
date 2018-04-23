@@ -9,8 +9,6 @@ AModeDeJeu_MenuPrincipal::AModeDeJeu_MenuPrincipal()
 	DefaultPawnClass = APersonnage::StaticClass();
 	PlayerControllerClass = APlayerController::StaticClass();
 
-	
-
 	NoJoueurGagnant = -1;
 }
 
@@ -42,11 +40,14 @@ void AModeDeJeu_MenuPrincipal::ChangeMenuWidget(TSubclassOf<UUserWidget> NewWidg
 	}
 }
 
-void AModeDeJeu_MenuPrincipal::GenererCarte(int _NbJoueurs, int nb_pieces, int nb_points_victoire)
+void AModeDeJeu_MenuPrincipal::GenererCarte(int _NbJoueurs, int nb_pieces, int nb_points_victoire, int duree)
 {
 	NbJoueurs = _NbJoueurs;
 	NbNiveauxVoulus = nb_pieces;
 	NbMeutresRequisPourVictoire = nb_points_victoire;
+	TempsMaxPartie = duree;
+
+	GetOuter()->GetWorld()->GetTimerManager().SetTimer(TimerHandleFinDePartie, this, &AModeDeJeu_MenuPrincipal::TerminerPartieTimer, TempsMaxPartie, false);
 
 	InitialiserStatsJoueurs();
 
@@ -58,6 +59,7 @@ void AModeDeJeu_MenuPrincipal::GenererCarte(int _NbJoueurs, int nb_pieces, int n
 	ListeCompleteNiveaux.Add(new InformationsNiveau(2, FName("Hall"), 2));
 	ListeCompleteNiveaux.Add(new InformationsNiveau(2, FName("SalleD"), 3));
 	ListeCompleteNiveaux.Add(new InformationsNiveau(4, FName("Appartement"), 4));
+	ListeCompleteNiveaux.Add(new InformationsNiveau(4, FName("Salle2"), 5));
 
 	if (NbNiveauxVoulus > ListeCompleteNiveaux.Num())
 	{
@@ -193,6 +195,9 @@ void AModeDeJeu_MenuPrincipal::InitialiserCarte()
 
 		//on place tous les joueurs
 		PlacerJoueurs();
+
+		//on affiche le widget qui contient le timer
+		ChangeMenuWidget(WidgetEnPartie);
 	}
 	else
 	{
@@ -347,8 +352,26 @@ void AModeDeJeu_MenuPrincipal::AttendreQueJoueurCharge(APlayerController * Contr
 	}
 }
 
+void AModeDeJeu_MenuPrincipal::TerminerPartieTimer()
+{
+	int PlusGrandNombreDeMeurtres = 0;
+
+	for (auto i = 0; i < NbJoueurs; i++)
+	{
+		if (StatsJoueurs[i]->NbMeurtres > PlusGrandNombreDeMeurtres)
+		{
+			PlusGrandNombreDeMeurtres = StatsJoueurs[i]->NbMeurtres;
+			NoJoueurGagnant = i;
+		}
+	}
+	PartieTerminee(NoJoueurGagnant);
+}
+
 void AModeDeJeu_MenuPrincipal::PartieTerminee(int idNoJoueurGagnant)
 {
+	//arrete le timer de fin de partie
+	GetWorldTimerManager().ClearTimer(TimerHandleFinDePartie);
+
 	//décharge tous les niveaux
 	DechargerCarte();
 
