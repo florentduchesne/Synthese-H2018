@@ -24,7 +24,7 @@ Liste des éléments du jeu :
 - Améliorer l'aléatoire dans la génération de la carte (au niveau de la sélection des portails) (FAIT)
 - Donner plus de paramètres au lancement de la partie (nombre de cartes, condition de victoire) (FAIT)
 - Affichage des statistiques de fin de partie (FAIT)
-- Timer de fin de partie
+- Timer de fin de partie (FAIT)
 - Ajouter des sons
 - Ajouter les maps finales
 - Équilibrage des statistiques de jeu
