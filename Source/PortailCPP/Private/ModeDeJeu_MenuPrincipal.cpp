@@ -76,6 +76,7 @@ void AModeDeJeu_MenuPrincipal::GenererCarte(int _NbJoueurs, int nb_pieces, int n
 	}
 	//on demande au gestionnaire de niveaux de charger tous les niveaux
 	ChargerLesNiveaux();
+	//FPlatformProcess::Sleep(5.f);
 	//on sélectionne quels niveaux seront reliés avec quels autres
 	RelierNiveaux();
 	//quand tous les niveaux ont terminé de charger, on connecte les portails, place les joueurs et démarre la partie
@@ -209,13 +210,21 @@ void AModeDeJeu_MenuPrincipal::InitialiserCarte()
 
 void AModeDeJeu_MenuPrincipal::TrouverTousLesPortailsCharges()
 {
-	//on va chercher tous les portails de tous les niveaux chargés
+	for (InformationsNiveau* Niveau : NiveauxChoisis)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("NIVEAU %s"), *Niveau->GetNom().ToString());
+	}
+	//on va chercher tous les portails de tous les niveaux chargés (équivalent à GetAllActorsOfClass)
 	for (TActorIterator<APortail> ActorItr(GetWorld()); ActorItr; ++ActorItr)
 	{
 		APortail *Portail = *ActorItr;
+		UE_LOG(LogTemp, Warning, TEXT("portail trouve %s"), *Portail->Tags[0].ToString());
+
+		//FPlatformProcess::Sleep(0.5f);
 		//on vérifie si le portail a un tag qui contient le nom d'un niveau
 		for (InformationsNiveau* Niveau : NiveauxChoisis)
 		{
+			UE_LOG(LogTemp, Warning, TEXT("avec niveau %s"), *Niveau->GetNom().ToString());
 			if (Portail->Tags.Contains(Niveau->GetNom()))
 			{
 				//on ajoute le portail à la liste de portails du niveau

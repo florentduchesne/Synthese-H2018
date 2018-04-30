@@ -114,12 +114,12 @@ void APersonnage::DeplacementLateral(float Value)
 
 void APersonnage::TournerHorizontalement(float Value)
 {
-	AddControllerYawInput(Value);
+	AddControllerYawInput(Value * GetWorld()->GetDeltaSeconds() * 10 * SensibiliteHorizontale);
 }
 
 void APersonnage::TournerVerticalement(float Value)
 {
-	AddControllerPitchInput(Value);
+	AddControllerPitchInput(Value * GetWorld()->GetDeltaSeconds() * 10 * SensibiliteVerticale);
 }
 
 //géré par l'engine...

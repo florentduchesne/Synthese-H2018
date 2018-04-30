@@ -55,6 +55,9 @@ protected:
 
 	AATH * ATH;
 
+	double SensibiliteHorizontale = 1.0;
+	double SensibiliteVerticale = 1.0;
+
 	// Camera du personnage
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent * camera;

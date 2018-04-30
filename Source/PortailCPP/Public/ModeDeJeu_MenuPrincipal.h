@@ -32,6 +32,7 @@ class PORTAILCPP_API AModeDeJeu_MenuPrincipal : public AGameModeBase
 	//-----------------------------------------
 	//---------OUVERTURE DE LA PARTIE----------
 	//-----------------------------------------
+
 	//vide le tableau et le remplis selon le nombre de joueurs
 	void InitialiserStatsJoueurs();
 
@@ -71,9 +72,13 @@ class PORTAILCPP_API AModeDeJeu_MenuPrincipal : public AGameModeBase
 
 	void PartieTerminee(int idNoJoueurGagnant);
 
+	//décharge tous les niveaux
 	void DechargerCarte();
 
 	void DetruireTousLesJoueurs();
+
+	//détruit un joueur spécifié
+	void DetruireJoueur(int NoJoueur);
 
 	//-----------------------------------------
 	//--------DÉROULEMENT DE LA PARTIE---------
@@ -87,8 +92,6 @@ class PORTAILCPP_API AModeDeJeu_MenuPrincipal : public AGameModeBase
 
 	void AttendreQueJoueurCharge(APlayerController * Controleur, int NoJoueur, AActor * PointApparition);
 
-	//détruit un joueur spécifié
-	void DetruireJoueur(int NoJoueur);
 
 	APersonnage * GetJoueurParIndex(int NoJoueur);
 
@@ -137,6 +140,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "MenuPrincipal")
 	void ChangeMenuWidget(TSubclassOf<UUserWidget> NewWidgetClass);
 
+	//appelé lorsqu'un joueur meurt
 	void JoueurEnTueUnAutre(int IndexJoueurTueur, int IndexJoueurMort);
 
 	//appelle toutes les fonctions d'ouverture de la partie
