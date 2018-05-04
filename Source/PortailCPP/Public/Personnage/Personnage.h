@@ -55,8 +55,8 @@ protected:
 
 	AATH * ATH;
 
-	double SensibiliteHorizontale = 1.0;
-	double SensibiliteVerticale = 1.0;
+	float SensibiliteHorizontale = 1.0f;
+	float SensibiliteVerticale = 1.0f;
 
 	// Camera du personnage
 	UPROPERTY(VisibleAnywhere)
@@ -110,6 +110,7 @@ public:
 
 	void SetNoJoueur(int _NoJoueur);
 	int GetNoJoueur();
+	void SetSensibilite(float sensiHorizontale, float sensiVerticale);
 
 	void SetATH(AHUD * HUD);
 	

@@ -114,12 +114,12 @@ void APersonnage::DeplacementLateral(float Value)
 
 void APersonnage::TournerHorizontalement(float Value)
 {
-	AddControllerYawInput(Value * GetWorld()->GetDeltaSeconds() * 10 * SensibiliteHorizontale);
+	AddControllerYawInput(Value * GetWorld()->GetDeltaSeconds() * 25.0f * SensibiliteHorizontale);
 }
 
 void APersonnage::TournerVerticalement(float Value)
 {
-	AddControllerPitchInput(Value * GetWorld()->GetDeltaSeconds() * 10 * SensibiliteVerticale);
+	AddControllerPitchInput(Value * GetWorld()->GetDeltaSeconds() * 25.0f * SensibiliteVerticale);
 }
 
 //géré par l'engine...
@@ -298,6 +298,12 @@ void APersonnage::TirSecondaire()
 void APersonnage::Rechargement()
 {
 	arme->LancerRechargement();
+}
+
+void APersonnage::SetSensibilite(float sensiHorizontale, float sensiVerticale)
+{
+	SensibiliteHorizontale = sensiHorizontale;
+	SensibiliteVerticale = sensiVerticale;
 }
 
 void APersonnage::SetATH(AHUD * HUD)

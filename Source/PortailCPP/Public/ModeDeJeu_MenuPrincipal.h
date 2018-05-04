@@ -111,6 +111,9 @@ class PORTAILCPP_API AModeDeJeu_MenuPrincipal : public AGameModeBase
 	void TerminerPartieTimer();
 	FTimerHandle TimerHandleFinDePartie;
 
+	TArray<float> SensibiliteH;
+	TArray<float> SensibiliteV;
+
 	
 public:
 	AModeDeJeu_MenuPrincipal();
@@ -145,5 +148,5 @@ public:
 
 	//appelle toutes les fonctions d'ouverture de la partie
 	UFUNCTION(BlueprintCallable, Category = "GenerationCarte")
-	void GenererCarte(int _NbJoueurs, int nb_pieces, int nb_points_victoire, int duree);
+		void GenererCarte(int _NbJoueurs, int nb_pieces, int nb_points_victoire, int duree, UPARAM(ref) TArray<float>& SensibiliteH, UPARAM(ref) TArray<float>& SensibiliteV);
 };

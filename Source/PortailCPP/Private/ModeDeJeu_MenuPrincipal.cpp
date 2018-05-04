@@ -40,12 +40,14 @@ void AModeDeJeu_MenuPrincipal::ChangeMenuWidget(TSubclassOf<UUserWidget> NewWidg
 	}
 }
 
-void AModeDeJeu_MenuPrincipal::GenererCarte(int _NbJoueurs, int nb_pieces, int nb_points_victoire, int duree)
+void AModeDeJeu_MenuPrincipal::GenererCarte(int _NbJoueurs, int nb_pieces, int nb_points_victoire, int duree, UPARAM(ref) TArray<float>& _SensibiliteH, UPARAM(ref) TArray<float>& _SensibiliteV)
 {
 	NbJoueurs = _NbJoueurs;
 	NbNiveauxVoulus = nb_pieces;
 	NbMeutresRequisPourVictoire = nb_points_victoire;
 	TempsMaxPartie = duree;
+	SensibiliteH = _SensibiliteH;
+	SensibiliteV = _SensibiliteV;
 
 	GetOuter()->GetWorld()->GetTimerManager().SetTimer(TimerHandleFinDePartie, this, &AModeDeJeu_MenuPrincipal::TerminerPartieTimer, TempsMaxPartie, false);
 
@@ -328,6 +330,9 @@ void AModeDeJeu_MenuPrincipal::PlacerJoueurs()
 			}
 		}
 	}
+	//maintenant que les personnages sont paramétrés, on n'a plus besoin de la sensibilité
+	SensibiliteH.Empty();
+	SensibiliteV.Empty();
 }
 
 void AModeDeJeu_MenuPrincipal::FaireApparaitreJoueur(AActor * PointApparition, int NoJoueur)
@@ -348,6 +353,8 @@ void AModeDeJeu_MenuPrincipal::AttendreQueJoueurCharge(APlayerController * Contr
 	if (Personnage)
 	{
 		Personnage->SetNoJoueur(NoJoueur);
+		UE_LOG(LogTemp, Warning, TEXT("sensibilite horizontale : %f"), SensibiliteH[NoJoueur]);
+		Personnage->SetSensibilite(SensibiliteH[NoJoueur], SensibiliteV[NoJoueur]);
 		Personnage->SetATH(Controleur->GetHUD());
 		Personnage->SetActorLocation(PointApparition->GetActorLocation());
 	}
