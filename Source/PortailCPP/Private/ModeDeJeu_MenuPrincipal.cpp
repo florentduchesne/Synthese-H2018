@@ -121,7 +121,7 @@ void AModeDeJeu_MenuPrincipal::ChargerLesNiveaux()
 	//on charge tous les niveaux sélectionnés
 	for (auto i = 0; i < NiveauxChoisis.Num(); i++)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("on charge un niveau"));
+		//UE_LOG(LogTemp, Warning, TEXT("on charge un niveau"));
 		GestionnaireDeNiveaux->ChargerNiveau(NiveauxChoisis[i]->GetNom(), i);
 	}
 }
@@ -181,26 +181,46 @@ void AModeDeJeu_MenuPrincipal::RelierNiveaux()
 
 void AModeDeJeu_MenuPrincipal::InitialiserCarte()
 {
+	//UE_LOG(LogTemp, Warning, TEXT("joueurs existants : %d"), NombreDeJoueursExistants());
+	DetruireTousLesJoueurs();
+
 	if (NiveauxTousCharges())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("niveaux tous charges"));
-		//on va chercher tous les portails de tous les niveaux chargés et on les sauvegarde dans NiveauxChoisis
-		TrouverTousLesPortailsCharges();
+		if (CompterPortails())
+		{
+			//UE_LOG(LogTemp, Warning, TEXT("joueurs existants2 : %d"), NombreDeJoueursExistants());
+			if (NombreDeJoueursExistants() == 1)
+			{
+				//UE_LOG(LogTemp, Warning, TEXT("joueurs existants3 : %d"), NombreDeJoueursExistants());
+				//UE_LOG(LogTemp, Warning, TEXT("niveaux tous charges"));
+				//on va chercher tous les portails de tous les niveaux chargés et on les sauvegarde dans NiveauxChoisis
+				TrouverTousLesPortailsCharges();
 
-		//on connecte les portails pour vrai
-		ConnecterLesPortails();
+				//on connecte les portails pour vrai
+				ConnecterLesPortails();
 
-		//on va chercher tous les points d'apparition
-		ChercherPointsApparition();
+				//on va chercher tous les points d'apparition
+				ChercherPointsApparition();
 
-		//détruit tous les joueurs
-		DetruireTousLesJoueurs();
+				//on place tous les joueurs
+				PlacerJoueurs();
 
-		//on place tous les joueurs
-		PlacerJoueurs();
-
-		//on affiche le widget qui contient le timer
-		ChangeMenuWidget(WidgetEnPartie);
+				//on affiche le widget qui contient le timer
+				ChangeMenuWidget(WidgetEnPartie);
+			}
+			else
+			{
+				UE_LOG(LogTemp, Warning, TEXT("personnages pas tous detruits"));
+				FTimerHandle UnusedHandle;
+				GetWorldTimerManager().SetTimer(UnusedHandle, this, &AModeDeJeu_MenuPrincipal::InitialiserCarte, 0.1f, false);
+			}
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("portails pas tous charges"));
+			FTimerHandle UnusedHandle;
+			GetWorldTimerManager().SetTimer(UnusedHandle, this, &AModeDeJeu_MenuPrincipal::InitialiserCarte, 0.1f, false);
+		}
 	}
 	else
 	{
@@ -210,23 +230,34 @@ void AModeDeJeu_MenuPrincipal::InitialiserCarte()
 	}
 }
 
-void AModeDeJeu_MenuPrincipal::TrouverTousLesPortailsCharges()
+bool AModeDeJeu_MenuPrincipal::CompterPortails()
 {
+	TArray<AActor*> FoundActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APortail::StaticClass(), FoundActors);
+	int nbPortailsTrouves = FoundActors.Num();
+	int nbPortailsTheorique = 0;
 	for (InformationsNiveau* Niveau : NiveauxChoisis)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("NIVEAU %s"), *Niveau->GetNom().ToString());
+		nbPortailsTheorique += Niveau->GetListeNiveauxConnectes().Num();
 	}
+	UE_LOG(LogTemp, Warning, TEXT("portails charges : %d"), nbPortailsTrouves);
+	UE_LOG(LogTemp, Warning, TEXT("portails theorique : %d"), nbPortailsTheorique);
+	return nbPortailsTrouves == nbPortailsTheorique;
+}
+
+void AModeDeJeu_MenuPrincipal::TrouverTousLesPortailsCharges()
+{
 	//on va chercher tous les portails de tous les niveaux chargés (équivalent à GetAllActorsOfClass)
 	for (TActorIterator<APortail> ActorItr(GetWorld()); ActorItr; ++ActorItr)
 	{
 		APortail *Portail = *ActorItr;
-		UE_LOG(LogTemp, Warning, TEXT("portail trouve %s"), *Portail->Tags[0].ToString());
+		//UE_LOG(LogTemp, Warning, TEXT("portail trouve %s"), *Portail->Tags[0].ToString());
 
 		//FPlatformProcess::Sleep(0.5f);
 		//on vérifie si le portail a un tag qui contient le nom d'un niveau
 		for (InformationsNiveau* Niveau : NiveauxChoisis)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("avec niveau %s"), *Niveau->GetNom().ToString());
+			//UE_LOG(LogTemp, Warning, TEXT("avec niveau %s"), *Niveau->GetNom().ToString());
 			if (Portail->Tags.Contains(Niveau->GetNom()))
 			{
 				//on ajoute le portail à la liste de portails du niveau
@@ -294,6 +325,29 @@ void AModeDeJeu_MenuPrincipal::ChercherPointsApparition()
 	}
 }
 
+int AModeDeJeu_MenuPrincipal::NombreDeJoueursExistants()
+{
+	TArray<AActor*> FoundActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APersonnage::StaticClass(), FoundActors);
+	return FoundActors.Num();
+}
+/*
+bool AModeDeJeu_MenuPrincipal::AttendreDetruireTousLesJoueurs()
+{
+	TArray<AActor*> FoundActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APersonnage::StaticClass(), FoundActors);
+	if (FoundActors.Num())
+	{
+		FTimerHandle TimerHandle;
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AModeDeJeu_MenuPrincipal::DetruireTousLesJoueurs, 0.1f, false);
+		return false;
+	}
+	else
+	{
+		return true;
+	}
+}*/
+
 void AModeDeJeu_MenuPrincipal::DetruireTousLesJoueurs()
 {
 	//va chercher tous les objets APersonnage
@@ -305,7 +359,9 @@ void AModeDeJeu_MenuPrincipal::DetruireTousLesJoueurs()
 		APersonnage * Personnage = Cast<APersonnage>(Acteur);
 		APlayerController * Controleur = Cast<APlayerController>(Personnage->GetController());
 		UGameplayStatics::RemovePlayer(Controleur, true);
+		UE_LOG(LogTemp, Warning, TEXT("joueur detruit"));
 	}
+	PlacerUnUniqueJoueur();
 }
 
 void AModeDeJeu_MenuPrincipal::PlacerJoueurs()
@@ -338,11 +394,25 @@ void AModeDeJeu_MenuPrincipal::PlacerJoueurs()
 void AModeDeJeu_MenuPrincipal::FaireApparaitreJoueur(AActor * PointApparition, int NoJoueur)
 {
 	//on cree un joueur automatiquement et on vérifie si il a bien été créé
-	UE_LOG(LogTemp, Warning, TEXT("joueur cree"));
 	APlayerController * Controleur = UGameplayStatics::CreatePlayer(PointApparition, NoJoueur, true);
 	if (Controleur)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("joueur cree"));
 		AttendreQueJoueurCharge(Controleur, NoJoueur, PointApparition);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("controleur n existe pas"));
+		APersonnage * Personnage = GetJoueurParIndex(-1);
+		if (Personnage)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Personnage 0 existe"));
+			Personnage->SetNoJoueur(NoJoueur);
+			Controleur = Cast<APlayerController>(Personnage->GetController());
+			Personnage->SetATH(Controleur->GetHUD());
+			Personnage->SetSensibilite(SensibiliteH[NoJoueur], SensibiliteV[NoJoueur]);
+			Personnage->SetActorLocation(PointApparition->GetActorLocation());
+		}
 	}
 }
 
@@ -353,19 +423,19 @@ void AModeDeJeu_MenuPrincipal::AttendreQueJoueurCharge(APlayerController * Contr
 	if (Personnage)
 	{
 		Personnage->SetNoJoueur(NoJoueur);
-		UE_LOG(LogTemp, Warning, TEXT("sensibilite horizontale : %f"), SensibiliteH[NoJoueur]);
 		Personnage->SetSensibilite(SensibiliteH[NoJoueur], SensibiliteV[NoJoueur]);
 		Personnage->SetATH(Controleur->GetHUD());
 		Personnage->SetActorLocation(PointApparition->GetActorLocation());
 	}
 	else
 	{
-		FTimerDelegate TimerDel;
+		FTimerDelegate TimerDel = FTimerDelegate::CreateUObject(this, &AModeDeJeu_MenuPrincipal::AttendreQueJoueurCharge, Controleur, NoJoueur, PointApparition);
 		FTimerHandle TimerHandle;
+		UE_LOG(LogTemp, Warning, TEXT("joueur pas charge"));
 		//on rappelle la fonction dans 0.1 seconde
-		TimerDel.BindUFunction(this, FName("AttendreQueJoueurCharge"), Controleur, NoJoueur);
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDel, 0.1f, false);
 	}
+	
 }
 
 void AModeDeJeu_MenuPrincipal::TerminerPartieTimer()
@@ -383,8 +453,27 @@ void AModeDeJeu_MenuPrincipal::TerminerPartieTimer()
 	PartieTerminee(NoJoueurGagnant);
 }
 
+void AModeDeJeu_MenuPrincipal::RetourMenuPrincipal()
+{
+	//détruit tous les joueurs
+	if (NombreDeJoueursExistants() == 1)
+	{
+		//retour au menu principal
+		ChangeMenuWidget(StartingWidgetClass);
+	}
+	else
+	{
+		FTimerHandle TimerHandle;
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AModeDeJeu_MenuPrincipal::RetourMenuPrincipal, 0.1f, false);
+	}
+}
+
 void AModeDeJeu_MenuPrincipal::PartieTerminee(int idNoJoueurGagnant)
 {
+	DetruireTousLesJoueurs();
+
+	PlacerUnUniqueJoueur();
+
 	//arrete le timer de fin de partie
 	GetWorldTimerManager().ClearTimer(TimerHandleFinDePartie);
 
@@ -394,13 +483,7 @@ void AModeDeJeu_MenuPrincipal::PartieTerminee(int idNoJoueurGagnant)
 	//supprime tous les niveaux sélectionnés pour la dernière partie
 	NiveauxChoisis.Empty();
 
-	//détruit tous les joueurs
-	DetruireTousLesJoueurs();
-
-	PlacerUnUniqueJoueur();
-
-	//retour au menu principal
-	ChangeMenuWidget(StartingWidgetClass);
+	RetourMenuPrincipal();
 }
 
 void AModeDeJeu_MenuPrincipal::DechargerCarte()
@@ -505,28 +588,23 @@ void AModeDeJeu_MenuPrincipal::PlacerUnUniqueJoueur()
 {
 	//fait réapparaitre un unique joueur pour avoir le controle du menu principal
 	APlayerStart * PointApparition = NewObject<APlayerStart>(this);
-	FaireApparaitreJoueur(PointApparition, 0);
+	//FaireApparaitreJoueur(PointApparition, 0);
+	UGameplayStatics::CreatePlayer(PointApparition, 0, true);
 	PointApparition->Destroy();
 }
 
 APersonnage * AModeDeJeu_MenuPrincipal::GetJoueurParIndex(int NoJoueur)
 {
-	for (TActorIterator<APlayerController> ActorItr(GetWorld()); ActorItr; ++ActorItr)
+	for (TActorIterator<APersonnage> ActorItr(GetWorld()); ActorItr; ++ActorItr)
 	{
-		APlayerController * Controleur = *ActorItr;
-		APawn * Pion = Controleur->GetPawn();
-		if (Pion)
+		APersonnage * Personnage = *ActorItr;
+		if (Personnage)
 		{
-			APersonnage * Personnage = Cast<APersonnage>(Pion);
-			if (Personnage)
+			if (Personnage->GetNoJoueur() == NoJoueur)
 			{
-				if (Personnage->GetNoJoueur() == NoJoueur)
-				{
-					return Personnage;
-				}
+				return Personnage;
 			}
 		}
 	}
-
 	return nullptr;
 }

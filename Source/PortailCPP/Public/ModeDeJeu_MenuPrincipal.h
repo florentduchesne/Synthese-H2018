@@ -63,6 +63,9 @@ class PORTAILCPP_API AModeDeJeu_MenuPrincipal : public AGameModeBase
 	//retourne vrai si tous les niveaux ont terminé d'être chargés
 	bool NiveauxTousCharges();
 
+	//retourne vrai si on trouve autant de portails qu'il est supposé y en avoir
+	bool CompterPortails();
+
 	//connecte les portails, va chercher les points d'apparition et fait apparaître les joueurs
 	void InitialiserCarte();
 
@@ -79,6 +82,12 @@ class PORTAILCPP_API AModeDeJeu_MenuPrincipal : public AGameModeBase
 
 	//détruit un joueur spécifié
 	void DetruireJoueur(int NoJoueur);
+
+	int NombreDeJoueursExistants();
+
+	bool AttendreDetruireTousLesJoueurs();
+
+	void RetourMenuPrincipal();
 
 	//-----------------------------------------
 	//--------DÉROULEMENT DE LA PARTIE---------
@@ -132,7 +141,7 @@ public:
 	TArray<UStatistiquesDuJoueur*> StatsJoueurs;
 
 	//le temps maximal qu'une partie peut durer
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Timer")
+	UPROPERTY(BlueprintReadOnly, Category = "Timer")
 	int TempsMaxPartie = 300;
 
 	virtual void BeginPlay() override;

@@ -51,7 +51,7 @@ protected:
 	int PointsDeVie = 100;
 	int Armure = 0;
 
-	int NoJoueur;
+	int NoJoueur = -1;
 
 	AATH * ATH;
 
