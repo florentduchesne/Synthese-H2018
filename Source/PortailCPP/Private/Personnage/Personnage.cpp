@@ -31,7 +31,7 @@ APersonnage::APersonnage()
 	// Permet au personnage de controler la rotation de la camera
 	camera->bUsePawnControlRotation = true;
 
-	arme = CreateDefaultSubobject<UFusilAPompe>(TEXT("Arme"));
+	arme = CreateDefaultSubobject<UFusilSemiAuto>(TEXT("Arme"));
 
 	arme->SetupAttachment(camera);
 
@@ -262,6 +262,11 @@ bool APersonnage::ChangerArme(TSubclassOf<UArme> SousClasseDeArme)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("rafales"));
 		arme = NewObject<UFusilARafales>(this, FName("FusilARafales"));
+	}
+	else if (SousClasseDeArme == UFusilAPompe::StaticClass())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("pompe"));
+		arme = NewObject<UFusilAPompe>(this, FName("FusilAPompe"));
 	}
 	//UE_LOG(LogTemp, Warning, TEXT("classe arme : %s"), *SousClasseDeArme);
 	UE_LOG(LogTemp, Warning, TEXT("nom arme : %s"), *arme->GetName());
