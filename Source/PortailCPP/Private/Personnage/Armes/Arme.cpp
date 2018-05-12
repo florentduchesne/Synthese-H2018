@@ -98,18 +98,18 @@ void UArme::DebloquerTirSecondaireDelai()
 	bDelaiEntreChaqueTirSecondaireTermine = true;
 }
 
-void UArme::FaireApparaitreProjectile(ETypeDeTir TypeDeTir)
+void UArme::FaireApparaitreProjectile(ETypeDeTir TypeDeTir, FRotator Deviation)
 {
 	UWorld* const World = GetWorld();
 	if (World != NULL)
 	{
-		const FRotator SpawnRotation = this->GetComponentRotation();
+		const FRotator SpawnRotation = this->GetComponentRotation() + Deviation;
 		// place la balle au bon endroit par rapport au personnage et à son orientation
 		const FVector SpawnLocation = this->GetComponentLocation() + SpawnRotation.RotateVector(FVector(100.0f, 25.0f, 0.0f));
 
 		//initialise les collisions pour la balle
 		FActorSpawnParameters ActorSpawnParams;
-		ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
+		ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
 		// fait apparaitre le projectile avec le constructeur par defaut
 		int DegatsBalle = 0;
@@ -117,9 +117,10 @@ void UArme::FaireApparaitreProjectile(ETypeDeTir TypeDeTir)
 		switch (TypeDeTir)
 		{
 		case ETypeDeTir::Normal:
-			Projectile = World->SpawnActor<AProjectile>(AProjectile::StaticClass(), SpawnLocation, SpawnRotation, ActorSpawnParams);
 			//diminue le nombre de balles dans le chargeur
 			MunitionsDansChargeur -= 1;
+		case ETypeDeTir::Pompe:
+			Projectile = World->SpawnActor<AProjectile>(AProjectile::StaticClass(), SpawnLocation, SpawnRotation, ActorSpawnParams);
 			DegatsBalle = Degats;
 			break;
 		case ETypeDeTir::Explosif:
@@ -147,7 +148,7 @@ void UArme::TirSecondaire()
 {
 	if(ADesBallesDansChargeur())
 		if(bDelaiEntreChaqueTirSecondaireTermine)
-			FaireApparaitreProjectile(ETypeDeTir::Explosif);
+			FaireApparaitreProjectile(ETypeDeTir::Explosif, FRotator(0.0f));
 }
 
 void UArme::SetNoJoueur(int NoJoueur)

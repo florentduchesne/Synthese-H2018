@@ -19,6 +19,8 @@ AProjectile::AProjectile()
 	// Players can't walk on it
 	CollisionComp->SetWalkableSlopeOverride(FWalkableSlopeOverride(WalkableSlope_Unwalkable, 0.f));
 	CollisionComp->CanCharacterStepUpOn = ECB_No;
+	CollisionComp->BodyInstance.SetCollisionProfileName(TEXT("Projectile"));
+	CollisionComp->SetCollisionProfileName(TEXT("Projectile"));
 
 	// Set as root component
 	RootComponent = CollisionComp;
@@ -29,6 +31,7 @@ AProjectile::AProjectile()
 	ProjectileMovement->InitialSpeed = 10000.f;
 	ProjectileMovement->bRotationFollowsVelocity = false;
 	ProjectileMovement->bShouldBounce = false;
+	ProjectileMovement->ProjectileGravityScale = 0.0f;
 
 	// Die after 3 seconds by default
 	InitialLifeSpan = 3.0f;
@@ -72,5 +75,7 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimi
 	{
 		personnageTouche->InfligerDegats(Degats, NoJoueur);
 	}
-	Destroy();
+	OtherActor = Cast<AProjectile>(OtherActor);
+	if(!OtherActor)
+		Destroy();
 }

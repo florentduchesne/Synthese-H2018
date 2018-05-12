@@ -20,7 +20,7 @@ void UFusilARafales::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 				if (TempsDepuisDernierTir > TempsEntreChaqueTir)
 				{
 					BallesTireesDansRafale += 1;
-					FaireApparaitreProjectile(ETypeDeTir::Normal);
+					FaireApparaitreProjectile(ETypeDeTir::Normal, FRotator(0.f));
 					TempsDepuisDernierTir = 0.0f;
 				}
 			}

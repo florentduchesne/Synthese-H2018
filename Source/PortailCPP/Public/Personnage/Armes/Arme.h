@@ -15,8 +15,9 @@
 UENUM(BlueprintType)
 enum class ETypeDeTir : uint8
 {
-	Normal 	UMETA(DisplayName = "Normal"),
-	Explosif 	UMETA(DisplayName = "Explosif")
+	Normal UMETA(DisplayName = "Normal"),
+	Explosif UMETA(DisplayName = "Explosif"),
+	Pompe UMETA(DisplayName = "Pompe")
 };
 
 UCLASS(abstract)
@@ -71,7 +72,7 @@ protected:
 
 	void DebloquerTirSecondaireDelai();
 	//fait apparaître un projectile et l'initialise
-	void FaireApparaitreProjectile(ETypeDeTir TypeDeTir);
+	void FaireApparaitreProjectile(ETypeDeTir TypeDeTir, FRotator Deviation);
 
 	///à implémenter dans chacune des sous-classes
 	//marque le début d'un "tir" (ou une rafale, selon le type d'arme). C'est le moment où on commence à appuyer sur la gâchette

@@ -18,7 +18,7 @@ void UFusilAuto::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompo
 			TempsDepuisDernierTir += DeltaTime;
 			if (TempsDepuisDernierTir > TempsEntreChaqueTir)
 			{
-				FaireApparaitreProjectile(ETypeDeTir::Normal);
+				FaireApparaitreProjectile(ETypeDeTir::Normal, FRotator(0.f));
 				TempsDepuisDernierTir = 0.0f;
 			}
 		}

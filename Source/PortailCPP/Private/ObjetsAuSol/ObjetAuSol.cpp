@@ -59,6 +59,7 @@ AObjetAuSol::AObjetAuSol(float _DelaisAvantReapparition, FString CheminMesh, ETy
 		SkeletalMesh->SetSkeletalMesh(MeshObj.Object);
 		SkeletalMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		SkeletalMesh->SetupAttachment(RootComponent);
+		SkeletalMesh->SetRelativeLocation(FVector(0, 0, 50));
 	}
 	else if (TypeDeMesh == ETypeDeMeshEnum::StaticMesh)
 	{

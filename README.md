@@ -25,6 +25,8 @@ Liste des éléments du jeu :
 - Donner plus de paramètres au lancement de la partie (nombre de cartes, condition de victoire) (FAIT)
 - Affichage des statistiques de fin de partie (FAIT)
 - Timer de fin de partie (FAIT)
+- Réglage des paramètres utilisateur (sensibilité) (FAIT)
+- Couleur réticule de visée?
 - Ajouter des sons
 - Ajouter les maps finales
 - Équilibrage des statistiques de jeu

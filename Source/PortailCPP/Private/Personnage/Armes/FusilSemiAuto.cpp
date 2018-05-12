@@ -8,7 +8,7 @@ UFusilSemiAuto::UFusilSemiAuto()
 {}
 
 void UFusilSemiAuto::CommencerTir() {
-	FaireApparaitreProjectile(ETypeDeTir::Normal);
+	FaireApparaitreProjectile(ETypeDeTir::Normal, FRotator(0.f));
 }
 
 void UFusilSemiAuto::TerminerTir()

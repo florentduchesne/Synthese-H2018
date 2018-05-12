@@ -18,6 +18,7 @@
 #include "Armes/FusilSemiAuto.h"
 #include "Armes/FusilARafales.h"
 #include "Armes/FusilAuto.h"
+#include "Armes/FusilAPompe.h"
 
 //tous les components autres que les armes
 #include "Components/CapsuleComponent.h"
