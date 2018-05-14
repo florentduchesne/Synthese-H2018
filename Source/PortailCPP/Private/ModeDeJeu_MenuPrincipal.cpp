@@ -337,7 +337,6 @@ void AModeDeJeu_MenuPrincipal::DetruireTousLesJoueurs()
 	//va chercher tous les objets APersonnage
 	TArray<AActor*> FoundActors;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APlayerController::StaticClass(), FoundActors);
-	UE_LOG(LogTemp, Warning, TEXT("dans Detruire tous les joueurs"));
 	UE_LOG(LogTemp, Warning, TEXT("nb joueurs : %d"), FoundActors.Num());
 	for (AActor * Acteur : FoundActors)
 	{
@@ -371,8 +370,8 @@ void AModeDeJeu_MenuPrincipal::PlacerJoueurs()
 		}
 	}
 	//maintenant que les personnages sont paramétrés, on n'a plus besoin de la sensibilité
-	SensibiliteH.Empty();
-	SensibiliteV.Empty();
+	/*SensibiliteH.Empty();
+	SensibiliteV.Empty();*/
 }
 
 void AModeDeJeu_MenuPrincipal::FaireApparaitreJoueur(AActor * PointApparition, int NoJoueur)

@@ -28,20 +28,25 @@ AObjetAuSol::AObjetAuSol(float _DelaisAvantReapparition, FString CheminMesh, ETy
 
 	MeshSocle->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
+	FString cheminMateriauSocle;
+
 	//set materiau socle
-	if (CouleurSocle == ECouleurSocleEnum::Bleu)
+	switch (CouleurSocle)
 	{
-		const ConstructorHelpers::FObjectFinder<UMaterial> MateriauObj(TEXT("/Game/Niveaux/Appartement/Assets/Materials/HoloCone"));
-		MateriauSocle = (UMaterial*)MateriauObj.Object;
+	case ECouleurSocleEnum::Bleu:
+		cheminMateriauSocle = TEXT("/Game/Niveaux/Appartement/Assets/Materials/HoloCone_Bleu");
+		break;
+	case ECouleurSocleEnum::Vert:
+		cheminMateriauSocle = TEXT("/Game/Niveaux/Appartement/Assets/Materials/HoloCone_Vert");
+		break;
+	case ECouleurSocleEnum::Rouge:
+		cheminMateriauSocle = TEXT("/Game/Niveaux/Appartement/Assets/Materials/HoloCone_Rouge");
+		break;
 	}
-	else if (CouleurSocle == ECouleurSocleEnum::Vert)
+
+	if (cheminMateriauSocle.Len())
 	{
-		const ConstructorHelpers::FObjectFinder<UMaterial> MateriauObj(TEXT("/Game/Niveaux/Appartement/Assets/Materials/HoloCone"));
-		MateriauSocle = (UMaterial*)MateriauObj.Object;
-	}
-	else
-	{
-		const ConstructorHelpers::FObjectFinder<UMaterial> MateriauObj(TEXT("/Game/Niveaux/Appartement/Assets/Materials/HoloCone"));
+		const ConstructorHelpers::FObjectFinder<UMaterial> MateriauObj(*cheminMateriauSocle);
 		MateriauSocle = (UMaterial*)MateriauObj.Object;
 	}
 
@@ -70,6 +75,7 @@ AObjetAuSol::AObjetAuSol(float _DelaisAvantReapparition, FString CheminMesh, ETy
 		StaticMesh->SetupAttachment(RootComponent);
 		//StaticMesh->SetWorldScale3D(FVector(0.5f, 0.5f, 0.5f));
 		StaticMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		StaticMesh->SetMaterial(0, MateriauSocle);
 	}
 
 	OnActorBeginOverlap.AddDynamic(this, &AObjetAuSol::OnCollision);
