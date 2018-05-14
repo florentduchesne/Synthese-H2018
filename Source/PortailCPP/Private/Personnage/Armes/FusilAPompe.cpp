@@ -14,9 +14,9 @@ void UFusilAPompe::CommencerTir() {
 		float Angle1, Angle2, Angle3;
 		for (int i = 0; i < BallesParTir; i++)
 		{
-			Angle1 = FMath::FRandRange(-5.0f, 5.0f);
-			Angle2 = FMath::FRandRange(-5.0f, 5.0f);
-			Angle3 = FMath::FRandRange(-5.0f, 5.0f);
+			Angle1 = FMath::FRandRange(-3.0f, 3.0f);
+			Angle2 = FMath::FRandRange(-3.0f, 3.0f);
+			Angle3 = FMath::FRandRange(-3.0f, 3.0f);
 			FaireApparaitreProjectile(ETypeDeTir::Pompe, FRotator(Angle1, Angle2, Angle3));
 		}
 		FaireApparaitreProjectile(ETypeDeTir::Pompe, FRotator(0.0f));

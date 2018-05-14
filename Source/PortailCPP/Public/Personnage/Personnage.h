@@ -52,6 +52,7 @@ protected:
 	int PointsDeVie = 100;
 	int Armure = 0;
 
+	//0 à 3, équivaut à l'emplacement dans le tableau StatistiquesDuJoueur
 	int NoJoueur = -1;
 
 	AATH * ATH;

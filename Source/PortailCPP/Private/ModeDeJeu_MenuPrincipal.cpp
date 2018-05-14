@@ -181,7 +181,7 @@ void AModeDeJeu_MenuPrincipal::RelierNiveaux()
 
 void AModeDeJeu_MenuPrincipal::InitialiserCarte()
 {
-	//UE_LOG(LogTemp, Warning, TEXT("joueurs existants : %d"), NombreDeJoueursExistants());
+	UE_LOG(LogTemp, Warning, TEXT("joueurs existants : %d"), NombreDeJoueursExistants());
 	DetruireTousLesJoueurs();
 
 	if (NiveauxTousCharges())
@@ -189,7 +189,7 @@ void AModeDeJeu_MenuPrincipal::InitialiserCarte()
 		if (CompterPortails())
 		{
 			//UE_LOG(LogTemp, Warning, TEXT("joueurs existants2 : %d"), NombreDeJoueursExistants());
-			if (NombreDeJoueursExistants() == 1)
+			if (NombreDeJoueursExistants() <= 1)
 			{
 				//UE_LOG(LogTemp, Warning, TEXT("joueurs existants3 : %d"), NombreDeJoueursExistants());
 				//UE_LOG(LogTemp, Warning, TEXT("niveaux tous charges"));
@@ -331,37 +331,21 @@ int AModeDeJeu_MenuPrincipal::NombreDeJoueursExistants()
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APersonnage::StaticClass(), FoundActors);
 	return FoundActors.Num();
 }
-/*
-bool AModeDeJeu_MenuPrincipal::AttendreDetruireTousLesJoueurs()
-{
-	TArray<AActor*> FoundActors;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APersonnage::StaticClass(), FoundActors);
-	if (FoundActors.Num())
-	{
-		FTimerHandle TimerHandle;
-		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AModeDeJeu_MenuPrincipal::DetruireTousLesJoueurs, 0.1f, false);
-		return false;
-	}
-	else
-	{
-		return true;
-	}
-}*/
 
 void AModeDeJeu_MenuPrincipal::DetruireTousLesJoueurs()
 {
 	//va chercher tous les objets APersonnage
 	TArray<AActor*> FoundActors;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APersonnage::StaticClass(), FoundActors);
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APlayerController::StaticClass(), FoundActors);
+	UE_LOG(LogTemp, Warning, TEXT("dans Detruire tous les joueurs"));
+	UE_LOG(LogTemp, Warning, TEXT("nb joueurs : %d"), FoundActors.Num());
 	for (AActor * Acteur : FoundActors)
 	{
 		//supprime le joueur
-		APersonnage * Personnage = Cast<APersonnage>(Acteur);
-		APlayerController * Controleur = Cast<APlayerController>(Personnage->GetController());
+		APlayerController * Controleur = Cast<APlayerController>(Acteur);
 		UGameplayStatics::RemovePlayer(Controleur, true);
 		UE_LOG(LogTemp, Warning, TEXT("joueur detruit"));
 	}
-	PlacerUnUniqueJoueur();
 }
 
 void AModeDeJeu_MenuPrincipal::PlacerJoueurs()
