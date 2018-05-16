@@ -3,7 +3,7 @@
 #include "ArmureAuSol.h"
 
 AArmureAuSol::AArmureAuSol()
-	:AObjetAuSol(10.0f, "/Game/Objets/Meshes/ArmorHolo", ETypeDeMeshEnum::StaticMesh, ECouleurSocleEnum::Bleu, "/Game/Objets/Materiaux/Mat_Holo_Bleu")
+	:AObjetAuSol(10.0f, "/Game/Objets/Meshes/ArmorHolo", ETypeDeMeshEnum::StaticMesh, ECouleurObjetEnum::Bleu)
 {}
 
 bool AArmureAuSol::RamasseParUnJoueur(APersonnage * Personnage)

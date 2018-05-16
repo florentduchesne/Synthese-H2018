@@ -21,7 +21,7 @@ enum class ETypeDeMeshEnum : uint8
 };
 
 UENUM(BlueprintType)
-enum class ECouleurSocleEnum : uint8
+enum class ECouleurObjetEnum : uint8
 {
 	Bleu 	UMETA(DisplayName = "Bleu"),
 	Vert 	UMETA(DisplayName = "Vert"),
@@ -36,11 +36,13 @@ class PORTAILCPP_API AObjetAuSol : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AObjetAuSol();
-	AObjetAuSol(float _DelaisAvantReapparition, FString CheminMesh, ETypeDeMeshEnum TypeDeMesh, ECouleurSocleEnum CouleurSocle, FString CheminMateriauObjet);
+	AObjetAuSol(float _DelaisAvantReapparition, FString CheminMesh, ETypeDeMeshEnum TypeDeMesh, ECouleurObjetEnum CouleurSocle);
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	virtual void Tick(float DeltaTime) override;
 
 	//mesh de l'objet à ramasser
 	///DOIT ETRE UN USTATICMESH OU UN USKELETALMESH
@@ -48,9 +50,13 @@ protected:
 
 	UStaticMeshComponent * MeshSocle;
 
-	UMaterial * MateriauSocle;
+	UStaticMeshComponent * MeshCone;
 
 	USphereComponent * SphereCollisions;
+
+	bool bMonte = false;
+
+	void MonteDescend();
 
 	float DelaisAvantReapparition;
 
