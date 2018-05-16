@@ -6,6 +6,7 @@
 #include "Components/SphereComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include "Materials/MaterialInstanceConstant.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Materials/Material.h"
 #include "GameFramework/Actor.h"
@@ -35,7 +36,7 @@ class PORTAILCPP_API AObjetAuSol : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AObjetAuSol();
-	AObjetAuSol(float _DelaisAvantReapparition, FString CheminMesh, ETypeDeMeshEnum TypeDeMesh, ECouleurSocleEnum CouleurSocle);
+	AObjetAuSol(float _DelaisAvantReapparition, FString CheminMesh, ETypeDeMeshEnum TypeDeMesh, ECouleurSocleEnum CouleurSocle, FString CheminMateriauObjet);
 
 protected:
 	// Called when the game starts or when spawned

@@ -3,7 +3,7 @@
 #include "TrousseDeSoins.h"
 
 ATrousseDeSoins::ATrousseDeSoins()
-	:AObjetAuSol(10.0f, "/Game/Niveaux/Appartement/Assets/Meshes/HealthPackHolo", ETypeDeMeshEnum::StaticMesh, ECouleurSocleEnum::Vert)
+	:AObjetAuSol(10.0f, "/Game/Objets/Meshes/HealthPackHolo", ETypeDeMeshEnum::StaticMesh, ECouleurSocleEnum::Vert, "/Game/Objets/Materiaux/Mat_Holo_Vert")
 {}
 
 

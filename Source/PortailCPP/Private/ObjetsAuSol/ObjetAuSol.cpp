@@ -6,7 +6,7 @@
 // Sets default values
 AObjetAuSol::AObjetAuSol(){}
 
-AObjetAuSol::AObjetAuSol(float _DelaisAvantReapparition, FString CheminMesh, ETypeDeMeshEnum TypeDeMesh, ECouleurSocleEnum CouleurSocle)
+AObjetAuSol::AObjetAuSol(float _DelaisAvantReapparition, FString CheminMesh, ETypeDeMeshEnum TypeDeMesh, ECouleurSocleEnum CouleurSocle, FString CheminMateriauObjet)
 	:DelaisAvantReapparition{ _DelaisAvantReapparition }
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
@@ -20,7 +20,7 @@ AObjetAuSol::AObjetAuSol(float _DelaisAvantReapparition, FString CheminMesh, ETy
 
 	//set mesh socle
 	MeshSocle = CreateDefaultSubobject<UStaticMeshComponent>(FName("Socle"));
-	const ConstructorHelpers::FObjectFinder<UStaticMesh> MeshSocleObj((TEXT("%s"), *(FString("/Game/Niveaux/Appartement/Assets/Meshes/HoloCone"))));
+	const ConstructorHelpers::FObjectFinder<UStaticMesh> MeshSocleObj((TEXT("%s"), *(FString("/Game/Objets/Meshes/HoloCone"))));
 	MeshSocle->SetStaticMesh(MeshSocleObj.Object);
 
 	MeshSocle->SetupAttachment(RootComponent);
@@ -34,25 +34,23 @@ AObjetAuSol::AObjetAuSol(float _DelaisAvantReapparition, FString CheminMesh, ETy
 	switch (CouleurSocle)
 	{
 	case ECouleurSocleEnum::Bleu:
-		cheminMateriauSocle = TEXT("/Game/Niveaux/Appartement/Assets/Materials/HoloCone_Bleu");
+		cheminMateriauSocle = TEXT("/Game/Objets/Materiaux/HoloCone_Blue");
 		break;
 	case ECouleurSocleEnum::Vert:
-		cheminMateriauSocle = TEXT("/Game/Niveaux/Appartement/Assets/Materials/HoloCone_Vert");
+		cheminMateriauSocle = TEXT("/Game/Objets/Materiaux/HoloCone_Vert");
 		break;
 	case ECouleurSocleEnum::Rouge:
-		cheminMateriauSocle = TEXT("/Game/Niveaux/Appartement/Assets/Materials/HoloCone_Rouge");
+		cheminMateriauSocle = TEXT("/Game/Objets/Materiaux/HoloCone_Red");
 		break;
 	}
 
 	if (cheminMateriauSocle.Len())
 	{
-		const ConstructorHelpers::FObjectFinder<UMaterial> MateriauObj(*cheminMateriauSocle);
-		MateriauSocle = (UMaterial*)MateriauObj.Object;
-	}
-
-	if (MateriauSocle)
-	{
-		MeshSocle->SetMaterial(0, MateriauSocle);
+		UMaterialInstanceConstant * materiauPtr = ConstructorHelpers::FObjectFinderOptional<UMaterialInstanceConstant>(*cheminMateriauSocle).Get();
+		if (materiauPtr)
+		{
+			MeshSocle->SetMaterial(0, materiauPtr);
+		}
 	}
 
 	//set mesh objet flottant
@@ -65,6 +63,11 @@ AObjetAuSol::AObjetAuSol(float _DelaisAvantReapparition, FString CheminMesh, ETy
 		SkeletalMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		SkeletalMesh->SetupAttachment(RootComponent);
 		SkeletalMesh->SetRelativeLocation(FVector(0, 0, 50));
+		UMaterialInstanceConstant * materiauPtr = ConstructorHelpers::FObjectFinderOptional<UMaterialInstanceConstant>(*CheminMateriauObjet).Get();
+		if (materiauPtr)
+		{
+			SkeletalMesh->SetMaterial(0, materiauPtr);
+		}
 	}
 	else if (TypeDeMesh == ETypeDeMeshEnum::StaticMesh)
 	{
@@ -73,9 +76,15 @@ AObjetAuSol::AObjetAuSol(float _DelaisAvantReapparition, FString CheminMesh, ETy
 		UStaticMeshComponent * StaticMesh = Cast<UStaticMeshComponent>(Mesh);
 		StaticMesh->SetStaticMesh(MeshObj.Object);
 		StaticMesh->SetupAttachment(RootComponent);
-		//StaticMesh->SetWorldScale3D(FVector(0.5f, 0.5f, 0.5f));
 		StaticMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-		StaticMesh->SetMaterial(0, MateriauSocle);
+		if (CheminMateriauObjet.Len())
+		{
+		UMaterialInstanceConstant * materiauPtr = ConstructorHelpers::FObjectFinderOptional<UMaterialInstanceConstant>(*CheminMateriauObjet).Get();
+		if (materiauPtr)
+		{
+		StaticMesh->SetMaterial(0, materiauPtr);
+		}
+		}
 	}
 
 	OnActorBeginOverlap.AddDynamic(this, &AObjetAuSol::OnCollision);
