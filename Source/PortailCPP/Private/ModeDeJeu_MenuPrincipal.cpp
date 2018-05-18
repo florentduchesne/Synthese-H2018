@@ -62,6 +62,7 @@ void AModeDeJeu_MenuPrincipal::GenererCarte(int _NbJoueurs, int nb_pieces, int n
 	ListeCompleteNiveaux.Add(new InformationsNiveau(2, FName("SalleD"), 3));
 	ListeCompleteNiveaux.Add(new InformationsNiveau(4, FName("Appartement"), 4));
 	ListeCompleteNiveaux.Add(new InformationsNiveau(4, FName("Salle2"), 5));
+	ListeCompleteNiveaux.Add(new InformationsNiveau(4, FName("Chapelle"), 6));
 
 	if (NbNiveauxVoulus > ListeCompleteNiveaux.Num())
 	{

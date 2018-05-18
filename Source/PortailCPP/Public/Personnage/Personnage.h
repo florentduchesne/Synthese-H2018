@@ -12,6 +12,7 @@
 #include "TimerManager.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "UObject/UObjectGlobals.h"
+#include "Materials/MaterialInstanceConstant.h"
 
 //toutes les armes possibles
 #include "Armes/Arme.h"

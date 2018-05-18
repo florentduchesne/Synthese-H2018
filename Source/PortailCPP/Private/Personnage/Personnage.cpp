@@ -9,7 +9,7 @@ APersonnage::APersonnage()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	corps = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("MeshCorps"));
-	const ConstructorHelpers::FObjectFinder<USkeletalMesh> MeshObj(TEXT("/Engine/Tutorial/SubEditors/TutorialAssets/Character/TutorialTPP"));
+	const ConstructorHelpers::FObjectFinder<USkeletalMesh> MeshObj(TEXT("/Game/Personnage/Ch_Personnage"));
 	corps->SetSkeletalMeshWithoutResettingAnimation(MeshObj.Object);
 	
 	corps->SetRelativeLocation(FVector(0, 0, -100.0f));
@@ -66,6 +66,17 @@ void APersonnage::SetNoJoueur(int _NoJoueur)
 	NoJoueur = _NoJoueur;
 	arme->SetNoJoueur(NoJoueur);
 	UE_LOG(LogTemp, Warning, TEXT("no joueur : %d"), NoJoueur);
+
+	//va chercher le chemin du matériau (se termine obligatoirement par 1, 2, 3 ou 4)
+	FString CheminMateriau = FString("/Game/Personnage/MT_BodyPlayer");
+	CheminMateriau.AppendInt(NoJoueur + 1);
+
+	//set le matériau du corps
+	UMaterialInstanceConstant * materiauPtr = Cast<UMaterialInstanceConstant>(StaticLoadObject(UMaterialInstanceConstant::StaticClass(), nullptr, *CheminMateriau));
+	if (materiauPtr)
+	{
+		corps->SetMaterial(0, materiauPtr);
+	}
 }
 
 int APersonnage::GetNoJoueur()
@@ -114,12 +125,12 @@ void APersonnage::DeplacementLateral(float Value)
 
 void APersonnage::TournerHorizontalement(float Value)
 {
-	AddControllerYawInput(Value * GetWorld()->GetDeltaSeconds() * 25.0f * SensibiliteHorizontale);
+	AddControllerYawInput(Value * GetWorld()->GetDeltaSeconds() * 35.0f * SensibiliteHorizontale);
 }
 
 void APersonnage::TournerVerticalement(float Value)
 {
-	AddControllerPitchInput(Value * GetWorld()->GetDeltaSeconds() * 25.0f * SensibiliteVerticale);
+	AddControllerPitchInput(Value * GetWorld()->GetDeltaSeconds() * 35.0f * SensibiliteVerticale);
 }
 
 //géré par l'engine...
