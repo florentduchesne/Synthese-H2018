@@ -17,8 +17,6 @@ ARebond::ARebond()
 	FScriptDelegate Delegate;
 	Delegate.BindUFunction(this, "OnCollision");
 	OnActorHit.AddUnique(Delegate);
-
-	//StaticMesh'/Engine/BasicShapes/Cylinder.Cylinder'
 }
 
 // Called when the game starts or when spawned
@@ -31,7 +29,6 @@ void ARebond::BeginPlay()
 void ARebond::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 void ARebond::OnCollision(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit)
