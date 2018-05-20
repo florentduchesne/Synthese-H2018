@@ -26,7 +26,11 @@ Liste des éléments du jeu :
 - Affichage des statistiques de fin de partie (FAIT)
 - Timer de fin de partie (FAIT)
 - Réglage des paramètres utilisateur (sensibilité) (FAIT)
-- Couleur réticule de visée?
+- Colorier les niveaux (FAIT)
+- Voir à travers les portails (FAIT)
 - Ajouter des sons
-- Ajouter les maps finales
 - Équilibrage des statistiques de jeu
+
+# Setup
+
+Programmation faite entièrement sur Unreal Engine 4.18 et Visual Studio 2017. Requiert DirectX11 pour faire fonctionner la version exécutable du jeu.
