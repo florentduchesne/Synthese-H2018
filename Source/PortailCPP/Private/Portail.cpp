@@ -2,6 +2,7 @@
 
 #include "Portail.h"
 
+int32 APortail::NbPortails = 0;
 
 // Sets default values
 APortail::APortail()
@@ -31,11 +32,10 @@ APortail::APortail()
 
 	Capture = CreateDefaultSubobject<USceneCaptureComponent2D>(TEXT("Capture"));
 	Capture->SetupAttachment(RootComponent);
-	//Capture->SetWorldLocation(FVector(0));
 	Capture->AddLocalRotation(FRotator(0.0f, 180.0f, 0.0f));
-	//Capture->AddLocalOffset(FVector(500.0f, 0, 5000.0f));
-	Capture->AddRelativeLocation(FVector(0.0f, 0.0f, 200.0f));
-	Capture->bCaptureEveryFrame = true;
+	Capture->AddRelativeLocation(FVector(0.0f, 0.0f, 150.0f));
+	//on update manuellement le SceneCapture2D pour réduire la charge de calcul. Seulement un portail par tick. La fréquence de mise à jour dépend donc du nombre de portails dans le monde.
+	Capture->bCaptureEveryFrame = false;
 	Capture->UpdateContent();
 	Capture->TextureTarget = nullptr;
 
@@ -49,10 +49,6 @@ APortail::APortail()
 	{
 		MateriauPortail = PortalMaterialObj.Object;
 	}
-
-	//NewObject<UTexture2D>(this, TEXT("/Engine/EngineResources/DefaultTexture"));
-
-	//MateriauDynamique = NewObject<UMaterialInstanceDynamic>(this, FName("MateriauDynamique"));
 
 	OnActorBeginOverlap.AddDynamic(this, &APortail::OnTeleportation);
 }
@@ -90,14 +86,8 @@ void APortail::OnTeleportation(AActor* overlappedActor, AActor* otherActor)
 			//on enlève la physique que le joueur pouvait avoir au moment de la téléportation (si il sautait, par exemple)
 			Personnage->GetCharacterMovement()->StopMovementImmediately();
 
-			//FVector Direction = autrePortail->GetActorForwardVector();//FRotationMatrix(autrePortail->GetActorRotation()).GetScaledAxis(EAxis::X);
-			//Personnage->GetCharacterMovement()->AddForce((Direction * 150000000) + FVector(0, 0, 10000000));
-
 			//on appelle une fonction qui lui redonne le droit de se teleporter dans une seconde
 			Personnage->DebloquerTeleportationFutur();
-		}
-		else {
-			UE_LOG(LogTemp, Warning, TEXT("erreur portail deconnecte"));
 		}
 	}	
 }
@@ -108,64 +98,31 @@ void APortail::connecterDeuxPortails(APortail * portail)
 	if (!autrePortail->estConnecte())
 		autrePortail->connecterDeuxPortails(this);
 
-	UE_LOG(LogTemp, Warning, TEXT("deux portails connectes"));
-	/*
-	TextureRenderTarget = NewObject<UTextureRenderTarget2D>(this, UTextureRenderTarget2D::StaticClass());
-	TextureRenderTarget->InitAutoFormat(512, 512);
-	TextureRenderTarget->UpdateResourceImmediate();*/
-
-	//Capture->TextureTarget = TextureRenderTarget;
+	ID = NbPortails;
+	NbPortails++;
 
 	autrePortail->Capture->TextureTarget = TextureRenderTarget;
 	autrePortail->Capture->UpdateContent();
 	MateriauDynamique = panneau->CreateAndSetMaterialInstanceDynamicFromMaterial(0, MateriauPortail);
 	MateriauDynamique->SetTextureParameterValue(TEXT("TexturePrincipale"), TextureRenderTarget);
-
-	/*
-	if (MateriauDynamique)
-	{
-		if (TextureRenderTarget)
-		{
-			//MateriauDynamique->SetTextureParameterValue(FName("TexturePrincipale"), TextureRenderTarget);
-			//change la couleur pour du noir (RGB)
-			//meshCompMat->SetVectorParameterValue(FName("Color"), FLinearColor(0.0f, 0.0f, 0.0f));
-			//panneau->SetMaterial(0, MateriauDynamique);
-		}
-	}*/
-}
-
-void APortail::SetMateriauPanneau(UMaterialInstanceDynamic * MateriauDynamique)
-{
-	//panneau->SetMaterial(0, MateriauDynamique);
 }
 
 // Called every frame
 void APortail::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	/*attente--;
-	if (!attente)
+	if (NbPortails)
 	{
-		if (TextureRenderTarget)
+		if (!attente)
 		{
-			if (MateriauDynamique)
-			{
-				//MateriauDynamique->SetTextureParameterValue(FName("Emissive Color"), TextureRenderTarget);
-				//MateriauDynamique->SetVectorParameterValue(FName("Color"), FLinearColor(0.0f, 0.0f, 0.0f));
-				MateriauDynamique->SetTextureParameterValue(FName("TexturePrincipale"), TextureRenderTarget);
-				if (autrePortail)
-				{
-					UE_LOG(LogTemp, Warning, TEXT("set texture"));
-					autrePortail->SetMateriauPanneau(MateriauDynamique);
-				}
-			}
+			attente = NbPortails;
 		}
-		attente = 3;
+		if (attente == ID)
+		{
+			Capture->UpdateContent();
+		}
+		attente--;
 	}
-	if (attente == 3)
-	{
-		Capture->UpdateContent();
-	}*/
 }
 
 bool APortail::estConnecte()

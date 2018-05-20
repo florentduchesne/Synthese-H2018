@@ -42,7 +42,11 @@ protected:
 	UFUNCTION()
 	void OnTeleportation(AActor* overlappedActor, AActor* otherActor);
 
-	int attente = 3;
+	int32 attente = 3;
+
+	int32 ID = 0;
+	//commence à 0, augmente à chaque appel de "connecterDeuxPortails"
+	static int32 NbPortails;
 
 	UTexture2D * textureTempo;
 	UMaterial* MateriauPortail;
@@ -58,8 +62,5 @@ public:
 	USceneCaptureComponent2D * Capture;
 	UMaterialInstanceDynamic * MateriauDynamique;
 
-	void SetMateriauPanneau(UMaterialInstanceDynamic * MateriauDynamique);
-
 	void connecterDeuxPortails(APortail * portail);
-	
 };
