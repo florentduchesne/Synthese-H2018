@@ -399,6 +399,7 @@ void AModeDeJeu_MenuPrincipal::FaireApparaitreJoueur(AActor * PointApparition, i
 			Personnage->SetATH(Controleur->GetHUD());
 			Personnage->SetSensibilite(SensibiliteH[NoJoueur], SensibiliteV[NoJoueur]);
 			Personnage->SetActorLocation(PointApparition->GetActorLocation());
+			Personnage->ChangerArme(UFusilSemiAuto::StaticClass());
 		}
 	}
 }
@@ -413,6 +414,7 @@ void AModeDeJeu_MenuPrincipal::AttendreQueJoueurCharge(APlayerController * Contr
 		Personnage->SetSensibilite(SensibiliteH[NoJoueur], SensibiliteV[NoJoueur]);
 		Personnage->SetATH(Controleur->GetHUD());
 		Personnage->SetActorLocation(PointApparition->GetActorLocation());
+		Personnage->ChangerArme(UFusilSemiAuto::StaticClass());
 	}
 	else
 	{

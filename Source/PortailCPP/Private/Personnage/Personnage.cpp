@@ -31,12 +31,13 @@ APersonnage::APersonnage()
 	// Permet au personnage de controler la rotation de la camera
 	camera->bUsePawnControlRotation = true;
 
-	arme = CreateDefaultSubobject<UFusilSemiAuto>(TEXT("Arme"));
-
+	/*arme = CreateDefaultSubobject<UFusilSemiAuto>(TEXT("Arme"));
+	arme->AttachToComponent(camera, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 	arme->SetupAttachment(camera);
-	//arme->getMesh()->SetupAttachment(camera);
-	arme->getMesh()->SetRelativeLocation(FVector(50.0f, 35.0f, -20.0f));
-	arme->getMesh()->SetRelativeRotation(FRotator(0.0f, -90.0f, 0.0f));
+	arme->RegisterComponent();
+	arme->Attacher(camera);
+	arme->SetRelativeLocation(FVector(50.0f, 35.0f, -20.0f));
+	*/
 	
 	//on change es statistiques de déplacement du personnage
 	GetCharacterMovement()->MaxWalkSpeed = 1500;
@@ -61,7 +62,6 @@ void APersonnage::Tick(float DeltaTime)
 void APersonnage::SetNoJoueur(int _NoJoueur)
 {
 	NoJoueur = _NoJoueur;
-	arme->SetNoJoueur(NoJoueur);
 	UE_LOG(LogTemp, Warning, TEXT("no joueur : %d"), NoJoueur);
 
 	//va chercher le chemin du matériau (se termine obligatoirement par 1, 2, 3 ou 4)
@@ -251,18 +251,24 @@ void APersonnage::ReinitialiserStatistiques()
 
 bool APersonnage::ChangerArme(TSubclassOf<UArme> SousClasseDeArme)
 {
-	arme->DetruireArme();
-	arme->DestroyComponent();
-	
 	if (!SousClasseDeArme)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("ERREUR, pas de sous classe d arme!!!"));
 		return false;
 	}
-	if (SousClasseDeArme == arme->StaticClass())
+	if (arme)
 	{
-		return false;
+		if (SousClasseDeArme == arme->GetClass())
+		{
+			UE_LOG(LogTemp, Warning, TEXT("meme arme!"));
+			return false;
+		}
+		UE_LOG(LogTemp, Warning, TEXT("detruire arme"));
+		arme->DetruireArme();
+		arme->UnregisterComponent();
+		arme->DestroyComponent();
 	}
+	arme = nullptr;
 	
 	if (SousClasseDeArme == UFusilSemiAuto::StaticClass())
 	{
@@ -286,28 +292,43 @@ bool APersonnage::ChangerArme(TSubclassOf<UArme> SousClasseDeArme)
 	}
 	UE_LOG(LogTemp, Warning, TEXT("nom arme : %s"), *arme->GetName());
 
-	arme->SetupAttachment(camera);
+	arme->RegisterComponent(); 
+	/*arme->SetWorldLocation(Location);
+	arme->SetWorldRotation(Rotation);
+	*/
+	//arme->AttachTo(GetRootComponent(), SocketName, EAttachLocation::KeepWorldPosition);
+
+	
+	UE_LOG(LogTemp, Warning, TEXT("attacher arme"));
+	/*arme->AttachToComponent(camera, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+	arme->SetRelativeLocation(FVector(50.0f, 35.0f, -20.0f));
+	*/
 	arme->Attacher(camera);
-	arme->getMesh()->SetRelativeLocation(FVector(50.0f, 35.0f, -20.0f));
-	arme->getMesh()->SetRelativeRotation(FRotator(0.0f, -90.0f, 0.0f));
-	
+	arme->SetRelativeLocation(FVector(50.0f, 35.0f, -20.0f));
 	arme->SetNoJoueur(GetNoJoueur());
-	arme->RegisterComponent();
 	
-	ATH->MiseAJourBallesMax(arme->GetBallesMax());
-	ATH->MiseAJourBallesDansChargeur(arme->GetBallesDansChargeur());
-	
+	if (ATH)
+	{
+		ATH->MiseAJourBallesMax(arme->GetBallesMax());
+		ATH->MiseAJourBallesDansChargeur(arme->GetBallesDansChargeur());
+	}
 	return true;
 }
 
 void APersonnage::CommencerTir()
 {
-	arme->CommencerTirSuper();
+	if(arme)
+		arme->CommencerTirSuper();
+	else
+		UE_LOG(LogTemp, Warning, TEXT("pas arme"));
 }
 
 void APersonnage::TerminerTir()
 {
-	arme->TerminerTirSuper();
+	if(arme)
+		arme->TerminerTirSuper();
+	else
+		UE_LOG(LogTemp, Warning, TEXT("pas arme"));
 }
 
 void APersonnage::TirSecondaire()
@@ -329,8 +350,8 @@ void APersonnage::SetSensibilite(float sensiHorizontale, float sensiVerticale)
 void APersonnage::SetATH(AHUD * HUD)
 {
 	ATH = Cast<AATH>(HUD);
-	ATH->MiseAJourBallesMax(arme->GetBallesMax());
-	ATH->MiseAJourBallesDansChargeur(arme->GetBallesDansChargeur());
+	//ATH->MiseAJourBallesMax(arme->GetBallesMax());
+	//ATH->MiseAJourBallesDansChargeur(arme->GetBallesDansChargeur());
 }
 
 void APersonnage::MiseAJourNbMeurtresATH(int Meurtres)
