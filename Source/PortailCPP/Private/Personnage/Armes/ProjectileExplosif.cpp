@@ -6,6 +6,23 @@
 AProjectileExplosif::AProjectileExplosif() {
 	static ConstructorHelpers::FObjectFinder<UParticleSystem> EffetExplosion(TEXT("ParticleSystem'/Game/Effets/Explosion/Effects/ParticleSystems/Weapons/RocketLauncher/Impact/P_Launcher_IH.P_Launcher_IH'"));
 	ParticuleSysteme = EffetExplosion.Object;
+
+	//son
+	static ConstructorHelpers::FObjectFinder<USoundCue> Signal(TEXT("SoundCue'/Game/Personnage/Armes/Sons/Explosion_TirSecondaire.Explosion_TirSecondaire'"));
+	SignalSonExplosion = Signal.Object;
+
+	SonExplosion = CreateDefaultSubobject<UAudioComponent>(TEXT("SonExplosion"));
+	SonExplosion->bAutoActivate = false;
+	SonExplosion->SetupAttachment(RootComponent);
+}
+
+void AProjectileExplosif::BeginPlay()
+{
+	Super::BeginPlay();
+	if (SonExplosion->IsValidLowLevelFast())
+	{
+		SonExplosion->SetSound(SignalSonExplosion);
+	}
 }
 
 void AProjectileExplosif::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
@@ -34,6 +51,7 @@ void AProjectileExplosif::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor
 		}
 	}
 
+
 	SphereCollision->OnComponentBeginOverlap.AddDynamic(this, &AProjectileExplosif::DebutCollisionExplosion);
 
 	CollisionComp->OnComponentHit.RemoveDynamic(this, &AProjectile::OnHit);
@@ -41,8 +59,12 @@ void AProjectileExplosif::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor
 	//FX
 	UGameplayStatics::SpawnEmitterAtLocation(this, ParticuleSysteme, GetActorLocation(), GetActorRotation(), true);
 
+	//Son
+	SonExplosion->bStopWhenOwnerDestroyed = false;
+	SonExplosion->Play(0.8f);
+
 	FTimerHandle TimerHandle;
-	GetOuter()->GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AProjectileExplosif::Detruire, 0.5, false);
+	GetOuter()->GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AProjectileExplosif::Detruire, 0.5f, false);
 }
 
 void AProjectileExplosif::DebutCollisionExplosion(class UPrimitiveComponent* HitComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)

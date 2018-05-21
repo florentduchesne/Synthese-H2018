@@ -11,6 +11,7 @@ UFusilAPompe::UFusilAPompe()
 void UFusilAPompe::CommencerTir() {
 	if (!bTirACommence)
 	{
+		SonTir->Play();
 		float Angle1, Angle2, Angle3;
 		for (int i = 0; i < BallesParTir; i++)
 		{

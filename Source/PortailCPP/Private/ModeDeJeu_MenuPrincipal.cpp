@@ -500,7 +500,8 @@ void AModeDeJeu_MenuPrincipal::JoueurEnTueUnAutre(int IndexJoueurTueur, int Inde
 		PartieTerminee(IndexJoueurTueur);
 	}
 	//sinon faire réapparaître le joueur mort
-	else {
+	else if (StatsJoueurs[IndexJoueurTueur]->NbMeurtres < NbMeutresRequisPourVictoire)
+	{
 		ReapparitionJoueur(IndexJoueurMort);
 	}
 }

@@ -10,6 +10,8 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include "Projectile.h"
 #include "ProjectileExplosif.h"
+#include "Components/AudioComponent.h"
+#include "Sound/SoundCue.h"
 #include "Arme.generated.h"
 
 UENUM(BlueprintType)
@@ -84,6 +86,9 @@ protected:
 	bool ADesBallesDansChargeur();
 
 	void MiseAJourATHJoueur();
+
+	UAudioComponent * SonTir;
+	USoundCue * SignalSonTir;
 
 public:
 	USkeletalMeshComponent * getMesh();

@@ -12,6 +12,8 @@
 #include "Particles/ParticleSystem.h"
 #include "Particles/ParticleSystemComponent.h"
 #include "Effets/EffetExplosion.h"
+#include "Components/AudioComponent.h"
+#include "Sound/SoundCue.h"
 #include "Projectile.h"
 #include "ProjectileExplosif.generated.h"
 
@@ -43,4 +45,9 @@ private:
 	void DebutCollisionExplosion(class UPrimitiveComponent* HitComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
 
 	void Detruire();
+
+	UAudioComponent * SonExplosion;
+	USoundCue * SignalSonExplosion;
+
+	virtual void BeginPlay() override;
 };

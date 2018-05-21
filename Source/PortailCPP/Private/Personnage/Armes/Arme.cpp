@@ -22,12 +22,24 @@ UArme::UArme(const int _TailleChargeur, float _TempsRecharge, float _DelaiEntreC
 	}
 
 	MunitionsDansChargeur = TailleChargeur;
+
+	static ConstructorHelpers::FObjectFinder<USoundCue> SignalTir(TEXT("SoundCue'/Game/Personnage/Armes/Sons/Tir_SemiAuto.Tir_SemiAuto'"));
+	SignalSonTir = SignalTir.Object;
+
+	SonTir = CreateDefaultSubobject<UAudioComponent>(TEXT("SonTir"));
+	SonTir->bAutoActivate = false;
+	SonTir->SetupAttachment(mesh);
+
 }
 
 // Called when the game starts
 void UArme::BeginPlay()
 {
 	Super::BeginPlay();
+	if (SonTir->IsValidLowLevelFast())
+	{
+		SonTir->SetSound(SignalSonTir);
+	}
 }
 
 USkeletalMeshComponent * UArme::getMesh()

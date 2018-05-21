@@ -13,7 +13,7 @@ AObjetAuSol::AObjetAuSol(float _DelaisAvantReapparition, FString CheminMesh, ETy
 	PrimaryActorTick.bStartWithTickEnabled = true;
 
 	SphereCollisions = CreateDefaultSubobject<USphereComponent>(FName("SphereCollisions"));
-	SphereCollisions->InitSphereRadius(50.0f);
+	SphereCollisions->InitSphereRadius(70.0f);
 	SphereCollisions->SetRelativeLocation(FVector(0, 0, 65));
 	SphereCollisions->SetCollisionProfileName(FName("ObjetAuSol"));
 	RootComponent = SphereCollisions;

@@ -8,6 +8,7 @@ UFusilSemiAuto::UFusilSemiAuto()
 {}
 
 void UFusilSemiAuto::CommencerTir() {
+	SonTir->Play();
 	FaireApparaitreProjectile(ETypeDeTir::Normal, FRotator(0.f));
 }
 

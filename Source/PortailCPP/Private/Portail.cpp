@@ -22,14 +22,14 @@ APortail::APortail()
 	panneau->SetCollisionProfileName(TEXT("OverlapOnlyPawn"));
 	cadre->SetCollisionProfileName(TEXT("OverlapOnlyPawn"));
 
-	FVector position = cadre->GetComponentLocation();
+	/*FVector position = cadre->GetComponentLocation();
 	position.Z += 120.0f;
 	FRotator rotation = cadre->GetComponentRotation();
 	rotation.Yaw += 90.0f;
 	rotation.Roll += 90.0f;
 
 	panneau->SetRelativeLocationAndRotation(position, rotation);
-
+	*/
 	Capture = CreateDefaultSubobject<USceneCaptureComponent2D>(TEXT("Capture"));
 	Capture->SetupAttachment(RootComponent);
 	Capture->AddLocalRotation(FRotator(0.0f, 180.0f, 0.0f));
@@ -40,7 +40,7 @@ APortail::APortail()
 	Capture->TextureTarget = nullptr;
 
 	TextureRenderTarget = CreateDefaultSubobject<UTextureRenderTarget2D>(TEXT("PortalRenderTarget"));
-	TextureRenderTarget->InitAutoFormat(300, 240);
+	TextureRenderTarget->InitAutoFormat(900, 720);
 	TextureRenderTarget->AddressX = TextureAddress::TA_Wrap;
 	TextureRenderTarget->AddressY = TextureAddress::TA_Wrap;
 
