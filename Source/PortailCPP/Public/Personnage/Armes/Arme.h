@@ -114,4 +114,6 @@ public:
 
 	int GetBallesDansChargeur() { return MunitionsDansChargeur; }
 	int GetBallesMax() { return TailleChargeur; }
+
+	static int ID;
 };

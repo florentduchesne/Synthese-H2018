@@ -3,6 +3,8 @@
 #include "Arme.h"
 #include "PortailCPP/Public/Personnage/Personnage.h"
 
+int UArme::ID = 0;
+
 // Sets default values for this component's properties
 UArme::UArme()
 {}
@@ -11,13 +13,15 @@ UArme::UArme(const int _TailleChargeur, float _TempsRecharge, float _DelaiEntreC
 	:TailleChargeur( _TailleChargeur ), TempsRecharge(_TempsRecharge), DelaiEntreChaqueTir(_DelaiEntreChaqueTir), Degats(Degats), VitesseProjectiles(VitesseProjectiles), CheminMesh{_CheminMesh}
 {
 	PrimaryComponentTick.bCanEverTick = false;
-	
-	mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("MeshArme"));
+
+	FString nomMesh = FString("MeshArme");
+	nomMesh.AppendInt(ID);
+	ID++;
+	mesh = CreateDefaultSubobject<USkeletalMeshComponent>(*nomMesh);
 	const ConstructorHelpers::FObjectFinder<USkeletalMesh> MeshObj((TEXT("%s"), *CheminMesh));
 	mesh->SetSkeletalMeshWithoutResettingAnimation(MeshObj.Object);
 
-	//mesh->SetupAttachment(this);
-	mesh->AttachToComponent(this, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+	mesh->RegisterComponent();
 
 	if (!DelaiEntreChaqueTir)
 	{
@@ -117,9 +121,9 @@ void UArme::FaireApparaitreProjectile(ETypeDeTir TypeDeTir, FRotator Deviation)
 	UWorld* const World = GetWorld();
 	if (World != NULL)
 	{
-		const FRotator SpawnRotation = this->GetComponentRotation() + Deviation;
+		const FRotator SpawnRotation = GetComponentRotation() + Deviation;
 		// place la balle au bon endroit par rapport au personnage et à son orientation
-		const FVector SpawnLocation = this->GetComponentLocation() + SpawnRotation.RotateVector(FVector(100.0f, 25.0f, 0.0f));
+		const FVector SpawnLocation = GetComponentLocation() + FVector(0.f, 0.f, 10.f);// +SpawnRotation.RotateVector(FVector(90.0f, 20.0f, 0.0f));
 
 		//initialise les collisions pour la balle
 		FActorSpawnParameters ActorSpawnParams;
@@ -181,12 +185,14 @@ void UArme::MiseAJourATHJoueur()
 
 void UArme::DetruireArme()
 {
-	mesh->UnregisterComponent();
+	//mesh->UnregisterComponent();
 	mesh->DestroyComponent();
 }
 
 void UArme::Attacher(USceneComponent * Objet)
 {
-	mesh->RegisterComponent();
-	//mesh->AttachTo(Objet);
+	//SetupAttachment(Objet);
+	AttachToComponent(Objet, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+	mesh->AttachToComponent(this, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+	mesh->SetRelativeRotation(FRotator(0, -90.0f, 0));
 }
