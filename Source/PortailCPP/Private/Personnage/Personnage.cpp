@@ -34,7 +34,7 @@ APersonnage::APersonnage()
 	arme = CreateDefaultSubobject<UFusilSemiAuto>(TEXT("Arme"));
 
 	arme->SetupAttachment(camera);
-	arme->getMesh()->SetupAttachment(camera);
+	//arme->getMesh()->SetupAttachment(camera);
 	arme->getMesh()->SetRelativeLocation(FVector(50.0f, 35.0f, -20.0f));
 	arme->getMesh()->SetRelativeRotation(FRotator(0.0f, -90.0f, 0.0f));
 	

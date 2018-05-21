@@ -34,9 +34,13 @@ protected:
 		class UStaticMeshComponent * panneau;*/
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Portail mesh")
 	UStaticMeshComponent * cadre;
+	//le panneau sur lequel on affiche ce que "voit" l'autre portail
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Portail mesh")
 	UStaticMeshComponent * panneau;
-
+	//panneau en partie transparent, ajoute un effet d'hologramme
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Portail mesh")
+	UStaticMeshComponent * panneau2;
+	
 	UTextureRenderTarget2D * TextureRenderTarget;
 
 	UFUNCTION()

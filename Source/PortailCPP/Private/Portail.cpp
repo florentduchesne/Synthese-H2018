@@ -22,14 +22,22 @@ APortail::APortail()
 	panneau->SetCollisionProfileName(TEXT("OverlapOnlyPawn"));
 	cadre->SetCollisionProfileName(TEXT("OverlapOnlyPawn"));
 
-	/*FVector position = cadre->GetComponentLocation();
-	position.Z += 120.0f;
-	FRotator rotation = cadre->GetComponentRotation();
-	rotation.Yaw += 90.0f;
-	rotation.Roll += 90.0f;
+	panneau2 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshPanneauHolo"));
+	panneau2->SetStaticMesh(MeshObj2.Object);
+	panneau2->SetupAttachment(cadre);
+	panneau2->SetCollisionProfileName(TEXT("IgnoreAll"));
 
-	panneau->SetRelativeLocationAndRotation(position, rotation);
-	*/
+	FString CheminMateriau = FString("/Game/Geometry/Meshes/Mat_PortalINST");
+
+	//set le matériau du corps
+	UMaterialInstanceConstant * materiauPtr = Cast<UMaterialInstanceConstant>(StaticLoadObject(UMaterialInstanceConstant::StaticClass(), nullptr, *CheminMateriau));
+	if (materiauPtr)
+	{
+		panneau2->SetMaterial(0, materiauPtr);
+	}
+
+	panneau2->SetRelativeLocation(FVector(-5.f, 0.f, 0.f));
+
 	Capture = CreateDefaultSubobject<USceneCaptureComponent2D>(TEXT("Capture"));
 	Capture->SetupAttachment(RootComponent);
 	Capture->AddLocalRotation(FRotator(0.0f, 180.0f, 0.0f));

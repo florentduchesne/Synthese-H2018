@@ -15,8 +15,9 @@ UArme::UArme(const int _TailleChargeur, float _TempsRecharge, float _DelaiEntreC
 	mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("MeshArme"));
 	const ConstructorHelpers::FObjectFinder<USkeletalMesh> MeshObj((TEXT("%s"), *CheminMesh));
 	mesh->SetSkeletalMeshWithoutResettingAnimation(MeshObj.Object);
-	mesh->SetupAttachment(this);
-	UE_LOG(LogTemp, Warning, TEXT("mesh cree"));
+
+	//mesh->SetupAttachment(this);
+	mesh->AttachToComponent(this, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 
 	if (!DelaiEntreChaqueTir)
 	{
