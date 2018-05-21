@@ -7,14 +7,16 @@
 UArme::UArme()
 {}
 
-UArme::UArme(const int _TailleChargeur, float _TempsRecharge, float _DelaiEntreChaqueTir, int Degats, int VitesseProjectiles, FString CheminMesh)
-	:TailleChargeur( _TailleChargeur ), TempsRecharge(_TempsRecharge), DelaiEntreChaqueTir(_DelaiEntreChaqueTir), Degats(Degats), VitesseProjectiles(VitesseProjectiles)
+UArme::UArme(const int _TailleChargeur, float _TempsRecharge, float _DelaiEntreChaqueTir, int Degats, int VitesseProjectiles, FString _CheminMesh)
+	:TailleChargeur( _TailleChargeur ), TempsRecharge(_TempsRecharge), DelaiEntreChaqueTir(_DelaiEntreChaqueTir), Degats(Degats), VitesseProjectiles(VitesseProjectiles), CheminMesh{_CheminMesh}
 {
 	PrimaryComponentTick.bCanEverTick = false;
 	
 	mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("MeshArme"));
 	const ConstructorHelpers::FObjectFinder<USkeletalMesh> MeshObj((TEXT("%s"), *CheminMesh));
 	mesh->SetSkeletalMeshWithoutResettingAnimation(MeshObj.Object);
+	mesh->SetupAttachment(this);
+	UE_LOG(LogTemp, Warning, TEXT("mesh cree"));
 
 	if (!DelaiEntreChaqueTir)
 	{
@@ -29,7 +31,6 @@ UArme::UArme(const int _TailleChargeur, float _TempsRecharge, float _DelaiEntreC
 	SonTir = CreateDefaultSubobject<UAudioComponent>(TEXT("SonTir"));
 	SonTir->bAutoActivate = false;
 	SonTir->SetupAttachment(mesh);
-
 }
 
 // Called when the game starts
@@ -175,4 +176,16 @@ void UArme::MiseAJourATHJoueur()
 	{
 		Personnage->MiseAJourBallesDansChargeur(MunitionsDansChargeur);
 	}
+}
+
+void UArme::DetruireArme()
+{
+	mesh->UnregisterComponent();
+	mesh->DestroyComponent();
+}
+
+void UArme::Attacher(USceneComponent * Objet)
+{
+	mesh->RegisterComponent();
+	//mesh->AttachTo(Objet);
 }

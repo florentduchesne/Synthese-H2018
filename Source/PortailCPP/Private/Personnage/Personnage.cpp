@@ -34,11 +34,8 @@ APersonnage::APersonnage()
 	arme = CreateDefaultSubobject<UFusilSemiAuto>(TEXT("Arme"));
 
 	arme->SetupAttachment(camera);
-
 	arme->getMesh()->SetupAttachment(camera);
-
 	arme->getMesh()->SetRelativeLocation(FVector(50.0f, 35.0f, -20.0f));
-
 	arme->getMesh()->SetRelativeRotation(FRotator(0.0f, -90.0f, 0.0f));
 	
 	//on change es statistiques de déplacement du personnage
@@ -254,11 +251,19 @@ void APersonnage::ReinitialiserStatistiques()
 
 bool APersonnage::ChangerArme(TSubclassOf<UArme> SousClasseDeArme)
 {
+	arme->DetruireArme();
+	arme->DestroyComponent();
+	
+	if (!SousClasseDeArme)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("ERREUR, pas de sous classe d arme!!!"));
+		return false;
+	}
 	if (SousClasseDeArme == arme->StaticClass())
 	{
 		return false;
 	}
-	arme->DestroyComponent();
+	
 	if (SousClasseDeArme == UFusilSemiAuto::StaticClass())
 	{
 		UE_LOG(LogTemp, Warning, TEXT("semi auto"));
@@ -279,20 +284,19 @@ bool APersonnage::ChangerArme(TSubclassOf<UArme> SousClasseDeArme)
 		UE_LOG(LogTemp, Warning, TEXT("pompe"));
 		arme = NewObject<UFusilAPompe>(this, FName("FusilAPompe"));
 	}
-	//UE_LOG(LogTemp, Warning, TEXT("classe arme : %s"), *SousClasseDeArme);
 	UE_LOG(LogTemp, Warning, TEXT("nom arme : %s"), *arme->GetName());
-	UE_LOG(LogTemp, Warning, TEXT("nom arme mesh : %s"), *arme->getMesh()->GetName());
 
 	arme->SetupAttachment(camera);
-	arme->getMesh()->SetupAttachment(camera);
+	arme->Attacher(camera);
 	arme->getMesh()->SetRelativeLocation(FVector(50.0f, 35.0f, -20.0f));
 	arme->getMesh()->SetRelativeRotation(FRotator(0.0f, -90.0f, 0.0f));
+	
 	arme->SetNoJoueur(GetNoJoueur());
 	arme->RegisterComponent();
-
+	
 	ATH->MiseAJourBallesMax(arme->GetBallesMax());
 	ATH->MiseAJourBallesDansChargeur(arme->GetBallesDansChargeur());
-
+	
 	return true;
 }
 

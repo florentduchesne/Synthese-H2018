@@ -80,7 +80,6 @@ void AModeDeJeu_MenuPrincipal::GenererCarte(int _NbJoueurs, int nb_pieces, int n
 	}
 	//on demande au gestionnaire de niveaux de charger tous les niveaux
 	ChargerLesNiveaux();
-	//FPlatformProcess::Sleep(5.f);
 	//on sélectionne quels niveaux seront reliés avec quels autres
 	RelierNiveaux();
 	//quand tous les niveaux ont terminé de charger, on connecte les portails, place les joueurs et démarre la partie
@@ -208,7 +207,10 @@ void AModeDeJeu_MenuPrincipal::InitialiserCarte()
 				PlacerJoueurs();
 
 				//on affiche le widget qui contient le timer
-				ChangeMenuWidget(WidgetEnPartie);
+				if (NbJoueurs > 1)
+				{
+					ChangeMenuWidget(WidgetEnPartie);
+				}
 			}
 			else
 			{

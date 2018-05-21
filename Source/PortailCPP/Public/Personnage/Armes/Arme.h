@@ -90,6 +90,8 @@ protected:
 	UAudioComponent * SonTir;
 	USoundCue * SignalSonTir;
 
+	FString CheminMesh;
+
 public:
 	USkeletalMeshComponent * getMesh();
 	
@@ -105,6 +107,10 @@ public:
 	void LancerRechargement();
 
 	void SetNoJoueur(int NoJoueur);
+
+	void DetruireArme();
+
+	void Attacher(USceneComponent * Objet);
 
 	int GetBallesDansChargeur() { return MunitionsDansChargeur; }
 	int GetBallesMax() { return TailleChargeur; }
