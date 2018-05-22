@@ -42,9 +42,11 @@ private:
 	UParticleSystem * ParticuleSysteme;
 
 	UFUNCTION()
-	void DebutCollisionExplosion(class UPrimitiveComponent* HitComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
+	void DebutOverlap(class UPrimitiveComponent* HitComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult) override;
 
 	void Detruire();
+
+	void Exploser(AActor * autreActeur);
 
 	UAudioComponent * SonExplosion;
 	USoundCue * SignalSonExplosion;

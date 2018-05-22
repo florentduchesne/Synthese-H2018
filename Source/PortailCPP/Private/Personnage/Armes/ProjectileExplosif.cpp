@@ -13,6 +13,7 @@ AProjectileExplosif::AProjectileExplosif() {
 
 	SonExplosion = CreateDefaultSubobject<UAudioComponent>(TEXT("SonExplosion"));
 	SonExplosion->bAutoActivate = false;
+	SonExplosion->bStopWhenOwnerDestroyed = false;
 	SonExplosion->SetupAttachment(RootComponent);
 }
 
@@ -27,17 +28,30 @@ void AProjectileExplosif::BeginPlay()
 
 void AProjectileExplosif::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-	// si l'acteur touché simule la physique, lui donne une poussée
-	if ((OtherActor != NULL) && (OtherActor != this) && (OtherComp != NULL) && OtherComp->IsSimulatingPhysics())
+	Exploser(OtherActor);
+}
+
+void AProjectileExplosif::DebutOverlap(class UPrimitiveComponent* HitComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
+{
+	if (APersonnage * Personnage = Cast<APersonnage>(OtherActor))
 	{
-		OtherComp->AddImpulseAtLocation(GetVelocity() * 100.0f, GetActorLocation());
+		Exploser(OtherActor);
 	}
-	
+}
+
+void AProjectileExplosif::Exploser(AActor * autreActeur)
+{
+	CollisionComp->OnComponentHit.RemoveDynamic(this, &AProjectile::OnHit);
+
+	ProjectileMovement->StopMovementImmediately();
+
 	SphereCollision = NewObject<USphereComponent>(this, TEXT("SphereCollision"));
 	SphereCollision->SetupAttachment(RootComponent);
 	SphereCollision->SetSphereRadius(250.0f);
 	SphereCollision->RegisterComponent();
 	SphereCollision->UpdateOverlaps();
+
+	SphereCollision->OnComponentBeginOverlap.AddDynamic(this, &AProjectileExplosif::DebutOverlap);
 
 	//on inflige des dégâts aux personnages déjà présents dans la zone (ils ne déclanchent pas la fonction OnComponentBeginOverlap)
 	TArray<AActor*> Acteurs;
@@ -51,28 +65,14 @@ void AProjectileExplosif::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor
 		}
 	}
 
-
-	SphereCollision->OnComponentBeginOverlap.AddDynamic(this, &AProjectileExplosif::DebutCollisionExplosion);
-
-	CollisionComp->OnComponentHit.RemoveDynamic(this, &AProjectile::OnHit);
-
 	//FX
 	UGameplayStatics::SpawnEmitterAtLocation(this, ParticuleSysteme, GetActorLocation(), GetActorRotation(), true);
 
 	//Son
-	SonExplosion->bStopWhenOwnerDestroyed = false;
 	SonExplosion->Play(0.8f);
 
 	FTimerHandle TimerHandle;
 	GetOuter()->GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AProjectileExplosif::Detruire, 0.5f, false);
-}
-
-void AProjectileExplosif::DebutCollisionExplosion(class UPrimitiveComponent* HitComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
-{
-	if (APersonnage * Personnage = Cast<APersonnage>(OtherActor))
-	{
-		Personnage->InfligerDegats(Degats, NoJoueur);
-	}
 }
 
 //détruit le projectile
