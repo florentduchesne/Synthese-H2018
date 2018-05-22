@@ -5,32 +5,43 @@ Il s'agit d'un Fast-FPS multijoueur local basé sur Unreal Engine. Avec un gamepl
 
 Liste des éléments du jeu :
 
-- Personnages, déplacements (FAIT)
-- Téléporteurs (FAIT)
-- Armes, projectiles (FAIT)
-- Gestion des points de vie (FAIT)
-- Logique de la partie : victoire, pointage, etc. (FAIT)
-- Menu principal (FAIT)
-- Génération des cartes (FAIT)
-- Apparition des joueurs (FAIT)
-- Réinitialiser la partie (FAIT)
-- Réapparition des joueurs quand ils meurent (FAIT)
-- ATH (FAIT)
-- Tirs secondaires (FAIT)
-- Afficher une explosion lors d'un tir secondaire (FAIT)
+- Personnages, déplacements
+- Téléporteurs
+- Armes, projectiles
+- Gestion des points de vie
+- Logique de la partie : victoire, pointage, etc.
+- Menu principal
+- Cartes générées aléatoirement
+- Apparition des joueurs au début de la partie
+- Réinitialiser la partie
+- Réapparition des joueurs quand ils meurent
+- ATH
+- Tirs secondaires
+- Afficher une explosion lors d'un tir secondaire
 - Objets de gameplay facultatifs
-	- Objets à ramasser : armes, santé, armure (FAIT)
-	- Bumpers (FAIT)
-- Améliorer l'aléatoire dans la génération de la carte (au niveau de la sélection des portails) (FAIT)
-- Donner plus de paramètres au lancement de la partie (nombre de cartes, condition de victoire) (FAIT)
-- Affichage des statistiques de fin de partie (FAIT)
-- Timer de fin de partie (FAIT)
-- Réglage des paramètres utilisateur (sensibilité) (FAIT)
-- Colorier les niveaux (FAIT)
-- Voir à travers les portails (FAIT)
-- Ajouter des sons
-- Équilibrage des statistiques de jeu
+	- Objets à ramasser : armes, santé, armure
+	- Bumpers
+- Affichage des statistiques de fin de partie
+- Timer de fin de partie
+- Sons lors de tirs
 
-# Setup
+# Prérequis
 
-Programmation faite entièrement sur Unreal Engine 4.18 et Visual Studio 2017. Requiert DirectX11 pour faire fonctionner la version exécutable du jeu.
+Programmation faite entièrement sur Unreal Engine 4.18 et Visual Studio 2017 (majoritairement en C++). Requiert DirectX11 pour faire fonctionner la version exécutable du jeu.
+Le jeu tout comme les outils de développements ont étés testés sur un ordinateur ayant la configuration suivante :
+ - Windows 10
+ - i5 6600K @ 3.5GHz
+ - RX 480 8Gb
+ - 8 Gb DDR4 2400MHz
+ - Drivers plus ou moins à jour
+Une configuration moins puissante pourrait être suffisante, mais les résultats ne sont pas garantis.
+
+# Auteurs
+
+ - Florent Duchesne : Programmation, Implémentation, Tests
+ - Keaven Trudel : Modélisation, Animations
+ - Jacob Rouleau : Modélisation
+
+# License
+
+ Ce projet est sous la licence GNU GPL 3.0 - Voir le fichier LICENSE pour plus de détails.
