@@ -45,11 +45,12 @@ void UArme::BeginPlay()
 		SonTir->SetSound(SignalSonTir);
 	}
 
+	//apparemment ça sert à de quoi (et ça plante des fois sans le if)
 	if (!mesh->IsRegistered())
 		mesh->RegisterComponent();
 	else
 		UE_LOG(LogTemp, Warning, TEXT("mesh arme deja enregistre"));
-}
+} 
 
 USkeletalMeshComponent * UArme::getMesh()
 {

@@ -14,6 +14,11 @@
 #include "UObject/UObjectGlobals.h"
 #include "Materials/MaterialInstanceConstant.h"
 
+//Animations
+#include "Animation/BlendSpace.h"
+#include "Animation/AnimSequence.h"
+#include "Animation/AnimInstance.h"
+
 //toutes les armes possibles
 #include "Armes/Arme.h"
 #include "Armes/FusilSemiAuto.h"
@@ -145,4 +150,9 @@ public:
 	void MiseAJourBallesDansChargeur(int NbBalles);
 	void MiseAJourBallesMax(int NbBalles);
 
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Animations")
+	UBlendSpace * BlendSpace;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Animations") 
+	UAnimSequence * AnimSequence;
 };

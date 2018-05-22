@@ -14,6 +14,7 @@
 #include "Personnage/Personnage.h"
 #include "GameFramework/PlayerStart.h"
 #include "InformationsNiveau.h"
+#include "Engine/EngineTypes.h"
 #include "Blueprint/UserWidget.h"
 #include "ModeDeJeu_MenuPrincipal.generated.h"
 
@@ -161,4 +162,8 @@ public:
 	//appelle toutes les fonctions d'ouverture de la partie
 	UFUNCTION(BlueprintCallable, Category = "GenerationCarte")
 		void GenererCarte(int _NbJoueurs, int nb_pieces, int nb_points_victoire, int duree, UPARAM(ref) TArray<float>& SensibiliteH, UPARAM(ref) TArray<float>& SensibiliteV);
+
+	//retourne le type de monde (pour savoir si on est en release ou dans l'éditeur)
+	UFUNCTION(BlueprintPure, Category = "Engine")
+	static bool EstPackage();
 };

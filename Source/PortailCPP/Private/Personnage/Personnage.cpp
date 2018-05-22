@@ -30,14 +30,6 @@ APersonnage::APersonnage()
 	camera->SetRelativeLocation(FVector(0.0f, 0.0f, 5.0f + BaseEyeHeight));
 	// Permet au personnage de controler la rotation de la camera
 	camera->bUsePawnControlRotation = true;
-
-	/*arme = CreateDefaultSubobject<UFusilSemiAuto>(TEXT("Arme"));
-	arme->AttachToComponent(camera, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
-	arme->SetupAttachment(camera);
-	arme->RegisterComponent();
-	arme->Attacher(camera);
-	arme->SetRelativeLocation(FVector(50.0f, 35.0f, -20.0f));
-	*/
 	
 	//on change es statistiques de déplacement du personnage
 	GetCharacterMovement()->MaxWalkSpeed = 1500;
