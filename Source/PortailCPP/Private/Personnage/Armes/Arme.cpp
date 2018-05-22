@@ -21,11 +21,6 @@ UArme::UArme(const int _TailleChargeur, float _TempsRecharge, float _DelaiEntreC
 	const ConstructorHelpers::FObjectFinder<USkeletalMesh> MeshObj((TEXT("%s"), *CheminMesh));
 	mesh->SetSkeletalMeshWithoutResettingAnimation(MeshObj.Object);
 
-	if(!mesh->IsRegistered())
-		mesh->RegisterComponent();
-	else
-		UE_LOG(LogTemp, Warning, TEXT("mesh arme deja enregistre"));
-
 	if (!DelaiEntreChaqueTir)
 	{
 		DelaiEntreChaqueTir = 0.01f;
@@ -49,6 +44,11 @@ void UArme::BeginPlay()
 	{
 		SonTir->SetSound(SignalSonTir);
 	}
+
+	if (!mesh->IsRegistered())
+		mesh->RegisterComponent();
+	else
+		UE_LOG(LogTemp, Warning, TEXT("mesh arme deja enregistre"));
 }
 
 USkeletalMeshComponent * UArme::getMesh()
