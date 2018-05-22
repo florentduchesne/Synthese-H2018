@@ -14,7 +14,8 @@ AProjectile::AProjectile()
 	CollisionComp = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComp"));
 	CollisionComp->InitSphereRadius(8.0f);
 	CollisionComp->SetCollisionProfileName(TEXT("Projectile"));
-	CollisionComp->OnComponentHit.AddDynamic(this, &AProjectile::OnHit);// set up a notification for when this component hits something blocking
+	CollisionComp->OnComponentHit.AddDynamic(this, &AProjectile::OnHit);
+	CollisionComp->OnComponentBeginOverlap.AddDynamic(this, &AProjectile::DebutOverlap);
 
 	// Players can't walk on it
 	CollisionComp->SetWalkableSlopeOverride(FWalkableSlopeOverride(WalkableSlope_Unwalkable, 0.f));
@@ -44,6 +45,22 @@ AProjectile::AProjectile()
 	Mesh->SetupAttachment(RootComponent);
 }
 
+void AProjectile::DebutOverlap(class UPrimitiveComponent* HitComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
+{
+	if (APersonnage * personnageTouche = Cast<APersonnage>(OtherActor))
+	{
+		if (personnageTouche->GetNoJoueur() == NoJoueur)
+		{
+			return;
+		}
+		personnageTouche->InfligerDegats(Degats, NoJoueur);
+	}
+	//si l'acteur touché est un joueur, lui inflige les dégâts
+	OtherActor = Cast<AProjectile>(OtherActor);
+	if (!OtherActor)
+		Destroy();
+}
+
 void AProjectile::Initialiser(int Degats, int NoJoueur, float vitesse)
 {
 	this->Degats = Degats;
@@ -65,16 +82,7 @@ void AProjectile::Tick(float DeltaTime)
 
 void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-	// si l'acteur touché simule la physique, lui donne une poussée
-	if ((OtherActor != NULL) && (OtherActor != this) && (OtherComp != NULL) && OtherComp->IsSimulatingPhysics())
-	{
-		OtherComp->AddImpulseAtLocation(GetVelocity() * 100.0f, GetActorLocation());
-	}
 	//si l'acteur touché est un joueur, lui inflige les dégâts
-	if (APersonnage * personnageTouche = Cast<APersonnage>(OtherActor))
-	{
-		personnageTouche->InfligerDegats(Degats, NoJoueur);
-	}
 	OtherActor = Cast<AProjectile>(OtherActor);
 	if(!OtherActor)
 		Destroy();

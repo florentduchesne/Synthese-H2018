@@ -117,7 +117,10 @@ class PORTAILCPP_API AModeDeJeu_MenuPrincipal : public AGameModeBase
 	int NbJoueurs;
 
 	//gèrent la fin de la partie avec le timer
+public:
 	void TerminerPartieTimer();
+	
+private:
 	FTimerHandle TimerHandleFinDePartie;
 
 	TArray<float> SensibiliteH;

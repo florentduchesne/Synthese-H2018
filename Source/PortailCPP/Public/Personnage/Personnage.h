@@ -104,6 +104,9 @@ protected:
 	UFUNCTION()
 	void TirSecondaire();
 
+	UFUNCTION()
+	void RetourMenuPrincipal();
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

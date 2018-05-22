@@ -104,6 +104,17 @@ void APersonnage::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	PlayerInputComponent->BindAction("TirerSecondaire", IE_Pressed, this, &APersonnage::TirSecondaire);
 	//recharger
 	PlayerInputComponent->BindAction("Recharger", IE_Pressed, this, &APersonnage::Rechargement);
+
+	//retour au menu principal (quitter la partie)
+	PlayerInputComponent->BindAction("RetourMenuPrincipal", IE_Pressed, this, &APersonnage::RetourMenuPrincipal);
+}
+
+void APersonnage::RetourMenuPrincipal()
+{
+	UE_LOG(LogTemp, Warning, TEXT("menu"));
+	AModeDeJeu_MenuPrincipal * GameMode = Cast<AModeDeJeu_MenuPrincipal>(GetOuter()->GetWorld()->GetAuthGameMode());
+	if(GameMode)
+		GameMode->TerminerPartieTimer();
 }
 
 void APersonnage::Avancer(float Value)
