@@ -598,12 +598,3 @@ APersonnage * AModeDeJeu_MenuPrincipal::GetJoueurParIndex(int NoJoueur)
 	}
 	return nullptr;
 }
-
-bool AModeDeJeu_MenuPrincipal::EstPackage()
-{
-	if (GEngine && GWorld)
-	{
-		return GEngine->GetNetMode(GWorld) == NM_Standalone;
-	}
-	return false;
-}
