@@ -29,7 +29,7 @@ APortail::APortail()
 
 	FString CheminMateriau = FString("/Game/Geometry/Meshes/Mat_PortalINST");
 
-	//set le matériau du corps
+	//set le materiau du corps
 	UMaterialInstanceConstant * materiauPtr = Cast<UMaterialInstanceConstant>(StaticLoadObject(UMaterialInstanceConstant::StaticClass(), nullptr, *CheminMateriau));
 	if (materiauPtr)
 	{
@@ -42,7 +42,7 @@ APortail::APortail()
 	Capture->SetupAttachment(RootComponent);
 	Capture->AddLocalRotation(FRotator(0.0f, 180.0f, 0.0f));
 	Capture->AddRelativeLocation(FVector(0.0f, 0.0f, 150.0f));
-	//on update manuellement le SceneCapture2D pour réduire la charge de calcul. Seulement un portail par tick. La fréquence de mise à jour dépend donc du nombre de portails dans le monde.
+	//on update manuellement le SceneCapture2D pour reduire la charge de calcul. Seulement un portail par tick. La frequence de mise a jour depend donc du nombre de portails dans le monde.
 	Capture->bCaptureEveryFrame = false;
 	Capture->UpdateContent();
 	Capture->TextureTarget = nullptr;
@@ -89,9 +89,9 @@ void APortail::OnTeleportation(AActor* overlappedActor, AActor* otherActor)
 			position = autrePortail->GetActorLocation() - autrePortail->GetActorForwardVector() * 80;
 			position.Z += 60.0f;
 			FHitResult HitResult;
-			Personnage->SetActorLocation(position, false, &HitResult, ETeleportType::None);//ETeleportType est None, ce qui (supposément) annule tout effet de physique lorsqu'on sort du portail.
+			Personnage->SetActorLocation(position, false, &HitResult, ETeleportType::None);//ETeleportType est None, ce qui (supposement) annule tout effet de physique lorsqu'on sort du portail.
 			
-			//on enlève la physique que le joueur pouvait avoir au moment de la téléportation (si il sautait, par exemple)
+			//on enleve la physique que le joueur pouvait avoir au moment de la teleportation (si il sautait, par exemple)
 			Personnage->GetCharacterMovement()->StopMovementImmediately();
 
 			//on appelle une fonction qui lui redonne le droit de se teleporter dans une seconde

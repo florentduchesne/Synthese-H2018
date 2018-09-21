@@ -53,7 +53,7 @@ void AProjectileExplosif::Exploser(AActor * autreActeur)
 
 	SphereCollision->OnComponentBeginOverlap.AddDynamic(this, &AProjectileExplosif::DebutOverlap);
 
-	//on inflige des dégâts aux personnages déjà présents dans la zone (ils ne déclanchent pas la fonction OnComponentBeginOverlap)
+	//on inflige des degats aux personnages deja presents dans la zone (ils ne declanchent pas la fonction OnComponentBeginOverlap)
 	TArray<AActor*> Acteurs;
 	SphereCollision->GetOverlappingActors(Acteurs);
 	for (AActor * Acteur : Acteurs)
@@ -75,7 +75,7 @@ void AProjectileExplosif::Exploser(AActor * autreActeur)
 	GetOuter()->GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AProjectileExplosif::Detruire, 0.5f, false);
 }
 
-//détruit le projectile
+//detruit le projectile
 void AProjectileExplosif::Detruire()
 {
 	Destroy();

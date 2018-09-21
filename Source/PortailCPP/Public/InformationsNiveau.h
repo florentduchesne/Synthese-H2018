@@ -16,7 +16,7 @@ class PORTAILCPP_API InformationsNiveau
 	TArray<int> IdPiecesConnectees;
 	//nom du niveau : primordial pour charger le niveau
 	FName Nom;
-	//id unique, permet de savoir avec quel autre niveau celui-ci est connecté
+	//id unique, permet de savoir avec quel autre niveau celui-ci est connecte
 	int Id;
 
 	//tous les points d'apparition dans une piece
@@ -28,13 +28,13 @@ public:
 	InformationsNiveau(int NbPortailsAConnecter, FName Nom, int Id);
 	~InformationsNiveau();
 
-	//trie le tableau de portails de manière aléatoire
+	//trie le tableau de portails de maniere aleatoire
 	void MelangerListePortails();
 
 	//liste de tous les portails du niveau
 	TArray<APortail*> listePortails;
 
-	//À MODIFIER POUR ÊTRE + ALÉATOIRE
+	//a MODIFIER POUR eTRE + ALeATOIRE
 	APortail * GetProchainPortailNonConnecte();
 
 	int GetNbPortailsNonConnectes() { return NbPortailsAConnecter; };

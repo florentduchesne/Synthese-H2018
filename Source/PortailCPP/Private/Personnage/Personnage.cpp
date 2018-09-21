@@ -31,7 +31,7 @@ APersonnage::APersonnage()
 	// Permet au personnage de controler la rotation de la camera
 	camera->bUsePawnControlRotation = true;
 	
-	//on change es statistiques de déplacement du personnage
+	//on change es statistiques de deplacement du personnage
 	GetCharacterMovement()->MaxWalkSpeed = 1500;
 	GetCharacterMovement()->MaxAcceleration = 3000;
 	GetCharacterMovement()->AirControl = 1.5f;
@@ -56,11 +56,11 @@ void APersonnage::SetNoJoueur(int _NoJoueur)
 	NoJoueur = _NoJoueur;
 	UE_LOG(LogTemp, Warning, TEXT("no joueur : %d"), NoJoueur);
 
-	//va chercher le chemin du matériau (se termine obligatoirement par 1, 2, 3 ou 4)
+	//va chercher le chemin du materiau (se termine obligatoirement par 1, 2, 3 ou 4)
 	FString CheminMateriau = FString("/Game/Personnage/MT_BodyPlayer");
 	CheminMateriau.AppendInt(NoJoueur + 1);
 
-	//set le matériau du corps
+	//set le materiau du corps
 	UMaterialInstanceConstant * materiauPtr = Cast<UMaterialInstanceConstant>(StaticLoadObject(UMaterialInstanceConstant::StaticClass(), nullptr, *CheminMateriau));
 	if (materiauPtr)
 	{
@@ -87,7 +87,7 @@ void APersonnage::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	PlayerInputComponent->BindAction("Sauter", IE_Pressed, this, &APersonnage::DebuterSaut);
 	PlayerInputComponent->BindAction("Sauter", IE_Released, this, &APersonnage::TerminerSaut);
 
-	///pas le choix de passer par une fonction membre de APersonnage, sinon quand on change d'arme ça brise tout...
+	///pas le choix de passer par une fonction membre de APersonnage, sinon quand on change d'arme ca brise tout...
 
 	//tir
 	PlayerInputComponent->BindAction("Tirer", IE_Pressed, this, &APersonnage::CommencerTir);
@@ -118,7 +118,7 @@ void APersonnage::Avancer(float Value)
 
 void APersonnage::DeplacementLateral(float Value)
 {
-	// prend la direction dans laquelle le personnage regarde et le fait avancer latérallement
+	// prend la direction dans laquelle le personnage regarde et le fait avancer laterallement
 	FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::Y);
 	AddMovementInput(Direction, Value);
 }
@@ -133,12 +133,12 @@ void APersonnage::TournerVerticalement(float Value)
 	AddControllerPitchInput(Value * GetWorld()->GetDeltaSeconds() * 40.0f * SensibiliteVerticale);
 }
 
-//géré par l'engine...
+//gere par l'engine...
 void APersonnage::DebuterSaut()
 {
 	bPressedJump = true;
 }
-//géré par l'engine...
+//gere par l'engine...
 void APersonnage::TerminerSaut()
 {
 	bPressedJump = false;

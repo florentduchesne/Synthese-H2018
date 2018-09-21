@@ -58,7 +58,7 @@ protected:
 	int PointsDeVie = 100;
 	int Armure = 0;
 
-	//0 à 3, équivaut à l'emplacement dans le tableau StatistiquesDuJoueur
+	//0 a 3, equivaut a l'emplacement dans le tableau StatistiquesDuJoueur
 	int NoJoueur = -1;
 
 	AATH * ATH;
@@ -70,7 +70,7 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent * camera;
 
-	//vrai si le personnage ne s'est pas téléporté depuis un petit délai
+	//vrai si le personnage ne s'est pas teleporte depuis un petit delai
 	bool bPeutSeTeleporter = true;
 
 	UFUNCTION()
@@ -125,19 +125,19 @@ public:
 
 	void SetATH(AHUD * HUD);
 	
-	///on bloque et débloque la téléportation dans le but d'éviter que le joueur se téléporte à répétition d'un téléporteur à l'autre jusqu'au StackOverflow
-	//débloque la téléportation après un court délai
+	///on bloque et debloque la teleportation dans le but d'eviter que le joueur se teleporte a repetition d'un teleporteur a l'autre jusqu'au StackOverflow
+	//debloque la teleportation apres un court delai
 	void DebloquerTeleportationFutur();
-	//permet au personnage de se téléporter
+	//permet au personnage de se teleporter
 	void DebloquerTeleportation();
-	//empêche le personnage de se téléporter
+	//empeche le personnage de se teleporter
 	void BloquerTeleportation();
-	//retourne si oui ou non, le personnage a le droit de se téléporter
+	//retourne si oui ou non, le personnage a le droit de se teleporter
 	bool PeutSeTeleporter();
 
 	//Le personnage recoit des degats
 	void InfligerDegats(int degats, int NoJoueurAttaquant);
-	//le personnage est soigné
+	//le personnage est soigne
 	bool Soigner(int NbPointsDeVie);
 	//le personnage gagne de l'armure
 	bool EquiperArmure(int NbArmure);

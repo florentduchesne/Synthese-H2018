@@ -28,7 +28,7 @@ class PORTAILCPP_API UArme : public USceneComponent
 	GENERATED_BODY()
 
 public:
-	//ne devrait pas être appelé, mais requis pour le bon fonctionnement de Unreal Engine
+	//ne devrait pas etre appele, mais requis pour le bon fonctionnement de Unreal Engine
 	UArme();
 	//initialise l'arme
 	UArme(const int _TailleChargeur, float _TempsRecharge, float _DelaiEntreChaqueTir, int Degats, int VitesseProjectiles, FString CheminMesh);
@@ -40,7 +40,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	USkeletalMeshComponent * mesh;
 
-	//delai entre la fin d'un tir et le début du suivant
+	//delai entre la fin d'un tir et le debut du suivant
 	float DelaiEntreChaqueTir;
 	//temps requis pour recharger
 	float TempsRecharge;
@@ -53,33 +53,33 @@ protected:
 
 	//munitions disponibles pour le tir secondaire
 	int8 MunitionsSecondaires;
-	//les dégâts qu'infligent chaque balle lorsqu'elles heurtent un personnage
+	//les degats qu'infligent chaque balle lorsqu'elles heurtent un personnage
 	int Degats;
 	int NoJoueur;
 	int VitesseProjectiles;
 
-	//vrai si l'arme a terminé son temps de récupération après un tir et est prête à commencer un autre tir
+	//vrai si l'arme a termine son temps de recuperation apres un tir et est prete a commencer un autre tir
 	bool bDelaiEntreChaqueTirTermine = true;
-	//vrai si l'arme a terminé son temps de récupération après un tir secondaire
+	//vrai si l'arme a termine son temps de recuperation apres un tir secondaire
 	bool bDelaiEntreChaqueTirSecondaireTermine = true;
 	//vrai si l'arme n'est pas en train de recharger
 	bool bADesBallesDansChargeur = true;
-	//si oui ou non le tir a commencé
+	//si oui ou non le tir a commence
 	bool bTirACommence = false;
 
 	//remet des balles dans le chargeur
 	void Recharger();
-	//on appelle cette fonction après un délai ce qui force un délai minimal entre chaque fin et début de tir
+	//on appelle cette fonction apres un delai ce qui force un delai minimal entre chaque fin et debut de tir
 	void DebloquerTirDelai();
 
 	void DebloquerTirSecondaireDelai();
-	//fait apparaître un projectile et l'initialise
+	//fait apparaitre un projectile et l'initialise
 	void FaireApparaitreProjectile(ETypeDeTir TypeDeTir, FRotator Deviation);
 
-	///à implémenter dans chacune des sous-classes
-	//marque le début d'un "tir" (ou une rafale, selon le type d'arme). C'est le moment où on commence à appuyer sur la gâchette
+	///a implementer dans chacune des sous-classes
+	//marque le debut d'un "tir" (ou une rafale, selon le type d'arme). C'est le moment où on commence a appuyer sur la gachette
 	virtual void CommencerTir() PURE_VIRTUAL(UArme::CommencerTir, ;);
-	//marque la fin d'un tir, le moment où on relâche la gâchette
+	//marque la fin d'un tir, le moment où on relache la gachette
 	virtual void TerminerTir() PURE_VIRTUAL(UArme::TerminerTir, ;);
 
 	//retourne vrai si l'arme n'est pas en train de recharger ET qu'elle a encore une balle ou plus dans le chargeur
@@ -96,14 +96,14 @@ public:
 	USkeletalMeshComponent * getMesh();
 	
 	//lorsque le joueur appuie sur la touche de tir
-	//gère les munitions dans le chargeur et le délai de récupération entre deux tirs, puis appelle "CommencerTir", implémenté dans la sous-classe
+	//gere les munitions dans le chargeur et le delai de recuperation entre deux tirs, puis appelle "CommencerTir", implemente dans la sous-classe
 	void CommencerTirSuper();
 	//lorsque le joueur relache la touche de tir
 	void TerminerTirSuper();
 
 	void TirSecondaire();
 
-	//bloque le tir de l'arme et appelle la méthode "Recharger" après un délai
+	//bloque le tir de l'arme et appelle la methode "Recharger" apres un delai
 	void LancerRechargement();
 
 	void SetNoJoueur(int NoJoueur);

@@ -44,7 +44,7 @@ protected:
 
 	virtual void Tick(float DeltaTime) override;
 
-	//mesh de l'objet à ramasser
+	//mesh de l'objet a ramasser
 	///DOIT ETRE UN USTATICMESH OU UN USKELETALMESH
 	UObject * Mesh;
 

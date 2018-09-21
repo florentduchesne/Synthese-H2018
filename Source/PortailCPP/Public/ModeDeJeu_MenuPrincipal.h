@@ -37,37 +37,37 @@ class PORTAILCPP_API AModeDeJeu_MenuPrincipal : public AGameModeBase
 	//vide le tableau et le remplis selon le nombre de joueurs
 	void InitialiserStatsJoueurs();
 
-	//liste de tous les niveaux qui ont été choisis par le générateur de carte au lancement d'une partie
+	//liste de tous les niveaux qui ont ete choisis par le generateur de carte au lancement d'une partie
 	TArray<InformationsNiveau*> NiveauxChoisis;
 
-	//choisis les niveaux qui seront utilisés pendant la partie
+	//choisis les niveaux qui seront utilises pendant la partie
 	void SelectionnerNiveaux(TArray<InformationsNiveau*> ListeCompleteNiveaux, int NbNiveauxVoulus);
 
-	//sélectionne quels niveaux seront connectés ensemble (NE CONNECTE PAS LES PORTAILS)
+	//selectionne quels niveaux seront connectes ensemble (NE CONNECTE PAS LES PORTAILS)
 	void RelierNiveaux();
 
 	//charge les niveaux
 	void ChargerLesNiveaux();
 
-	//connecte les portails de tous les niveaux de manière à ce que tous les niveaux soient accessibles
+	//connecte les portails de tous les niveaux de maniere a ce que tous les niveaux soient accessibles
 	void ConnecterLesPortails();
 
-	//Trouve tous les acteurs de type APortail chargés dans le jeu, et les stock dans NiveauxChoisis
+	//Trouve tous les acteurs de type APortail charges dans le jeu, et les stock dans NiveauxChoisis
 	void TrouverTousLesPortailsCharges();
 
-	//Trouve tous les acteurs de type PointApparition chargés dans le jeu, et les stock dans NiveauChoisis
+	//Trouve tous les acteurs de type PointApparition charges dans le jeu, et les stock dans NiveauChoisis
 	void ChercherPointsApparition();
 
-	//Supprime tous les objets APersonnage déjà présent (ex: le personnage par défaut), et en crée un certain nombre, placés dans les PointsApparitions sélectionnés précédemment
+	//Supprime tous les objets APersonnage deja present (ex: le personnage par defaut), et en cree un certain nombre, places dans les PointsApparitions selectionnes precedemment
 	void PlacerJoueurs();
 
-	//retourne vrai si tous les niveaux ont terminé d'être chargés
+	//retourne vrai si tous les niveaux ont termine d'etre charges
 	bool NiveauxTousCharges();
 
-	//retourne vrai si on trouve autant de portails qu'il est supposé y en avoir
+	//retourne vrai si on trouve autant de portails qu'il est suppose y en avoir
 	bool CompterPortails();
 
-	//connecte les portails, va chercher les points d'apparition et fait apparaître les joueurs
+	//connecte les portails, va chercher les points d'apparition et fait apparaitre les joueurs
 	void InitialiserCarte();
 
 	//-----------------------------------------
@@ -76,12 +76,12 @@ class PORTAILCPP_API AModeDeJeu_MenuPrincipal : public AGameModeBase
 
 	void PartieTerminee(int idNoJoueurGagnant);
 
-	//décharge tous les niveaux
+	//decharge tous les niveaux
 	void DechargerCarte();
 
 	void DetruireTousLesJoueurs();
 
-	//détruit un joueur spécifié
+	//detruit un joueur specifie
 	void DetruireJoueur(int NoJoueur);
 
 	int NombreDeJoueursExistants();
@@ -91,13 +91,13 @@ class PORTAILCPP_API AModeDeJeu_MenuPrincipal : public AGameModeBase
 	void RetourMenuPrincipal();
 
 	//-----------------------------------------
-	//--------DÉROULEMENT DE LA PARTIE---------
+	//--------DeROULEMENT DE LA PARTIE---------
 	//-----------------------------------------
 
-	//fait apparaitre un joueur sur un point d'apparition aléatoire
+	//fait apparaitre un joueur sur un point d'apparition aleatoire
 	void ReapparitionJoueur(int NoJoueur);
 
-	//fait apparaitre un joueur au point d'apparition spécifié avec l'ID du PlayerController spécifié
+	//fait apparaitre un joueur au point d'apparition specifie avec l'ID du PlayerController specifie
 	void FaireApparaitreJoueur(AActor * PointApparition, int NoJoueur);
 
 	void AttendreQueJoueurCharge(APlayerController * Controleur, int NoJoueur, AActor * PointApparition);
@@ -105,19 +105,19 @@ class PORTAILCPP_API AModeDeJeu_MenuPrincipal : public AGameModeBase
 
 	APersonnage * GetJoueurParIndex(int NoJoueur);
 
-	//retourne un point d'apparition aléatoire (à remplacer plus tard par un point d'apparition dans un pièce où il n'y a pas de joueur)
+	//retourne un point d'apparition aleatoire (a remplacer plus tard par un point d'apparition dans un piece où il n'y a pas de joueur)
 	APlayerStart * TrouverPointApparitionAleatoire();
 
 	int NbMeutresRequisPourVictoire;
 
-	//sera plus élevé quand on aura plus de niveaux de faits
-	///IMPORTANT!!! DOIT ÊTRE PLUS PETIT OU ÉGAL À LA TAILLE DE LA LISTE DE NIVEAUX
+	//sera plus eleve quand on aura plus de niveaux de faits
+	///IMPORTANT!!! DOIT eTRE PLUS PETIT OU eGAL a LA TAILLE DE LA LISTE DE NIVEAUX
 	int NbNiveauxVoulus;
 
 	//nombre de joueurs qui participeront dans la partie
 	int NbJoueurs;
 
-	//gèrent la fin de la partie avec le timer
+	//gerent la fin de la partie avec le timer
 public:
 	void TerminerPartieTimer();
 	
@@ -137,7 +137,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "WidgetPartie")
 	TSubclassOf<UUserWidget> WidgetEnPartie;
 	
-	//le numéro du joueur gagnant. si égal à -1, le menu ne l'affichera pas
+	//le numero du joueur gagnant. si egal a -1, le menu ne l'affichera pas
 	UPROPERTY(BlueprintReadOnly, Category = "MenuPrincipal")
 	int NoJoueurGagnant = -1;
 
@@ -156,7 +156,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "MenuPrincipal")
 	void ChangeMenuWidget(TSubclassOf<UUserWidget> NewWidgetClass);
 
-	//appelé lorsqu'un joueur meurt
+	//appele lorsqu'un joueur meurt
 	void JoueurEnTueUnAutre(int IndexJoueurTueur, int IndexJoueurMort);
 
 	//appelle toutes les fonctions d'ouverture de la partie

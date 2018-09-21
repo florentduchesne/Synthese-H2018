@@ -28,10 +28,10 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	//marque une niveau à charger pour le level streaming
+	//marque une niveau a charger pour le level streaming
 	void ChargerNiveau(FName nomNiveau, int IdStream);
-	//retourne si oui ou non un niveau a fini d'être chargé
+	//retourne si oui ou non un niveau a fini d'etre charge
 	bool NiveauEstCharge(FName nomNiveau);
-	//marque un niveau comme étant à décharger pour le level streaming
+	//marque un niveau comme etant a decharger pour le level streaming
 	void DechargerNiveau(FName nomNiveau, int IdStream);
 };

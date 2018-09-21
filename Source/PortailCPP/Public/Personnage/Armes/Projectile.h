@@ -46,7 +46,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	//est appelée lorsque le projectile heurte un obstacle
+	//est appelee lorsque le projectile heurte un obstacle
 	UFUNCTION()
 	virtual void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 

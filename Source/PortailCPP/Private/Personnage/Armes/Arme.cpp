@@ -45,11 +45,12 @@ void UArme::BeginPlay()
 		SonTir->SetSound(SignalSonTir);
 	}
 
-	//apparemment ça sert à de quoi (et ça plante des fois sans le if)
+	//apparemment ca sert a de quoi (et ca plante des fois sans le if)
 	if (!mesh->IsRegistered())
 		mesh->RegisterComponent();
 	else
-		UE_LOG(LogTemp, Warning, TEXT("mesh arme deja enregistre"));
+		;
+		//UE_LOG(LogTemp, Warning, TEXT("mesh arme deja enregistre"));
 } 
 
 USkeletalMeshComponent * UArme::getMesh()
@@ -126,7 +127,7 @@ void UArme::FaireApparaitreProjectile(ETypeDeTir TypeDeTir, FRotator Deviation)
 	if (World != NULL)
 	{
 		const FRotator SpawnRotation = GetComponentRotation() + Deviation;
-		// place la balle au bon endroit par rapport au personnage et à son orientation
+		// place la balle au bon endroit par rapport au personnage et a son orientation
 		const FVector SpawnLocation = GetComponentLocation() + FVector(0.f, 0.f, 10.f);// +SpawnRotation.RotateVector(FVector(90.0f, 20.0f, 0.0f));
 
 		//initialise les collisions pour la balle

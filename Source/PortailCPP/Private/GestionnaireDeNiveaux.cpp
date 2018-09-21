@@ -49,7 +49,7 @@ void AGestionnaireDeNiveaux::DechargerNiveau(FName nomNiveau, int IdStream)
 	FLatentActionInfo info;
 	info.UUID = IdStream;
 	info.Linkage = 1;
-	//trouvé sur internet
+	//trouve sur internet
 	//http://orfeasel.com/handling-level-streaming-through-c/
 	/*info.CallbackTarget = this;
 	info.ExecutionFunction = FName("SpawnMap");*/

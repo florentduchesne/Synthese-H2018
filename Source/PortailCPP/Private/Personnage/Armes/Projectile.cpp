@@ -55,7 +55,7 @@ void AProjectile::DebutOverlap(class UPrimitiveComponent* HitComp, class AActor*
 		}
 		personnageTouche->InfligerDegats(Degats, NoJoueur);
 	}
-	//si l'acteur touché est un joueur, lui inflige les dégâts
+	//si l'acteur touche est un joueur, lui inflige les degats
 	OtherActor = Cast<AProjectile>(OtherActor);
 	if (!OtherActor)
 		Destroy();
@@ -82,7 +82,7 @@ void AProjectile::Tick(float DeltaTime)
 
 void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-	//si l'acteur touché est un joueur, lui inflige les dégâts
+	//si l'acteur touche est un joueur, lui inflige les degats
 	OtherActor = Cast<AProjectile>(OtherActor);
 	if(!OtherActor)
 		Destroy();

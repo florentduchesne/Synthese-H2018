@@ -49,7 +49,7 @@ protected:
 	int32 attente = 3;
 
 	int32 ID = 0;
-	//commence à 0, augmente à chaque appel de "connecterDeuxPortails"
+	//commence a 0, augmente a chaque appel de "connecterDeuxPortails"
 	static int32 NbPortails;
 
 	UTexture2D * textureTempo;
@@ -62,7 +62,7 @@ public:
 	bool bConnecte = false;
 	bool estConnecte();
 
-	//sert à afficher la "vision" de l'autre portail
+	//sert a afficher la "vision" de l'autre portail
 	USceneCaptureComponent2D * Capture;
 	UMaterialInstanceDynamic * MateriauDynamique;
 
