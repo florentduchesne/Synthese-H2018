@@ -19,6 +19,8 @@ APortail::APortail()
 	RootComponent = cadre;
 	panneau->SetupAttachment(cadre);
 
+	ID = ++NbPortails;
+
 	panneau->SetCollisionProfileName(TEXT("OverlapOnlyPawn"));
 	cadre->SetCollisionProfileName(TEXT("OverlapOnlyPawn"));
 
@@ -106,9 +108,6 @@ void APortail::connecterDeuxPortails(APortail * portail)
 	if (!autrePortail->estConnecte())
 		autrePortail->connecterDeuxPortails(this);
 
-	ID = NbPortails;
-	NbPortails++;
-
 	autrePortail->Capture->TextureTarget = TextureRenderTarget;
 	autrePortail->Capture->UpdateContent();
 	MateriauDynamique = panneau->CreateAndSetMaterialInstanceDynamicFromMaterial(0, MateriauPortail);
@@ -121,7 +120,7 @@ void APortail::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	if (NbPortails)
 	{
-		if (!attente)
+		if (attente < 0)
 		{
 			attente = NbPortails;
 		}
@@ -139,4 +138,9 @@ bool APortail::estConnecte()
 		return true;
 	else
 		return false;
+}
+
+APortail::~APortail()
+{
+	--NbPortails;
 }

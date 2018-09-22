@@ -49,12 +49,8 @@ void AGestionnaireDeNiveaux::DechargerNiveau(FName nomNiveau, int IdStream)
 	FLatentActionInfo info;
 	info.UUID = IdStream;
 	info.Linkage = 1;
-	//trouve sur internet
-	//http://orfeasel.com/handling-level-streaming-through-c/
-	/*info.CallbackTarget = this;
-	info.ExecutionFunction = FName("SpawnMap");*/
 	UGameplayStatics::UnloadStreamLevel(this, nomNiveau, info);
-	UE_LOG(LogTemp, Warning, TEXT("on decharge un niveau"));
+	//UE_LOG(LogTemp, Warning, TEXT("on decharge un niveau"));
 	/*ULevelStreaming *pStreaming = UGameplayStatics::GetStreamingLevel(this, nomNiveau);
 	if (pStreaming)
 	{

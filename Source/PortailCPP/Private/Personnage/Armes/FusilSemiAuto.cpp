@@ -14,5 +14,4 @@ void UFusilSemiAuto::CommencerTir() {
 
 void UFusilSemiAuto::TerminerTir()
 {
-	UE_LOG(LogTemp, Warning, TEXT("tir termine"));
 }

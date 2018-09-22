@@ -450,7 +450,9 @@ void AModeDeJeu_MenuPrincipal::RetourMenuPrincipal()
 	if (NombreDeJoueursExistants() == 1)
 	{
 		//retour au menu principal
+		UE_LOG(LogTemp, Warning, TEXT("retour menu %d"), NombreDeJoueursExistants());
 		ChangeMenuWidget(StartingWidgetClass);
+		UE_LOG(LogTemp, Warning, TEXT("afficher widget menu"));
 	}
 	else
 	{

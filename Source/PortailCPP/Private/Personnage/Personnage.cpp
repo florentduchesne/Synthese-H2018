@@ -103,7 +103,6 @@ void APersonnage::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 
 void APersonnage::RetourMenuPrincipal()
 {
-	UE_LOG(LogTemp, Warning, TEXT("menu"));
 	AModeDeJeu_MenuPrincipal * GameMode = Cast<AModeDeJeu_MenuPrincipal>(GetOuter()->GetWorld()->GetAuthGameMode());
 	if(GameMode)
 		GameMode->TerminerPartieTimer();
@@ -263,10 +262,8 @@ bool APersonnage::ChangerArme(TSubclassOf<UArme> SousClasseDeArme)
 	{
 		if (SousClasseDeArme == arme->GetClass())
 		{
-			UE_LOG(LogTemp, Warning, TEXT("meme arme!"));
 			return false;
 		}
-		UE_LOG(LogTemp, Warning, TEXT("detruire arme"));
 		arme->DetruireArme();
 		arme->UnregisterComponent();
 		arme->DestroyComponent();
@@ -275,25 +272,20 @@ bool APersonnage::ChangerArme(TSubclassOf<UArme> SousClasseDeArme)
 	
 	if (SousClasseDeArme == UFusilSemiAuto::StaticClass())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("semi auto"));
 		arme = NewObject<UFusilSemiAuto>(this, FName("FusilSemiAuto"));
 	}
 	else if (SousClasseDeArme == UFusilAuto::StaticClass())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("auto"));
 		arme = NewObject<UFusilAuto>(this, FName("FusilAuto"));
 	}
 	else if (SousClasseDeArme == UFusilARafales::StaticClass())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("rafales"));
 		arme = NewObject<UFusilARafales>(this, FName("FusilARafales"));
 	}
 	else if (SousClasseDeArme == UFusilAPompe::StaticClass())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("pompe"));
 		arme = NewObject<UFusilAPompe>(this, FName("FusilAPompe"));
 	}
-	UE_LOG(LogTemp, Warning, TEXT("nom arme : %s"), *arme->GetName());
 
 	arme->RegisterComponent(); 
 	/*arme->SetWorldLocation(Location);
@@ -301,8 +293,6 @@ bool APersonnage::ChangerArme(TSubclassOf<UArme> SousClasseDeArme)
 	*/
 	//arme->AttachTo(GetRootComponent(), SocketName, EAttachLocation::KeepWorldPosition);
 
-	
-	UE_LOG(LogTemp, Warning, TEXT("attacher arme"));
 	/*arme->AttachToComponent(camera, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 	arme->SetRelativeLocation(FVector(50.0f, 35.0f, -20.0f));
 	*/
