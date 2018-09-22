@@ -106,6 +106,11 @@ AObjetAuSol::AObjetAuSol(float _DelaisAvantReapparition, FString CheminMesh, ETy
 	OnActorBeginOverlap.AddDynamic(this, &AObjetAuSol::OnCollision);
 }
 
+void AObjetAuSol::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	GetWorldTimerManager().ClearTimer(TimerMonteDescend);
+}
+
 // Called when the game starts or when spawned
 void AObjetAuSol::BeginPlay()
 {
@@ -147,8 +152,7 @@ void AObjetAuSol::Tick(float DeltaTime)
 void AObjetAuSol::MonteDescend()
 {
 	bMonte = (bMonte) ? false : true;
-	FTimerHandle UnusedHandle;
-	GetWorldTimerManager().SetTimer(UnusedHandle, this, &AObjetAuSol::MonteDescend, 1.f, false);
+	GetWorldTimerManager().SetTimer(TimerMonteDescend, this, &AObjetAuSol::MonteDescend, 1.f, false);
 }
 
 void AObjetAuSol::OnCollision(AActor * overlappedActor, AActor * otherActor)

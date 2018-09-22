@@ -63,6 +63,11 @@ APortail::APortail()
 	OnActorBeginOverlap.AddDynamic(this, &APortail::OnTeleportation);
 }
 
+void APortail::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	--NbPortails;
+}
+
 // Called when the game starts or when spawned
 void APortail::BeginPlay()
 {
@@ -138,9 +143,4 @@ bool APortail::estConnecte()
 		return true;
 	else
 		return false;
-}
-
-APortail::~APortail()
-{
-	--NbPortails;
 }

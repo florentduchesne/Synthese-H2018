@@ -44,6 +44,8 @@ protected:
 
 	virtual void Tick(float DeltaTime) override;
 
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+
 	//mesh de l'objet a ramasser
 	///DOIT ETRE UN USTATICMESH OU UN USKELETALMESH
 	UObject * Mesh;
@@ -69,4 +71,7 @@ protected:
 
 	UFUNCTION()
 	void OnCollision(AActor* overlappedActor, AActor* otherActor);
+
+private:
+	FTimerHandle TimerMonteDescend;
 };

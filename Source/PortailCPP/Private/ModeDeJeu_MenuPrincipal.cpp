@@ -431,7 +431,9 @@ void AModeDeJeu_MenuPrincipal::AttendreQueJoueurCharge(APlayerController * Contr
 
 void AModeDeJeu_MenuPrincipal::TerminerPartieTimer()
 {
+	UE_LOG(LogTemp, Warning, TEXT("timer termine"));
 	int PlusGrandNombreDeMeurtres = 0;
+	NoJoueurGagnant = -1;
 
 	for (auto i = 0; i < NbJoueurs; i++)
 	{
@@ -450,7 +452,6 @@ void AModeDeJeu_MenuPrincipal::RetourMenuPrincipal()
 	if (NombreDeJoueursExistants() == 1)
 	{
 		//retour au menu principal
-		UE_LOG(LogTemp, Warning, TEXT("retour menu %d"), NombreDeJoueursExistants());
 		ChangeMenuWidget(StartingWidgetClass);
 		UE_LOG(LogTemp, Warning, TEXT("afficher widget menu"));
 	}

@@ -23,11 +23,11 @@ class APortail : public AActor
 public:	
 	// Sets default values for this actor's properties
 	APortail();
-	~APortail();
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 	APortail * autrePortail{nullptr};
 	/*UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Portail Mesh")
 		class UStaticMeshComponent * cadre;
